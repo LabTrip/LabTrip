@@ -1,0 +1,7 @@
+1606684099|Criação do repositório
+1606685501|Adicionado ideia de jogo runner
+1606685648|Adicionado ideia de gerenciador de viagens
+1606691601|Adicionado parte 1 ideia localizador de atividades
+1606693243|Adicionado parte 2 ideia localizador de atividades
+1606694895|Adicionado ideia IR para pequenos investidores
+1606742041|Adicionado ideia reserva de equipamentos
