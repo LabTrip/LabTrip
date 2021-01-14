@@ -7,3 +7,4 @@
 1606742041|Ideia de reserva de equipamentos adicionado
 1606791880|Repositório com participantes adicionado
 1610503648|Proposta inicial detalhada
+1610507064|Adicionando apresentação da proposta do tema do projeto
