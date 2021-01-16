@@ -3,6 +3,7 @@ import cors from 'cors';
 import defineUsuarioRouter from './usuarios/UsuarioRouter'
 import defineViagemRouter from './viagens/ViagemRouter'
 import defineAtividadeRouter from './atividades/AtividadeRouter'
+import defineAgenciaRouter from './agencias/AgenciaRouter'
 
 export default function LabTrip() {
   const app = express();
@@ -11,6 +12,7 @@ export default function LabTrip() {
   app.use('/usuarios', defineUsuarioRouter());
   app.use('/trips', defineViagemRouter());
   app.use('/atividades', defineAtividadeRouter());
+  app.use('/agencias', defineAgenciaRouter());
 
   app.get('/', function(req, res) {
 
