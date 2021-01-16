@@ -1,15 +1,22 @@
 {
-  "name": "back-end",
+  "name": "LabTrip",
   "version": "1.0.0",
-  "description": "",
+  "description": "Repositório destinado ao projeto de software LabTrip. Uma ferramenta que tem como proposta mudar a forma como agências de Travel Boutique se relacionam e oferecem serviços ao usuário final. Este projeto tem como inciativa a matéria de Projeto Intergado, do curso de Análise e Desenvolvimento de Sistemas do Instituo Federal do Estado de São Paulo - IFSP-SPO.",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --exec sucrase-node ./src/server.js",
-    "staart": "nodemon --exec sucrase-node ./src/index.js"
+    "start": "nodemon --exec sucrase-node ./src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LabTrip/LabTrip.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LabTrip/LabTrip/issues"
+  },
+  "homepage": "https://github.com/LabTrip/LabTrip#readme",
   "dependencies": {
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",
