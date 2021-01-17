@@ -5,7 +5,7 @@ export default class ViagemMiddleware{
     }
   
     async viagemExiste(req, res, next){
-      const viagem = await this.viagemRepository.getById(req.params.tripId)
+      const viagem = await this.viagemRepository.getById(req.params.ID)
       if(!viagem){
         return res.status(404).json({erro: 'Viagem não encontrada!'});       
       }

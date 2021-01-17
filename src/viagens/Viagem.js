@@ -1,12 +1,14 @@
 import {v4 as uuidv4} from 'uuid';
 
 export default class Viagem{
-  constructor(tripNome, tripInicio, tripFim, tripStatus, userId, tripId = uuidv4()){
-      this.tripId = tripId;
-      this.tripNome = tripNome;
-      this.tripInicio = new Date(tripInicio).toISOString();
-      this.tripFim = new Date(tripFim).toISOString();
-      this.tripStatus = tripStatus;
-      this.userId = userId;
+  constructor(apelido, local, local, codCidade, agenciaID, statusID, dataInicio, dataFim, ID = uuidv4()){
+      this.ID = ID;
+      this.apelido = apelido;
+      this.dataInicio = new Date(dataInicio).toISOString();
+      this.dataFim = new Date(dataFim).toISOString();
+      this.statusID = statusID;
+      this.local = local;
+      this.codCidade = codCidade;
+      this.agenciaID = agenciaID;
   }
 }

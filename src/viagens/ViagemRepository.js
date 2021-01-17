@@ -4,12 +4,12 @@ export default class ViagemRepository{
   }
 
   async getAll(){
-    return await this.client('trips');
+    return await this.client('viagem');
   }
 
   async save(viagem){
     console.log(viagem);
-    const [firstRow] = await this.client('trips')
+    const [firstRow] = await this.client('viagem')
       .insert(viagem)
       .returning("*");
 
@@ -17,18 +17,18 @@ export default class ViagemRepository{
   }
 
   async getById(tripId){
-    return await this.client('trips')
-      .where({'tripId': tripId.toString()}).first();
+    return await this.client('viagem')
+      .where({'ID': tripId.toString()}).first();
   }
 
   async update(viagem){
-    const [firstRow] = await this.client('trips')
-      .where({'tripId': viagem.tripId})
+    const [firstRow] = await this.client('viagem')
+      .where({'ID': viagem.ID})
       .update({
-        tripNome: viagem.tripNome,
-        tripInicio: viagem.tripInicio,
-        tripFim: viagem.tripFim,
-        tripStatus: viagem.tripStatus
+        apelido: viagem.apelido,
+        dataInicio: viagem.dataInicio,
+        dataFim: viagem.dataFim,
+        statusID: viagem.statusID
       })
       .returning("*");
 
@@ -36,8 +36,8 @@ export default class ViagemRepository{
   }
 
   async delete(viagem){
-    await this.client('trips')
-      .where('tripId', viagem.tripId)
+    await this.client('viagem')
+      .where('ID', viagem.ID)
       .del()
   }
 }

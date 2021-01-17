@@ -1,17 +1,19 @@
 import Viagem from './Viagem'
 
 const viagemViewModel = (viagem) => ({
-  tripId: viagem.tripId,
-  tripNome: viagem.tripNome,
-  tripInicio: viagem.tripInicio,
-  tripFim: viagem.tripFim,
-  tripStatus: viagem.tripStatus,
-  userId: viagem.userId
+  ID:  viagem.ID,
+  apelido: viagem.apelido,
+  dataInicio: viagem.dataInicio,
+  dataFim: viagem.dataFim,
+  statusID: viagem.statusID,
+  local: viagem.local,
+  codCidade: viagem.codCidade,
+  agenciaID: viagem.agenciaID,
 });
 
-const verificaStatusViagem = (tripFim) => {
+const verificaStatusViagem = (dataFim) => {
   const dataAtual = new Date()
-  const dataFinal = new Date(tripFim)
+  const dataFinal = new Date(dataFim)
   if(dataFinal < dataAtual){
     return true
   }
@@ -33,11 +35,11 @@ export default class ViagemController {
   }
 
   async save(req, res){
-    const {tripNome, tripInicio, tripFim, userId} = req.body;
+    const {apelido, dataInicio, dataFim} = req.body;
 
-    const tripStatus = verificaStatusViagem(tripFim);
+    const tripStatus = verificaStatusViagem(dataFim);
 
-    const viagem = new Viagem(tripNome, tripInicio, tripFim, tripStatus, userId);
+    const viagem = new Viagem(apelido, dataInicio, dataFim, statusID);
 
     await this.viagemRepository.save(viagem);
 
@@ -49,11 +51,11 @@ export default class ViagemController {
   }
 
   async update(req,res){     
-    const{tripNome, tripInicio, tripFim, userId} = req.body;
+    const{apelido, dataInicio, dataFim} = req.body;
 
-    const tripStatus = verificaStatusViagem(tripFim);
+    const tripStatus = verificaStatusViagem(dataFim);
 
-    const viagem = new Viagem(tripNome, tripInicio, tripFim, tripStatus, userId, req.viagem.tripId);
+    const viagem = new Viagem(apelido, datInicio, dataFim, statusID, req.viagem.ID);
     
     const viagemAtualizada = await this.viagemRepository.update(viagem);
 

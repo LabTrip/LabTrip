@@ -16,7 +16,7 @@ export default function defineViagemRouter(){
    .get((req, res) => viagemController.index(req, res))
    .post((req, res) => viagemController.save(req, res));
 
-  router.route('/:tripId')
+  router.route('/:ID')
     .all((req, res, next) => viagemMiddleware.viagemExiste(req, res, next))
     .get((req, res) => viagemController.show(req, res))
     .put((req, res) => viagemController.update(req, res))
