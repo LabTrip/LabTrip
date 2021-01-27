@@ -10,5 +10,8 @@ export default class Viagem{
       this.local = local;
       this.codCidade = codCidade;
       this.agenciaID = agenciaID;
+      this.createdAt = new Date().toISOString();
+      this.updatedAt = new Date().toISOString();
+      this.deletedAt = null;
   }
 }

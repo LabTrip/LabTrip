@@ -6,7 +6,7 @@ export default class AgenciaMiddleware{
   
     async agenciaExiste(req, res, next){
       //const usuario = this.usuarios.find(u => u.id == req.params.id);
-      const agenciaController = await this.agenciaRepository.getById(req.params.ID)
+      const agenciaController = await this.agenciaRepository.getById(req.params.id)
       if(!agencia){
         return res.status(404).json({erro: 'Agencia não encontrada!'});       
       }

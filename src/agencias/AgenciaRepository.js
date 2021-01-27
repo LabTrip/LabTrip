@@ -15,14 +15,14 @@ export default class AgenciaRepository{
         return firstRow;
     }
   
-    async getById(ID){
+    async getById(id){
       return await this.client('agencia')
-        .where({'ID': id.toString()}).first();
+        .where({'id': id.toString()}).first();
     }
   
     async update(agencia){
       const [firstRow] = await this.client('agencia')
-        .where({'ID': usuario.id})
+        .where({'id': usuario.id})
         .update({
           nome: usuario.nome,
           updatedAt: new Date().toISOString()
@@ -34,7 +34,7 @@ export default class AgenciaRepository{
   
     async delete(agencia){
       await this.client('agencia')
-        .where('ID', agencia.ID)
+        .where('id', agencia.id)
         .del()
     }
   }

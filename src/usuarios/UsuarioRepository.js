@@ -4,11 +4,11 @@ export default class UsuarioRepository{
     }
   
     async getAll(){
-      return await this.client('usuarios');
+      return await this.client('usuario');
     }
   
     async save(usuario){
-      const [firstRow] = await this.client('usuarios')
+      const [firstRow] = await this.client('usuario')
         .insert(usuario)
         .returning("*");
   
@@ -16,12 +16,12 @@ export default class UsuarioRepository{
     }
   
     async getById(id){
-      return await this.client('usuarios')
+      return await this.client('usuario')
         .where({'id': id.toString()}).first();
     }
   
     async update(usuario){
-      const [firstRow] = await this.client('usuarios')
+      const [firstRow] = await this.client('usuario')
         .where({'id': usuario.id})
         .update({
           nome: usuario.nome,
@@ -35,7 +35,7 @@ export default class UsuarioRepository{
     }
   
     async delete(usuario){
-      await this.client('usuarios')
+      await this.client('usuario')
         .where('id', usuario.id)
         .del()
     }

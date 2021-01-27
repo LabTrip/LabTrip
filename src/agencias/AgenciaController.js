@@ -1,7 +1,7 @@
 import Agencia from './Agencia'
 
 const agenciaViewModel = (agencia) => ({
-  ID: agencia.ID,
+  id: agencia.id,
   nome: agencia.nome
 });
 
@@ -36,7 +36,7 @@ export default class AgenciaController {
   async update(req,res){     
     const{nome} = req.body;
 
-    const agencia = new Usuario(nome, req.usuario.ID);
+    const agencia = new Usuario(nome, req.usuario.id);
 
     const agenciaAtualizada = await this.agenciaRepository.update(agencia);
 
