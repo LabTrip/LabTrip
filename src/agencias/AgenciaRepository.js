@@ -22,10 +22,9 @@ export default class AgenciaRepository{
   
     async update(agencia){
       const [firstRow] = await this.client('agencia')
-        .where({'id': usuario.id})
+        .where({'id': agencia.id})
         .update({
-          nome: usuario.nome,
-          updatedAt: new Date().toISOString()
+          nome: agencia.nome
         })
         .returning("*");
   

@@ -11,7 +11,7 @@ export default class AgenciaController {
     this.agenciaRepository = agenciaRepository;
   }
 
-  //GET /usuarios
+  //GET /agencias
   async index(req, res) {
     const agencias = await this.agenciaRepository.getAll();
     res.status(200).json(agencias.map(u => agenciaViewModel(u)));
@@ -36,7 +36,7 @@ export default class AgenciaController {
   async update(req,res){     
     const{nome} = req.body;
 
-    const agencia = new Usuario(nome, req.usuario.id);
+    const agencia = new Agencia(nome, req.agencia.id);
 
     const agenciaAtualizada = await this.agenciaRepository.update(agencia);
 
@@ -45,7 +45,7 @@ export default class AgenciaController {
 
 
   async delete(req, res){
-    await this.agenciaRepository.delete(req.usuario);
+    await this.agenciaRepository.delete(req.agencia);
     return res.status(204).end();
   }
 
