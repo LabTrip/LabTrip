@@ -6,7 +6,7 @@ const usuarioViewModel = (usuario) => ({
   email: usuario.email,
   telefone: usuario.telefone,
   foto: usuario.foto,
-  permissaoID: usuario.permissaoID,
+  perfilId: usuario.perfilId,
 });
 
 export default class UsuarioController {
@@ -22,9 +22,9 @@ export default class UsuarioController {
   }
 
   async save(req, res){
-    const {nome, email, senha, telefone, foto, permissaoID} = req.body;
+    const {nome, email, senha, telefone, foto, perfilId} = req.body;
 
-    const usuario = new Usuario(nome, email, senha, telefone, foto, permissaoID);
+    const usuario = new Usuario(nome, email, senha, telefone, foto, perfilId);
 
     console.log(usuario)
 
@@ -38,9 +38,9 @@ export default class UsuarioController {
   }
 
   async update(req,res){     
-    const{nome, email, senha, telefone, foto, permissaoID} = req.body;
+    const{nome, email, senha, telefone, foto, perfilId} = req.body;
 
-    const usuario = new Usuario(nome, email, senha, telefone, foto, permissaoID, req.usuario.id);
+    const usuario = new Usuario(nome, email, senha, telefone, foto, perfilId, req.usuario.id);
 
     const usuarioAtualizado = await this.usuarioRepository.update(usuario);
 

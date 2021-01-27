@@ -27,7 +27,7 @@ export default class UsuarioRepository{
           nome: usuario.nome,
           email: usuario.email,
           senha: usuario.senha,
-          updatedAt: new Date().toISOString()
+          perfilId: usuario.perfilId
         })
         .returning("*");
   
