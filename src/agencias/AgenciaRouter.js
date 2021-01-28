@@ -13,14 +13,14 @@ export default function defineAgenciaRouter(){
   const agenciaMiddleware = new AgenciaMiddleware(agenciaRepository);
 
   router.route('/')
-   .get((req, res) => agenciaController.index(req, res))
-   .post((req, res) => agenciaController.save(req, res));
+   .get((req, res) => agenciaController.buscaTodos(req, res))
+   .post((req, res) => agenciaController.salva(req, res));
 
   router.route('/:id')
     .all((req, res, next) => agenciaMiddleware.agenciaExiste(req, res, next))
-    .get((req, res) => agenciaController.show(req, res))
-    .put((req, res) => agenciaController.update(req, res))
-    .delete((req, res) => agenciaController.delete(req, res));
+    .get((req, res) => agenciaController.mostra(req, res))
+    .put((req, res) => agenciaController.atualiza(req, res))
+    .delete((req, res) => agenciaController.deleta(req, res));
 
   return router;
 }

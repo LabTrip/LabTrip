@@ -3,11 +3,11 @@ export default class AgenciaRepository{
       this.client = client;
     }
   
-    async getAll(){
+    async buscaTodos(){
       return await this.client('agencia');
     }
   
-    async save(agencia){
+    async salva(agencia){
       const [firstRow] = await this.client('agencia')
         .insert(agencia)
         .returning("*");
@@ -15,25 +15,28 @@ export default class AgenciaRepository{
         return firstRow;
     }
   
-    async getById(id){
+    async buscaPorId(id){
       return await this.client('agencia')
         .where({'id': id.toString()}).first();
     }
   
-    async update(agencia){
+    async atualiza(agencia){
       const [firstRow] = await this.client('agencia')
         .where({'id': agencia.id})
         .update({
-          nome: agencia.nome
+          nome: agencia.nome,
+          editadoEm: new Date().toISOString()
         })
         .returning("*");
   
         return firstRow;
     }
   
-    async delete(agencia){
+    async deleta(agencia){
       await this.client('agencia')
-        .where('id', agencia.id)
-        .del()
+        .where({'id': agencia.id})
+        .update({
+          deletadoEm: new Date().toISOString()
+        })
     }
   }

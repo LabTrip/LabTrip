@@ -3,11 +3,11 @@ export default class UsuarioRepository{
       this.client = client;
     }
   
-    async getAll(){
+    async buscaTodos(){
       return await this.client('usuario');
     }
   
-    async save(usuario){
+    async salva(usuario){
       const [firstRow] = await this.client('usuario')
         .insert(usuario)
         .returning("*");
@@ -15,28 +15,31 @@ export default class UsuarioRepository{
         return firstRow;
     }
   
-    async getById(id){
+    async buscaPorId(id){
       return await this.client('usuario')
         .where({'id': id.toString()}).first();
     }
   
-    async update(usuario){
+    async atualiza(usuario){
       const [firstRow] = await this.client('usuario')
         .where({'id': usuario.id})
         .update({
           nome: usuario.nome,
           email: usuario.email,
           senha: usuario.senha,
-          perfilId: usuario.perfilId
+          perfilId: usuario.perfilId,
+          editadoEm: new Date().toISOString()
         })
         .returning("*");
   
         return firstRow;
     }
   
-    async delete(usuario){
+    async deleta(usuario){
       await this.client('usuario')
-        .where('id', usuario.id)
-        .del()
+        .where({'id': usuario.id})
+        .update({
+          deletadoEm: new Date().toISOString()
+        })
     }
   }

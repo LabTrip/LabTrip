@@ -12,40 +12,40 @@ export default class AgenciaController {
   }
 
   //GET /agencias
-  async index(req, res) {
-    const agencias = await this.agenciaRepository.getAll();
+  async buscaTodos(req, res) {
+    const agencias = await this.agenciaRepository.buscaTodos();
     res.status(200).json(agencias.map(u => agenciaViewModel(u)));
   }
 
-  async save(req, res){
+  async salva(req, res){
     const {nome} = req.body;
 
     const agencia = new Agencia(nome);
 
     console.log(agencia)
 
-    await this.agenciaRepository.save(agencia);
+    await this.agenciaRepository.salva(agencia);
 
     res.status(201).json(agenciaViewModel(agencia));
   }
 
-  show(req, res){
+  mostra(req, res){
     return res.status(200).json(agenciaViewModel(req.agencia)); 
   }
 
-  async update(req,res){     
+  async atualiza(req,res){     
     const{nome} = req.body;
 
     const agencia = new Agencia(nome, req.agencia.id);
 
-    const agenciaAtualizada = await this.agenciaRepository.update(agencia);
+    const agenciaAtualizada = await this.agenciaRepository.atualiza(agencia);
 
     return res.status(200).json(agenciaViewModel(agenciaAtualizada));      
   }
 
 
-  async delete(req, res){
-    await this.agenciaRepository.delete(req.agencia);
+  async deleta(req, res){
+    await this.agenciaRepository.deleta(req.agencia);
     return res.status(204).end();
   }
 

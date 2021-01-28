@@ -10,5 +10,8 @@ export default class Usuario{
       this.foto = foto;
       this.perfilId = perfilId;
       this.senha = sha256(senha).toString();
+      this.criadoEm = new Date().toISOString();
+      this.editadoEm = new Date().toISOString();
+      this.deletadoEm = null;
   }
 }

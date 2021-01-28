@@ -16,40 +16,40 @@ export default class UsuarioController {
   }
 
   //GET /usuarios
-  async index(req, res) {
-    const usuarios = await this.usuarioRepository.getAll();
+  async buscaTodos(req, res) {
+    const usuarios = await this.usuarioRepository.buscaTodos();
     res.status(200).json(usuarios.map(u => usuarioViewModel(u)));
   }
 
-  async save(req, res){
+  async salva(req, res){
     const {nome, email, senha, telefone, foto, perfilId} = req.body;
 
     const usuario = new Usuario(nome, email, senha, telefone, foto, perfilId);
 
     console.log(usuario)
 
-    await this.usuarioRepository.save(usuario);
+    await this.usuarioRepository.salva(usuario);
 
     res.status(201).json(usuarioViewModel(usuario));
   }
 
-  show(req, res){
+  mostra(req, res){
     return res.status(200).json(usuarioViewModel(req.usuario)); 
   }
 
-  async update(req,res){     
+  async atualiza(req,res){     
     const{nome, email, senha, telefone, foto, perfilId} = req.body;
 
     const usuario = new Usuario(nome, email, senha, telefone, foto, perfilId, req.usuario.id);
 
-    const usuarioAtualizado = await this.usuarioRepository.update(usuario);
+    const usuarioAtualizado = await this.usuarioRepository.atualiza(usuario);
 
     return res.status(200).json(usuarioViewModel(usuarioAtualizado));      
   }
 
 
-  async delete(req, res){
-    await this.usuarioRepository.delete(req.usuario);
+  async deleta(req, res){
+    await this.usuarioRepository.deleta(req.usuario);
     return res.status(204).end();
   }
 

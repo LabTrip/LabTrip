@@ -13,14 +13,14 @@ export default function defineUsuarioRouter(){
   const usuarioMiddleware = new UsuarioMiddleware(usuarioRepository);
 
   router.route('/')
-   .get((req, res) => usuarioController.index(req, res))
-   .post((req, res) => usuarioController.save(req, res));
+   .get((req, res) => usuarioController.buscaTodos(req, res))
+   .post((req, res) => usuarioController.salva(req, res));
 
   router.route('/:id')
     .all((req, res, next) => usuarioMiddleware.usuarioExiste(req, res, next))
-    .get((req, res) => usuarioController.show(req, res))
-    .put((req, res) => usuarioController.update(req, res))
-    .delete((req, res) => usuarioController.delete(req, res));
+    .get((req, res) => usuarioController.mostra(req, res))
+    .put((req, res) => usuarioController.atualiza(req, res))
+    .delete((req, res) => usuarioController.deleta(req, res));
 
   return router;
 }

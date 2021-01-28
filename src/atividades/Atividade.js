@@ -9,8 +9,8 @@ export default class Atividade{
       this.atividadeHr = atividadeHr;
       this.tripId = tripId;
       this.atividadeId = atividadeId;
-      this.createdAt = new Date().toISOString();
-      this.updatedAt = new Date().toISOString();
-      this.deletedAt = null;
+      this.criadoEm = new Date().toISOString();
+      this.editadoEm = new Date().toISOString();
+      this.deletadoEm = null;
   }
 }
