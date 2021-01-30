@@ -13,7 +13,7 @@ export default function Login({}) {
       <Text style={styles.title}>Seja bem vindo ao Labtrip.</Text>
       <TextInput placeholder={"seuemail@email.com"} style={styles.input} />
       <TextInput placeholder={"Senha"} style={styles.input} secureTextEntry={true} />
-      <TouchableOpacity style={styles.botaoLogin}>
+      <TouchableOpacity style={styles.botaoLogin} onPress={() => navigation.navigate('ListaViagens')}>
         <Text style={styles.botaoLoginTexto}>Entrar</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>

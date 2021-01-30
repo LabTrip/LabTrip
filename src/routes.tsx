@@ -12,6 +12,7 @@ import RedefinirInserirEmail from './pages/redefinirInserirEmail';
 import RedefinirInserirCodigo from './pages/redefinirInserirCodigo';
 import RedefinirInserirSenha from './pages/redefinirInserirSenha';
 import RedefinirSucesso from './pages/redefinirSucesso';
+import ListaViagens from './pages/listaViagens';
 
 export default function Routes(){
     return(
@@ -22,6 +23,7 @@ export default function Routes(){
                 <Screen name="RedefinirInserirCodigo" component={RedefinirInserirCodigo}/>
                 <Screen name="RedefinirInserirSenha" component={RedefinirInserirSenha}/>
                 <Screen name="RedefinirSucesso" component={RedefinirSucesso}/>
+                <Screen name="ListaViagens" component={ListaViagens}/>
             </Navigator>
         </NavigationContainer>
     );
