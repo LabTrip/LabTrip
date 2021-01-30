@@ -4,6 +4,7 @@ import defineUsuarioRouter from './usuarios/UsuarioRouter'
 import defineViagemRouter from './viagens/ViagemRouter'
 import defineAtividadeRouter from './atividades/AtividadeRouter'
 import defineAgenciaRouter from './agencias/AgenciaRouter'
+import defineLoginRouter from './login/LoginRouter'
 
 export default function LabTrip() {
   const app = express();
@@ -16,7 +17,6 @@ export default function LabTrip() {
   app.use('/login', defineLoginRouter());
 
   app.get('/', function(req, res) {
-
     res.status(200).send('Olá  mundo!');
   });
 
