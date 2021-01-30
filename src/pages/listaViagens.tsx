@@ -13,7 +13,7 @@ export default function ListaViagens() {
         <Image source={require('../imgs/logo.png')} style={styles.logo} />
       </View>
       <View style={styles.barra}>
-        <TextInput placeholder={'Pesquisar viagem...'} style={styles.input} />
+        <TextInput placeholder={'Pesquisar viagem...'} value={this.state} style={styles.input} />
         <Image source={require('../imgs/filter.svg')} />
         <TouchableOpacity onPress={() => alert('clicou no filtro')}>
           <Image source={require('../imgs/filter.svg')} />

@@ -6,14 +6,18 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function Login({}) {
   const navigation = useNavigation();
+  const [email, onChangeTextEmail] = React.useState('');
+  const [senha, onChangeTextSenha] = React.useState('');
   return (
     <View style={styles.container}>
       <Image source={require('../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Olá!</Text>
       <Text style={styles.title}>Seja bem vindo ao Labtrip.</Text>
-      <TextInput placeholder={"seuemail@email.com"} style={styles.input} />
-      <TextInput placeholder={"Senha"} style={styles.input} secureTextEntry={true} />
-      <TouchableOpacity style={styles.botaoLogin} onPress={() => navigation.navigate('ListaViagens')}>
+      <TextInput placeholder={"seuemail@email.com"} style={styles.input}
+      onChangeText={text => onChangeTextEmail(text)} value={email} />
+      <TextInput placeholder={"Senha"} style={styles.input} secureTextEntry={true}
+      onChangeText={text => onChangeTextSenha(text)} value={senha} />
+      <TouchableOpacity style={styles.botaoLogin} onPress={() => alert('email: ' + email + ', senha: ' + senha)}>
         <Text style={styles.botaoLoginTexto}>Entrar</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
