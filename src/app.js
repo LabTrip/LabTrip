@@ -13,7 +13,7 @@ export default function LabTrip() {
   app.use('/trips', defineViagemRouter());
   app.use('/atividades', defineAtividadeRouter());
   app.use('/agencias', defineAgenciaRouter());
-  app.use('/login', defineUsuarioRouter());
+  app.use('/login', defineLoginRouter());
 
   app.get('/', function(req, res) {
 

@@ -4,7 +4,7 @@ import UsuarioMiddleware from './LoginMiddleware'
 import LoginRepository from './LoginRepository'
 import {client} from '../config'
 
-export default function defineUsuarioRouter(){
+export default function defineLoginRouter(){
   const router = express.Router();
 
   const loginRepository = new LoginRepository(client);
