@@ -19,7 +19,7 @@ export default class LoginController {
 
     const usuario = await new Login(this.usuarioRepository.getByEmail(email));
 
-    const senha = sha256(req.usuario.senha).toString();
+    senha = sha256(senha).toString();
 
     if(usuario.senha == senha){
       const token = jwt.sign(usuario.email, process.env.SECRET);
