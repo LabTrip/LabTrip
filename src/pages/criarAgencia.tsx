@@ -10,11 +10,9 @@ const Tab = createMaterialBottomTabNavigator();
 export default function CriarAgencia() {
   const navigation = useNavigation();
   return (
-    <SafeAreaView>
-      
-    </SafeAreaView>
-
-
+    <View>
+      <Text>Teste</Text>
+    </View>
   );
 }
 

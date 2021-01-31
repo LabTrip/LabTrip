@@ -20,7 +20,6 @@ export default function Routes() {
             <Navigator screenOptions={{ headerShown: false }}>
                 <Screen name="Login" component={Login} />
                 <Screen name="ListaViagens" component={ListaViagens} />
-                <Screen name="CriarAgencia" component={CriarAgencia} />
                 <Screen name="RedefinirInserirEmail" component={RedefinirInserirEmail} />
                 <Screen name="RedefinirInserirCodigo" component={RedefinirInserirCodigo} />
                 <Screen name="RedefinirInserirSenha" component={RedefinirInserirSenha} />
