@@ -37,11 +37,8 @@ export default function EdicaoPerfil() {
 }
 
 const styles = StyleSheet.create({
-    droidSafeArea: {
-        flex: 1,
-        backgroundColor: '#fff',
-    },
     conteudo: {
+        flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
         flexDirection: 'column',
@@ -69,11 +66,9 @@ const styles = StyleSheet.create({
         backgroundColor: '#3385FF',
         width: 144,
         height: 50,
-
         padding: 10,
         borderRadius: 40,
         marginTop: 30,
-
         flexDirection: 'column',
         alignContent: 'center',
         justifyContent: 'center',
