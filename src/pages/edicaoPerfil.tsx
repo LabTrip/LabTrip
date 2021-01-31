@@ -1,23 +1,28 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Platform, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import Cabecalho from '../components/cabecalho';
 import { SafeAreaView } from 'react-navigation';
 
 export default function EdicaoPerfil() {
+    const [nome, onChangeTextNome] = React.useState('Ednaldo Pereira');
+    const [email, onChangeTextEmail] = React.useState('ednaldo.chance@yahoo.com.br');
+    const [data, onChangeTextData] = React.useState('17/10/1967');
+    const [telefone, onChangeTextTelefone] = React.useState('(11) 4002-8922');
     return (
         <SafeAreaView style={styles.droidSafeArea}>
             <Cabecalho />
             <View style={styles.conteudo}>
-                <ScrollView>
                     <TouchableOpacity>
                         <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
                     </TouchableOpacity>
-                    <TextInput placeholder={"Nome"} value={"Ednaldo Pereira"} style={styles.input} />
-                    <TextInput placeholder={"Nome"} value={"ednaldo.chance@yahoo.com.br"} style={styles.input} />
-                    <TextInput placeholder={"Nome"} value={"17/10/1967"} style={styles.input} />
-                    <TextInput placeholder={"Nome"} value={"(11) 4002-8922"} style={styles.input} />
+                    <TextInput placeholder={"Nome"} value={nome} style={styles.input}
+                    onChangeText={text => onChangeTextNome(text)}/>
+                    <TextInput placeholder={"Email"} value={email} style={styles.input} 
+                    onChangeText={text => onChangeTextEmail(text)}/>
+                    <TextInput placeholder={"Data de nascimento"} value={data} style={styles.input} 
+                    onChangeText={text => onChangeTextData(text)}/>
+                    <TextInput placeholder={"Telefone"} value={telefone} style={styles.input} 
+                    onChangeText={text => onChangeTextTelefone(text)}/>
                     <TouchableOpacity>
                         <Text style={styles.link}>
                             Redefinir senha
@@ -26,7 +31,6 @@ export default function EdicaoPerfil() {
                     <TouchableOpacity style={styles.botaoSalvar} >
                         <Text style={styles.botaoSalvarTexto}>Salvar</Text>
                     </TouchableOpacity>
-                </ScrollView>
             </View>
         </SafeAreaView>
     )
