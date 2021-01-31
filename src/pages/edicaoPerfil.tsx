@@ -15,9 +15,9 @@ export default function EdicaoPerfil() {
                 </TouchableOpacity>
                 <TextInput placeholder={"Nome"} value={"Ednaldo Pereira"} style={styles.input} />
                 <TextInput placeholder={"Nome"} value={"ednaldo.chance@yahoo.com.br"} style={styles.input} />
-                <TextInput placeholder={"Nome"} value={"Ednaldo Pereira"} style={styles.input} />
+                <TextInput placeholder={"Nome"} value={"17/10/1967"} style={styles.input} />
                 <TextInput placeholder={"Nome"} value={"(11) 4002-8922"} style={styles.input} />
-                <TouchableOpacity style={styles.botaoLink}>
+                <TouchableOpacity>
                     <Text style={styles.link}>
                         Redefinir senha
                     </Text>
