@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity,  } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 
@@ -18,7 +18,7 @@ export default function Login({}) {
       onChangeText={text => onChangeTextEmail(text)} value={email} />
       <TextInput placeholder={"Senha"} style={styles.input} secureTextEntry={true}
       onChangeText={text => onChangeTextSenha(text)} value={senha} />
-      <TouchableOpacity style={styles.botaoLogin} onPress={() => fetch.}>
+      <TouchableOpacity style={styles.botaoLogin} onPress={() => navigation.navigate('MenuBar')}>
         <Text style={styles.botaoLoginTexto}>Entrar</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>

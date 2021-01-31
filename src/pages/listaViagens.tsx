@@ -1,22 +1,21 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView, Platform, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import Login from './login';
-import RedefinirSucesso from './redefinirSucesso';
+import Cabecalho from '../components/cabecalho';
+import SafeArea from '../components/safeArea';
 
 const Tab = createMaterialBottomTabNavigator();
+
 
 
 
 export default function ListaViagens() {
   const navigation = useNavigation();
   return (
-    <SafeAreaView>
-      <View style={styles.cabecalho}>
-        <Image source={require('../imgs/logo.png')} style={styles.logo} />
-      </View>
+    <SafeAreaView style={styles.droidSafeArea}>
+      <Cabecalho/>
       <View style={styles.barra}>
         <TextInput placeholder={'Pesquisar viagem...'} style={styles.input} />
         <TouchableOpacity onPress={() => alert('clicou no filtro')}>
@@ -24,35 +23,42 @@ export default function ListaViagens() {
         </TouchableOpacity>
       </View>
       <ScrollView>
-      <View style={styles.conteudo}>
-        <TouchableOpacity style={styles.cardViagens}>
-          <Text>Apelido da viagem</Text>
-          <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-          <Text>Local: Nome do local</Text>
-          <Text>Status: status</Text>
-        </TouchableOpacity>
-      </View>
-      </ScrollView>
-      <View style={styles.menu}>
-        <TouchableOpacity style={styles.menuIcones} onPress={() => alert('clicou no sino')}>
-          <Image source={require('../imgs/bell.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuIcones} onPress={() => alert('clicou no edit')}>
-          <Image source={require('../imgs/edit-2.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuIcones} onPress={() => alert('clicou no aviao')}>
-          <Image source={require('../imgs/plane-solid.png')} style={{ width: 29, height: 29 }} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuIcones} onPress={() => alert('clicou no msgs')}>
-          <Image source={require('../imgs/message-square.png')} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.menuIcones} onPress={() => alert('clicou no user')}>
-          <Image source={require('../imgs/user.png')} />
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
-
-
+        <View style={styles.conteudo}>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+        </View>
+        </ScrollView>
+        <StatusBar/>
+        </SafeAreaView>
+    
   );
 }
 
@@ -75,16 +81,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     flexDirection: 'column',
-    height: 614,
+    height: '100%',
   },
   logo: {
     width: 128,
     height: 39,
     marginTop: 15,
-  },
-  icon: {
-    width: 100,
-    height: 100,
   },
   input: {
     marginRight: 25,
@@ -122,5 +124,10 @@ const styles = StyleSheet.create({
     height: 143,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
+  droidSafeArea: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingTop: Platform.OS === 'android' ? 25 : 0
+}
 });
