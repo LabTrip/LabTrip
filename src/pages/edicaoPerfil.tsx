@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Platform, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Platform, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import Cabecalho from '../components/cabecalho';
-import { SafeAreaView } from 'react-navigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function EdicaoPerfil() {
     const [nome, onChangeTextNome] = React.useState('Ednaldo Pereira');
@@ -9,30 +10,29 @@ export default function EdicaoPerfil() {
     const [data, onChangeTextData] = React.useState('17/10/1967');
     const [telefone, onChangeTextTelefone] = React.useState('(11) 4002-8922');
     return (
-        <SafeAreaView style={styles.droidSafeArea}>
-            <Cabecalho />
+        <ScrollView>
             <View style={styles.conteudo}>
-                    <TouchableOpacity>
-                        <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
-                    </TouchableOpacity>
-                    <TextInput placeholder={"Nome"} value={nome} style={styles.input}
-                    onChangeText={text => onChangeTextNome(text)}/>
-                    <TextInput placeholder={"Email"} value={email} style={styles.input} 
-                    onChangeText={text => onChangeTextEmail(text)}/>
-                    <TextInput placeholder={"Data de nascimento"} value={data} style={styles.input} 
-                    onChangeText={text => onChangeTextData(text)}/>
-                    <TextInput placeholder={"Telefone"} value={telefone} style={styles.input} 
-                    onChangeText={text => onChangeTextTelefone(text)}/>
-                    <TouchableOpacity>
-                        <Text style={styles.link}>
-                            Redefinir senha
+                <TouchableOpacity>
+                    <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
+                </TouchableOpacity>
+                <TextInput placeholder={"Nome"} value={nome} style={styles.input}
+                    onChangeText={text => onChangeTextNome(text)} />
+                <TextInput placeholder={"Email"} value={email} style={styles.input}
+                    onChangeText={text => onChangeTextEmail(text)} />
+                <TextInput placeholder={"Data de nascimento"} value={data} style={styles.input}
+                    onChangeText={text => onChangeTextData(text)} />
+                <TextInput placeholder={"Telefone"} value={telefone} style={styles.input}
+                    onChangeText={text => onChangeTextTelefone(text)} />
+                <TouchableOpacity>
+                    <Text style={styles.link}>
+                        Redefinir senha
                     </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.botaoSalvar} >
-                        <Text style={styles.botaoSalvarTexto}>Salvar</Text>
-                    </TouchableOpacity>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.botaoSalvar} >
+                    <Text style={styles.botaoSalvarTexto}>Salvar</Text>
+                </TouchableOpacity>
             </View>
-        </SafeAreaView>
+        </ScrollView>
     )
 }
 
@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
     droidSafeArea: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingTop: Platform.OS === 'android' ? 25 : 0
     },
     conteudo: {
         backgroundColor: '#fff',

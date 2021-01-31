@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Cabecalho() {
     return (
-        <View style={styles.cabecalho}>
-            <Image source={require('../imgs/logo.png')} style={styles.logo} />
-        </View>
+        <SafeAreaView>
+            <View style={styles.cabecalho}>
+                <Image source={require('../imgs/logo.png')} style={styles.logo} />
+            </View>
+        </SafeAreaView>
     )
 }
 
@@ -22,6 +25,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
         elevation: 24,
+        marginBottom: 2,
     },
     logo: {
         width: 128,
