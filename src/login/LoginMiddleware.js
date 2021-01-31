@@ -6,7 +6,8 @@ export default class UsuarioMiddleware{
   
     async usuarioExiste(req, res, next){
       //const usuario = this.usuarios.find(u => u.id == req.params.id);
-      const usuario = await this.usuarioRepository.getById(req.params.id)
+      const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
+      console.log("verificou se existe")
       if(!usuario){
         return res.status(404).json({erro: 'Usuário não encontrado!'});       
       }

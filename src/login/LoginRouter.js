@@ -4,7 +4,7 @@ import UsuarioMiddleware from './LoginMiddleware'
 import LoginRepository from './LoginRepository'
 import {client} from '../config'
 
-export default function defineUsuarioRouter(){
+export default function defineLoginRouter(){
   const router = express.Router();
 
   const loginRepository = new LoginRepository(client);
@@ -13,7 +13,7 @@ export default function defineUsuarioRouter(){
 
   router.route('/')
    .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))
-   .post((req, res) => loginController.authenticate(req, res));
+   .post((req, res) => loginController.autentica(req, res));
 
   return router;
 }

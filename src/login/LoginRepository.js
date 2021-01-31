@@ -3,7 +3,7 @@ export default class LoginRepository{
       this.client = client;
     }
   
-    async getByEmail(email){
+    async buscaPorEmail(email){
       return await this.client('usuario')
         .where({'email': email.toString()}).first();
     }

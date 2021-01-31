@@ -1,11 +1,15 @@
 import Login from './Login'
 const jwt = require('jsonwebtoken');
+import sha256 from 'crypto-js/sha256'
 
-const loginViewModel = (login) => ({
+const loginViewModel = (usuario) => ({
   id: usuario.id,
   nome: usuario.nome,
   email: usuario.email,
-  permissaoID: usuario.permissaoID
+  foto: usuario.foto,
+  telefone: usuario.telefone,
+  perfilId: usuario.perfilId,
+  token: usuario.token,
 });
 
 export default class LoginController {
@@ -14,18 +18,26 @@ export default class LoginController {
     this.loginRepository = loginRepository;
   }
 
-  async authenticate(req, res){
+  async autentica(req, res){
     const{email, senha} = req.body;
-
-    const usuario = await new Login(this.usuarioRepository.getByEmail(email));
-
-    const senha = sha256(req.usuario.senha).toString();
-
-    if(usuario.senha == senha){
+    
+    const usuario = await this.loginRepository.buscaPorEmail(email);
+    
+    if(usuario.senha == sha256(senha).toString()){
+      console.log("verificou senha")
       const token = jwt.sign(usuario.email, process.env.SECRET);
+      const usuarioAuth = new Login(usuario.id, usuario.nome, usuario.email, usuario.foto, usuario.telefone, usuario.perfilId, token)
+      return res.status(200).json(loginViewModel(usuarioAuth)); 
     }
+    else{
+      console.log("recusou senha")
+      return res.status(401).end();
+    }
+    
+  }
 
-    return res.status(200).json(usuarioViewModel(req.usuario), token); 
+  validaToken(req, res){
+
   }
 
 }
