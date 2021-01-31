@@ -21,11 +21,9 @@ export default class LoginController {
   async autentica(req, res){
     const{email, senha} = req.body;
 
-    const usuario = await new Login(this.usuarioRepository.getByEmail(email));
+    const usuario = await this.loginRepository.buscaPorEmail(email);
 
-    senha = sha256(senha).toString();
-
-    if(usuario.senha == senha){
+    if(usuario.senha == sha256(senha).toString()){
       const token = jwt.sign(usuario.email, process.env.SECRET);
       const usuarioAuth = new Login(usuario.id, usuario.nome, usuario.email, usuario.foto, usuario.telefone, usuario.perfilId, token)
       return res.status(200).json(loginViewModel(usuarioAuth)); 
