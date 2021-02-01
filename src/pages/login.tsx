@@ -9,6 +9,20 @@ export default function Login({}) {
   const navigation = useNavigation();
   const [email, onChangeTextEmail] = React.useState('');
   const [senha, onChangeTextSenha] = React.useState('');
+  const auth = async () => {
+    return fetch('https://labtrip-backend.herokuapp.com/login',{
+      method:'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: email,
+        senha: senha
+      })      
+    });
+  }
+  let descErro = null;
   return (
     <View style={styles.container}>
       <Image source={require('../imgs/logo.png')} style={styles.logo} />
@@ -18,7 +32,20 @@ export default function Login({}) {
       onChangeText={text => onChangeTextEmail(text)} value={email} />
       <TextInput placeholder={"Senha"} style={styles.input} secureTextEntry={true}
       onChangeText={text => onChangeTextSenha(text)} value={senha} />
-      <TouchableOpacity style={styles.botaoLogin} onPress={() => navigation.navigate('MenuBar')}>
+      <TouchableOpacity style={styles.botaoLogin} onPress={() => {
+          auth().then(response => {
+            return response.json();
+          }).then((json) => {
+            if(json.codigo == "200"){
+              console.log("Autenticação ok");
+              navigation.navigate('MenuBar');
+            }
+            else{
+              console.log("Credenciais inválidas");
+              alert(json.erro);
+            }
+          });
+        }}>
         <Text style={styles.botaoLoginTexto}>Entrar</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
@@ -83,5 +110,11 @@ const styles = StyleSheet.create({
     marginTop: 30,
     textDecorationLine: 'underline',
     color: '#fff'
+  },
+  erro: {
+    marginTop: 20,
+    fontSize: 20,
+    color: '#ff0000',
+    display: 'flex'
   }
 });
