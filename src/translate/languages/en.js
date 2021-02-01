@@ -2,7 +2,7 @@ const messages  = {
     en: {
         translations: {
             login: {
-                titulo: 'Hello',
+                titulo: 'Hello!',
                 saudacao: 'Welcome to Labtrip.'
             },
             redefinirSenha:{
@@ -10,14 +10,18 @@ const messages  = {
                 inserirCodigo:'Enter the code which you received',
                 inserirEmail: 'Enter your e-mail',
                 InserirNovaSenha: 'Enter your new password and confirm it',
-                sucesso: 'your password has been reset successfully'
+                sucesso: 'your password has been reset successfully',
+                senha: 'password',
+                email: 'youremail@email.com',
+                redefinir: 'I forgot my password'
             },
             botoes:{
                 salvar: 'Save',
                 deletar:'Delete',
                 editar:'Edit',
                 sim:'Yes',
-                nao:'No'
+                nao:'No',
+                entrar: 'Login'
             }             
             
 
