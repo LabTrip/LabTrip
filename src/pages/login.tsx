@@ -10,7 +10,6 @@ export default function Login({}) {
   const navigation = useNavigation();
   const [email, onChangeTextEmail] = React.useState('');
   const [senha, onChangeTextSenha] = React.useState('');
-<<<<<<< HEAD
   const auth = async () => {
     return fetch('https://labtrip-backend.herokuapp.com/login',{
       method:'POST',
@@ -25,9 +24,6 @@ export default function Login({}) {
     });
   }
   let descErro = null;
-=======
-
->>>>>>> 18c7000ea4913a39299acaf8bcf317c65eab86ce
   return (
     <View style={styles.container}>
       <Image source={require('../imgs/logo.png')} style={styles.logo} />
@@ -37,9 +33,9 @@ export default function Login({}) {
       onChangeText={text => onChangeTextEmail(text)} value={email} />
       <TextInput placeholder= {i18n.t('redefinirSenha.senha')} style={styles.input} secureTextEntry={true}
       onChangeText={text => onChangeTextSenha(text)} value={senha} />
-<<<<<<< HEAD
       <TouchableOpacity style={styles.botaoLogin} onPress={() => {
           auth().then(response => {
+            console.log(response.status)
             return response.json();
           }).then((json) => {
             if(json.codigo == "200"){
@@ -53,10 +49,6 @@ export default function Login({}) {
           });
         }}>
         <Text style={styles.botaoLoginTexto}>Entrar</Text>
-=======
-      <TouchableOpacity style={styles.botaoLogin} onPress={() => navigation.navigate('MenuBar')}>
-        <Text style={styles.botaoLoginTexto}>{i18n.t('botoes.entrar')}</Text>
->>>>>>> 18c7000ea4913a39299acaf8bcf317c65eab86ce
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
       <Text style={styles.link} >
