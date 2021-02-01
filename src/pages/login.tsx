@@ -1,7 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity  } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, TextComponent  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { i18n } from '../translate/i18n'
 
 
 
@@ -9,21 +10,22 @@ export default function Login({}) {
   const navigation = useNavigation();
   const [email, onChangeTextEmail] = React.useState('');
   const [senha, onChangeTextSenha] = React.useState('');
+
   return (
     <View style={styles.container}>
       <Image source={require('../imgs/logo.png')} style={styles.logo} />
-      <Text style={styles.title}>Olá!</Text>
-      <Text style={styles.title}>Seja bem vindo ao Labtrip.</Text>
-      <TextInput placeholder={"seuemail@email.com"} style={styles.input}
+      <Text style={styles.title}>{i18n.t('login.titulo')}</Text>
+      <Text style={styles.title}>{i18n.t('login.saudacao')}</Text>
+      <TextInput placeholder= {i18n.t('redefinirSenha.email')} style={styles.input}
       onChangeText={text => onChangeTextEmail(text)} value={email} />
-      <TextInput placeholder={"Senha"} style={styles.input} secureTextEntry={true}
+      <TextInput placeholder= {i18n.t('redefinirSenha.senha')} style={styles.input} secureTextEntry={true}
       onChangeText={text => onChangeTextSenha(text)} value={senha} />
       <TouchableOpacity style={styles.botaoLogin} onPress={() => navigation.navigate('MenuBar')}>
-        <Text style={styles.botaoLoginTexto}>Entrar</Text>
+        <Text style={styles.botaoLoginTexto}>{i18n.t('botoes.entrar')}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
       <Text style={styles.link} >
-        Esqueceu sua senha?
+      {i18n.t('redefinirSenha.redefinir')}
       </Text>
       </TouchableOpacity>
       <StatusBar style="auto" />
