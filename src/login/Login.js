@@ -2,7 +2,7 @@ import {v4 as uuidv4} from 'uuid';
 
 
 export default class Login{
-  constructor(id, nome, email, foto, telefone, perfilId, token, codigo){
+  constructor(id, nome, email, foto, telefone, perfilId, token, codigo = null, senha = null){
     this.id = id;  
     this.nome = nome;  
     this.email = email;
@@ -11,5 +11,6 @@ export default class Login{
     this.perfilId = perfilId;
     this.token = token;
     this.codigo = codigo;
+    this.senha = senha;
   }
 }

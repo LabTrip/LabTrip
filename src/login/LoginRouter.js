@@ -15,5 +15,17 @@ export default function defineLoginRouter(){
    .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))
    .post((req, res) => loginController.autentica(req, res));
 
+  router.route('/redefine')
+   .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))
+   .post((req, res) => loginController.redefine(req, res));
+  
+   router.route('/geracodigo')
+   .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))
+   .post((req, res) => loginController.geraCodigo(req, res));
+
+   router.route('/verificacodigo')
+   .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))
+   .post((req, res) => loginController.validaCodigo(req, res));
+
   return router;
 }
