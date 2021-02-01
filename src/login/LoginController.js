@@ -10,6 +10,7 @@ const loginViewModel = (usuario) => ({
   telefone: usuario.telefone,
   perfilId: usuario.perfilId,
   token: usuario.token,
+  codigo: usuario.codigo
 });
 
 export default class LoginController {
@@ -26,12 +27,12 @@ export default class LoginController {
     if(usuario.senha == sha256(senha).toString()){
       console.log("A senha foi aceita para o e-mail:" + email);
       const token = jwt.sign(usuario.email, process.env.SECRET);
-      const usuarioAuth = new Login(usuario.id, usuario.nome, usuario.email, usuario.foto, usuario.telefone, usuario.perfilId, token)
+      const usuarioAuth = new Login(usuario.id, usuario.nome, usuario.email, usuario.foto, usuario.telefone, usuario.perfilId, token, "200")
       return res.status(200).json(loginViewModel(usuarioAuth)); 
     }
     else{
       console.log("A senha foi recusada para o e-mail:" + email);
-      return res.status(401).json({erro:"Senha incorreta."});
+      return res.status(401).json({erro:"Senha incorreta.",codigo:"401"});
     }
     
   }
