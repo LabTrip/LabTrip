@@ -1,22 +1,24 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import BarraPesquisa from '../components/barraPesquisa';
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function ListaViagens() {
+export default function ListaEditarViagens() {
   const navigation = useNavigation();
   return (
-    
     <View>
-      <BarraPesquisa texto="Pesquisar Viagem..." />
+      <BarraPesquisa texto={'Pesquisar viagem...'} />
       <ScrollView>
         <View style={styles.conteudo}>
-          <TouchableOpacity  style={styles.cardViagens}>
+          <TouchableOpacity style={styles.botaoMais}>
+            <Image source={require('../imgs/plus-circle.png')}/>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
             <Text>Apelido da viagem</Text>
             <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
             <Text>Local: Nome do local</Text>
@@ -50,7 +52,7 @@ export default function ListaViagens() {
       </ScrollView>
       <StatusBar />
     </View>
-
+  
   );
 }
 
@@ -87,4 +89,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  botaoMais: {
+    marginTop: 20,
+  }
 });

@@ -14,6 +14,7 @@ import RedefinirSucesso from '../pages/redefinirSucesso';
 import CriarAgencia from '../pages/criarAgencia';
 import EdicaoPerfil from '../pages/edicaoPerfil';
 import Cabecalho from './cabecalho';
+import Laboratorio from './laboratorio';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -29,7 +30,7 @@ export default function MenuBar() {
               <MaterialCommunityIcons name="bell" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="EdicaoPerfil" component={EdicaoPerfil} options={{
+          <Tab.Screen name="Laboratorio" component={Laboratorio} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
@@ -50,7 +51,7 @@ export default function MenuBar() {
               <MaterialCommunityIcons name="message" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="RedefinirInserirEmail" component={RedefinirInserirEmail} options={{
+          <Tab.Screen name="EdicaoPerfil" component={EdicaoPerfil} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
