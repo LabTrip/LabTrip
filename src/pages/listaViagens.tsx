@@ -11,45 +11,46 @@ const Tab = createMaterialBottomTabNavigator();
 export default function ListaViagens() {
   const navigation = useNavigation();
   return (
-    
-    <View>
+    <ScrollView>
       <BarraPesquisa texto="Pesquisar Viagem..." />
       <ScrollView>
-        <View style={styles.conteudo}>
-          <TouchableOpacity  style={styles.cardViagens}>
-            <Text>Apelido da viagem</Text>
-            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-            <Text>Local: Nome do local</Text>
-            <Text>Status: status</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cardViagens}>
-            <Text>Apelido da viagem</Text>
-            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-            <Text>Local: Nome do local</Text>
-            <Text>Status: status</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cardViagens}>
-            <Text>Apelido da viagem</Text>
-            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-            <Text>Local: Nome do local</Text>
-            <Text>Status: status</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cardViagens}>
-            <Text>Apelido da viagem</Text>
-            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-            <Text>Local: Nome do local</Text>
-            <Text>Status: status</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.cardViagens}>
-            <Text>Apelido da viagem</Text>
-            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-            <Text>Local: Nome do local</Text>
-            <Text>Status: status</Text>
-          </TouchableOpacity>
+        <View>
+          <View style={styles.conteudo}>
+            <TouchableOpacity style={styles.cardViagens}>
+              <Text>Apelido da viagem</Text>
+              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+              <Text>Local: Nome do local</Text>
+              <Text>Status: status</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cardViagens}>
+              <Text>Apelido da viagem</Text>
+              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+              <Text>Local: Nome do local</Text>
+              <Text>Status: status</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cardViagens}>
+              <Text>Apelido da viagem</Text>
+              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+              <Text>Local: Nome do local</Text>
+              <Text>Status: status</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cardViagens}>
+              <Text>Apelido da viagem</Text>
+              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+              <Text>Local: Nome do local</Text>
+              <Text>Status: status</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.cardViagens}>
+              <Text>Apelido da viagem</Text>
+              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+              <Text>Local: Nome do local</Text>
+              <Text>Status: status</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
       <StatusBar />
-    </View>
+      </ScrollView>
 
   );
 }
