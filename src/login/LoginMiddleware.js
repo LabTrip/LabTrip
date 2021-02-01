@@ -7,10 +7,10 @@ export default class UsuarioMiddleware{
     async usuarioExiste(req, res, next){
       //const usuario = this.usuarios.find(u => u.id == req.params.id);
       const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
-      console.log("verificou se existe")
       if(!usuario){
-        return res.status(404).json({erro: 'Usuário não encontrado!'});       
+        return res.status(404).json({erro: 'E-mail não cadastrado.'});       
       }
+      console.log("E-mail localizado na base de dados")
       req.usuario = usuario;
       next(); 
     }
