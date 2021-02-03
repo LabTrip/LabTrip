@@ -14,6 +14,9 @@ import RedefinirSucesso from '../pages/redefinirSucesso';
 import CriarAgencia from '../pages/criarAgencia';
 import EdicaoPerfil from '../pages/edicaoPerfil';
 import Cabecalho from './cabecalho';
+import Laboratorio from './laboratorio';
+import Notificacoes from '../pages/notificacoes';
+import Mensagens from '../pages/mensagens';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -21,36 +24,36 @@ export default function MenuBar() {
   return (
       <><Cabecalho />
       <NavigationContainer independent={true}>
-        <Tab.Navigator barStyle={{ backgroundColor: '#fff' }}>
-          <Tab.Screen name="ListaViagens" component={ListaViagens} options={{
+        <Tab.Navigator barStyle={{ backgroundColor: '#fff' }} initialRouteName={"ListaViagens"}>
+          <Tab.Screen name="Notificacoes" component={Notificacoes} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
               <MaterialCommunityIcons name="bell" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="EdicaoPerfil" component={EdicaoPerfil} options={{
+          <Tab.Screen name="Laboratorio" component={Laboratorio} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
               <MaterialCommunityIcons name="pen" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="RedefinirSucesso" component={RedefinirSucesso} options={{
+          <Tab.Screen name="ListaViagens" component={ListaViagens} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
               <MaterialCommunityIcons name="airplane" color={'#00ff7b'} size={29} />
             )
           }} />
-          <Tab.Screen name="RedefinirInserirSenha" component={RedefinirInserirSenha} options={{
+          <Tab.Screen name="Mensagens" component={Mensagens} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
               <MaterialCommunityIcons name="message" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="RedefinirInserirEmail" component={RedefinirInserirEmail} options={{
+          <Tab.Screen name="EdicaoPerfil" component={EdicaoPerfil} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
