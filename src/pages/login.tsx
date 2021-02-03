@@ -11,7 +11,7 @@ export default function Login({}) {
   const [email, onChangeTextEmail] = React.useState('');
   const [senha, onChangeTextSenha] = React.useState('');
   const auth = async () => {
-    return fetch('https://labtrip-backend.herokuapp.com/login',{
+    return await fetch('https://labtrip-backend.herokuapp.com/login',{
       method:'POST',
       headers: {
         Accept: 'application/json',
@@ -30,7 +30,7 @@ export default function Login({}) {
       <Text style={styles.title}>Olá!</Text>
       <Text style={styles.title}>Seja bem vindo ao Labtrip.</Text>
       <TextInput placeholder='email@email.com' style={styles.input}
-      onChangeText={text => onChangeTextEmail(text)} value={email} />
+      onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
       <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
       onChangeText={text => onChangeTextSenha(text)} value={senha} />
       <TouchableOpacity style={styles.botaoLogin} onPress={() => {

@@ -5,13 +5,42 @@ import { useNavigation } from '@react-navigation/native';
 
 export default function RedefinirInserirEmail() {
     const navigation = useNavigation();
+    const [email, onChangeTextEmail] = React.useState('');
+    const geraCodigo = async () => {
+        return fetch('https://labtrip-backend.herokuapp.com/login/geracodigo',{
+          method:'POST',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email
+          })      
+        });
+      }
     return (
         <View style={styles.container}>
             <Image source={require('../imgs/logo.png')} style={styles.logo} />
             <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
             <Text style={styles.texto}>Insira o e-mail cadastrado.</Text>
-            <TextInput placeholder={"seuemail@email.com"} style={styles.input} />
-            <TouchableOpacity style={styles.botaoConfirmar} onPress={() => navigation.navigate('RedefinirInserirCodigo')}>
+            <TextInput placeholder={"seuemail@email.com"} style={styles.input}
+            onChangeText={text => onChangeTextEmail(text.trim())} value={email}/>
+            <TouchableOpacity style={styles.botaoConfirmar} onPress={() => 
+                {
+                    geraCodigo().then(response => {
+                        console.log(response.status)
+                        return response.json();
+                      }).then((json) => {
+                        if(json.codigo == "200"){
+                          console.log("Autenticação ok");
+                          navigation.navigate('RedefinirInserirCodigo',{email: email});
+                        }
+                        else{
+                          console.log("E-mail não cadastrado!");
+                          alert(json.erro);
+                        }
+                      });
+                }}>
                 <Text style={styles.botaoLoginTexto}>Confirmar</Text>
             </TouchableOpacity>
             <StatusBar style="auto" />
