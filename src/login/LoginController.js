@@ -6,12 +6,12 @@ const nodemailer = require("nodemailer");
 require('dotenv/config');
 
 let transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: process.env.SMTP_SENDINBLUE,
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.EMAIL_USER, // generated ethereal user
-    pass: process.env.EMAIL_PASSWORD, // generated ethereal password
+    pass: process.env.SENDINBLUE_PASSWORD, // generated ethereal password
   },
   tls:{
     rejectUnauthorized: false
@@ -95,7 +95,7 @@ export default class LoginController {
   async enviaCodigoVerificacao(usuario){
 
     let info = await transporter.sendMail({
-      from: 'LabTrip <mailer@labtrip.com>', // sender address
+      from: 'LabTrip <biel0828@hotmail.com>', // sender address
       to: usuario.email, // list of receivers
       subject: "Código de verificação - LabTrip", // Subject line
       html: this.montaCorpoEmailVerificacao(usuario), // html body
@@ -113,8 +113,8 @@ export default class LoginController {
         "table.titulo {background: #FFFFFF;padding-bottom: 7px;border-bottom: solid 2px #3385FF;}" +
         "table.titulo tr {background: #FFFFFF;color: #3385FF;}" + 
         "table.titulo tr td {display: flex;padding: auto;align-items: center;justify-content: center;}" +
-        ".logo {width: 100%;display: flex;padding: auto;align-items: center;justify-content: center;}" +
-        ".logo img {width: 60%}" +
+        ".logo {width: 100%;display: flex;padding: auto;align-items: center;justify-content: center;text-align: center;}" +
+        ".logo img {width: 100%}" +
         ".line{height: 2.5px;width: 100%;background: #3385FF;}" +
         ".subject {font-size: 20px;font-weight: 600;text-align: center;padding: auto;}" +
         "div.clear {clear: both;}" +
@@ -124,7 +124,7 @@ export default class LoginController {
         "table.ov tr:nth-child(2n+1) td {background: #CFE7F3;}" +
         "table.footer {border-top: solid 1px #CCCCCC;color: #999999;}" +
         "</style></head><body>" +
-        "<div class='logo'><img src='https://lh3.googleusercontent.com/L2FstSDkeuVLSILRimwaYJJ38tGxgNwn_BInOB7eDzNXPRmaBjNgFylTzlL5-JRpE3vmPEp9YT5VbxSE4FCPOblUW0burjoJ9VPHWGJNFaraHQDDIlxV1imrKGbV3Cju-4mJq-4xn-JGX4xFGRAFnWs8x3c4vw?authuser=3'></div>" +
+        "<div class='logo'><img src='https://yt3.ggpht.com/h7v4PLxOl-4v3GFwdraTCW7D2ZJwIQbbP380kwT0ssrDh1UTlZeXo9oSkTrj5n1BBSEv_Uk4YQ=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj'></div>" +
         "<div class='line'></div><br>" +
         "<table class='texto'><tbody>" +
         "<tr><td>Olá, " + usuario.nome + ", tudo bem?<br><br>Segue abaixo o código de verificação para concluir sua solicitação para redefinir senha: <br><br> </td></tr>" +
