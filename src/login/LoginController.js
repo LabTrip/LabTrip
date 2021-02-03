@@ -87,9 +87,16 @@ export default class LoginController {
   }
 
   async redefine(req, res){
-    const {email, senha} = req.body;
-    await this.loginRepository.redefineSenha(email, sha256(senha).toString());
-    return res.status(200).json({codigo:"200", message: "Senha redefinida com sucesso."});
+    const {email, senha, codigoVerificacao} = req.body;
+    const dados = await this.loginRepository.buscaPorEmail(email);
+    if(codigoVerificacao == dados.codigoVerificacao.toString()){
+      await this.loginRepository.redefineSenha(email, sha256(senha).toString(),cryptoRandomString({length: 6, type: 'distinguishable'}));
+      return res.status(200).json({codigo:"200", message: "Senha redefinida com sucesso."});
+    }
+    else{
+      return res.status(401).json({codigo:"401", error: "Código incorreto."});
+    }
+    
   }
 
   async enviaCodigoVerificacao(usuario){

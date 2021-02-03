@@ -18,12 +18,13 @@ export default class LoginRepository{
       return firstRow;
     }
 
-    async redefineSenha(email, senha){
+    async redefineSenha(email, senha, novoCodigo){
       const [firstRow] = await this.client('usuario')
       .where({'email': email.toString()})
       .update({
         senha: senha,
-        verificado: true
+        verificado: true,
+        codigoVerificacao: novoCodigo
       }).returning("*");
 
       return firstRow;
