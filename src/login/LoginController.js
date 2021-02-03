@@ -70,7 +70,7 @@ export default class LoginController {
     const usuario = await this.loginRepository.geraCodigo(email, codigoVerificacao);
     await this.enviaCodigoVerificacao(usuario);
     console.log(usuario);
-    return res.status(200).json({message: "Código gerado com sucesso"});
+    return res.status(200).json({codigo:"200", message: "Código gerado com sucesso"});
   }
 
   async validaCodigo(req, res){
