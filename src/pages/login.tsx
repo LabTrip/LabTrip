@@ -28,7 +28,7 @@ export default function Login({}) {
     <View style={styles.container}>
       <Image source={require('../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Olá!</Text>
-      <Text style={styles.title}>Seja bem vindo ao Labtrip.</Text>
+      <Text style={styles.title}>Seja bem-vindo ao Labtrip.</Text>
       <TextInput placeholder='email@email.com' style={styles.input}
       onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
       <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
