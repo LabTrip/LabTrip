@@ -1,6 +1,7 @@
 import Login from './Login'
 const jwt = require('jsonwebtoken');
 import sha256 from 'crypto-js/sha256'
+import { next } from 'sucrase/dist/parser/tokenizer';
 const cryptoRandomString = require('crypto-random-string');
 const nodemailer = require("nodemailer");
 require('dotenv/config');
@@ -45,31 +46,35 @@ export default class LoginController {
       codigo:"401"});
     }
     else if(usuario.senha == sha256(senha).toString()){
-      console.log("A senha foi aceita para o e-mail:" + email);
-      const token = jwt.sign(usuario.email, process.env.SECRET);
+      const token = jwt.sign({email: usuario.email, id: usuario.id, perfilId: usuario.perfilId, geradoEm: new Date().toISOString()}, process.env.SECRET, {expiresIn: 2592000});
       const usuarioAuth = new Login(usuario.id, usuario.nome, usuario.email, usuario.foto, usuario.telefone, usuario.perfilId, token, "200")
       return res.status(200).json(loginViewModel(usuarioAuth)); 
     }
     else{
-      console.log("A senha foi recusada para o e-mail:" + email);
-      return res.status(401).json({erro:"Senha incorreta.",codigo:"401"});
+      return res.status(401).json({erro:"E-mail e/ou senha inválidos.",codigo:"401"});
     }
     
   }
 
-  validaToken(req, res){
+  async validaToken(req, res, next){
+    const token = req.headers['x-access-token'];
+    jwt.verify(token, process.env.SECRET, (err, decoded) => {
+        if(err) return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
+
+        req.email = decoded.email;
+        req.id = decoded.id;
+        req.perfilId = decoded.perfilId;
+        req.geradoEm = decoded.geradoEm;
+        next();
+    });
 
   }
 
   async geraCodigo(req, res){
     const {email} = req.body;
     const codigoVerificacao = cryptoRandomString({length: 6, type: 'distinguishable'});
-    console.log(codigoVerificacao);
-    console.log(process.env.EMAIL_USER);
-    console.log(process.env.EMAIL_PASSWORD);
     const usuario = await this.loginRepository.geraCodigo(email, codigoVerificacao);
     await this.enviaCodigoVerificacao(usuario);
-    console.log(usuario);
     return res.status(200).json({codigo:"200", message: "Código gerado com sucesso"});
   }
 

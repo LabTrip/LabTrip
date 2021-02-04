@@ -2,6 +2,8 @@ import express from 'express';
 import PerfilController from './PerfilController'
 import PerfilMiddleware from './PerfilMiddleware'
 import PerfilRepository from './PerfilRepository'
+import LoginMiddleware from '../login/LoginMiddleware'
+import LoginRepository from '../login/LoginRepository'
 import {client} from '../config'
 
 export default function defineAgenciaRouter(){
@@ -10,15 +12,20 @@ export default function defineAgenciaRouter(){
   const perfilRepository = new PerfilRepository(client);
 
   const perfilController = new PerfilController(perfilRepository);
-  const perfilMiddleware = new AgenciaMiddleware(perfilRepository);
+  const perfilMiddleware = new PerfilMiddleware(perfilRepository);
+
+  const loginRepository = new LoginRepository(client);
+  const loginMiddleware = new LoginMiddleware(loginRepository);
 
   router.route('/')
-   .get((req, res) => agenciaController.buscaTodos(req, res))
-   .post((req, res) => agenciaController.salva(req, res));
+   .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .get((req, res) => perfilController.buscaTodos(req, res))
+   .post((req, res) => perfilController.salva(req, res));
 
   router.route('/:id')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => perfilMiddleware.perfilExiste(req, res, next))
-    .get((req, res) => agenciaController.mostra(req, res));
+    .get((req, res) => perfilController.mostra(req, res));
 
   return router;
 }

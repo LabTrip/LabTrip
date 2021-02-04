@@ -1,16 +1,16 @@
-export default class AgenciaMiddleware{
+export default class PerfilMiddleware{
   
-    constructor(agenciaRepository){
-      this.agenciaRepository = agenciaRepository;
+    constructor(perfilRepository){
+      this.perfilRepository = perfilRepository;
     }
   
-    async agenciaExiste(req, res, next){
+    async perfilExiste(req, res, next){
       //const usuario = this.usuarios.find(u => u.id == req.params.id);
-      const agencia = await this.agenciaRepository.buscaPorId(req.params.id)
-      if(!agencia){
-        return res.status(404).json({erro: 'Agencia não encontrada!'});       
+      const perfil = await this.perfilRepository.buscaPorId(req.params.id)
+      if(!perfil){
+        return res.status(404).json({erro: 'Perfil não encontrado!'});       
       }
-      req.agencia = agencia;
+      req.perfil = perfil;
       next(); 
     }
   }

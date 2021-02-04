@@ -17,6 +17,7 @@ export default class UsuarioController {
 
   //GET /usuarios
   async buscaTodos(req, res) {
+    console.log("Busca todos")
     const usuarios = await this.usuarioRepository.buscaTodos();
     res.status(200).json(usuarios.map(u => usuarioViewModel(u)));
   }

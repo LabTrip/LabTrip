@@ -1,4 +1,4 @@
-export default class AgenciaRepository{
+export default class PerfilRepository{
     constructor(client){
       this.client = client;
     }
