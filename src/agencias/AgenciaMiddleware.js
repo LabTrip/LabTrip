@@ -8,7 +8,7 @@ export default class AgenciaMiddleware{
       //const usuario = this.usuarios.find(u => u.id == req.params.id);
       const agencia = await this.agenciaRepository.buscaPorId(req.params.id)
       if(!agencia){
-        return res.status(404).json({erro: 'Agencia não encontrada!'});       
+        return res.status(404).json({erro: 'Agencia não encontrada.'});       
       }
       req.agencia = agencia;
       next(); 

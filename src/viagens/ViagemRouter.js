@@ -2,6 +2,8 @@ import express from 'express';
 import ViagemController from './ViagemController'
 import ViagemMiddleware from './ViagemMiddleware'
 import ViagemRepository from './ViagemRepository'
+import LoginMiddleware from '../login/LoginMiddleware'
+import LoginRepository from '../login/LoginRepository'
 import {client} from '../config'
 
 export default function defineViagemRouter(){
@@ -12,15 +14,20 @@ export default function defineViagemRouter(){
   const viagemController = new ViagemController(viagemRepository);
   const viagemMiddleware = new ViagemMiddleware(viagemRepository);
 
-  router.route('/')
-   .get((req, res) => viagemController.index(req, res))
-   .post((req, res) => viagemController.save(req, res));
+  const loginRepository = new LoginRepository(client);
+  const loginMiddleware = new LoginMiddleware(loginRepository);
 
-  router.route('/:ID')
+  router.route('/')
+   .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .get((req, res) => viagemController.buscaTodos(req, res))
+   .post((req, res) => viagemController.salva(req, res));
+
+  router.route('/:id')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => viagemMiddleware.viagemExiste(req, res, next))
-    .get((req, res) => viagemController.show(req, res))
-    .put((req, res) => viagemController.update(req, res))
-    .delete((req, res) => viagemController.delete(req, res));
+    .get((req, res) => viagemController.mostra(req, res))
+    .put((req, res) => viagemController.atualiza(req, res))
+    .delete((req, res) => viagemController.deleta(req, res));
 
   return router;
 }

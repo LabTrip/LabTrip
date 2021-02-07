@@ -4,6 +4,8 @@ import UsuarioMiddleware from './UsuarioMiddleware'
 import UsuarioRepository from './UsuarioRepository'
 import LoginMiddleware from '../login/LoginMiddleware'
 import LoginRepository from '../login/LoginRepository'
+import PerfilMiddleware from '../perfis/PerfilMiddleware'
+import PerfilRepository from '../perfis/PerfilRepository'
 import {client} from '../config'
 
 export default function defineUsuarioRouter(){
@@ -17,9 +19,13 @@ export default function defineUsuarioRouter(){
   const loginRepository = new LoginRepository(client);
   const loginMiddleware = new LoginMiddleware(loginRepository);
 
+  const perfilRepository = new PerfilRepository(client);
+  const perfilMiddleware = new PerfilMiddleware(perfilRepository);
+
   router.route('/')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
    .get((req, res) => usuarioController.buscaTodos(req, res))
+   .all((req, res, next) => perfilMiddleware.perfilUsuarioExiste(req, res, next))
    .post((req, res) => usuarioController.salva(req, res));
 
   router.route('/:id')

@@ -3,12 +3,19 @@ export default class ViagemRepository{
     this.client = client;
   }
 
-  async getAll(){
+  async buscaTodos(){
     return await this.client('viagem');
   }
 
-  async save(viagem){
-    console.log(viagem);
+  async buscaTodosComPermissao(id){
+    return await this.client('viagem')
+      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+      .where({
+        usuarioId: id,
+      });
+  }
+
+  async salva(viagem){
     const [firstRow] = await this.client('viagem')
       .insert(viagem)
       .returning("*");
@@ -16,28 +23,31 @@ export default class ViagemRepository{
       return firstRow;
   }
 
-  async getById(tripId){
+  async buscaPorId(id){
     return await this.client('viagem')
-      .where({'ID': tripId.toString()}).first();
+      .where({'id': id.toString()}).first();
   }
 
-  async update(viagem){
+  async atualiza(viagem){
     const [firstRow] = await this.client('viagem')
-      .where({'ID': viagem.ID})
-      .update({
-        apelido: viagem.apelido,
-        dataInicio: viagem.dataInicio,
-        dataFim: viagem.dataFim,
-        statusID: viagem.statusID
-      })
+      .where({'id': viagem.id})
+      .update(viagem)
       .returning("*");
 
       return firstRow;
   }
 
-  async delete(viagem){
+  async deleta(viagem){
     await this.client('viagem')
-      .where('ID', viagem.ID)
-      .del()
+      .where('id', viagem.id)
+      .update({
+        deletedAt: new Date().toISOString,
+      })
+  }
+
+  async salvaParticipantes(participantes){
+    await this.client('usuario_viagem')
+      .insert(participantes)
+      .returning("*");
   }
 }

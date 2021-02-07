@@ -7,7 +7,7 @@ export default class AtividadeMiddleware{
     async atividadeExiste(req, res, next){
       const atividade = await this.atividadeRepository.getById(req.params.atividadeId)
       if(!atividade){
-        return res.status(404).json({erro: 'Atividade não encontrada!'});       
+        return res.status(404).json({erro: 'Atividade não encontrada.'});       
       }
       req.atividade = atividade;
       next(); 

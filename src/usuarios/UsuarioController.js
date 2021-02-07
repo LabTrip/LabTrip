@@ -1,4 +1,5 @@
 import Usuario from './Usuario'
+const cryptoRandomString = require('crypto-random-string');
 
 const usuarioViewModel = (usuario) => ({
   id: usuario.id,
@@ -7,6 +8,7 @@ const usuarioViewModel = (usuario) => ({
   telefone: usuario.telefone,
   foto: usuario.foto,
   perfilId: usuario.perfilId,
+  dataNascimento: usuario.dataNascimento,
 });
 
 export default class UsuarioController {
@@ -23,11 +25,10 @@ export default class UsuarioController {
   }
 
   async salva(req, res){
-    const {nome, email, senha, telefone, foto, perfilId} = req.body;
-
-    const usuario = new Usuario(nome, email, senha, telefone, foto, perfilId);
-
-    console.log(usuario)
+    const {nome, email, telefone, foto, perfilId, dataNascimento} = req.body;
+    const senhaProvisoria = cryptoRandomString({length: 15, type: 'distinguishable'});
+    const codigoVerificacao = cryptoRandomString({length: 6, type: 'distinguishable'});
+    const usuario = new Usuario(nome, email,telefone, foto, perfilId, dataNascimento, codigoVerificacao, senhaProvisoria, undefined);
 
     await this.usuarioRepository.salva(usuario);
 
@@ -39,15 +40,24 @@ export default class UsuarioController {
   }
 
   async atualiza(req,res){     
-    const{nome, email, senha, telefone, foto, perfilId} = req.body;
+    const{nome, email, telefone, foto, perfilId, dataNascimento} = req.body;
 
-    const usuario = new Usuario(nome, email, senha, telefone, foto, perfilId, req.usuario.id);
+    const usuario = new Usuario(nome, email, telefone, foto, perfilId, dataNascimento, null, null, req.usuario.id);
 
     const usuarioAtualizado = await this.usuarioRepository.atualiza(usuario);
 
     return res.status(200).json(usuarioViewModel(usuarioAtualizado));      
   }
 
+  async atualizaSenha(req, res){
+    const u = await this.usuarioRepository.buscaPorId(req.body.id);
+
+    const usuario = new Usuario(u.nome, u.email, u.telefone, u.foto, u.perfilId, u.dataNascimento, u.codigoVerificacao, req.body.senha, req.usuario.id);
+
+    const usuarioAtualizado = await this.usuarioRepository.atualizaSenha(usuario);
+
+    return res.status(200).json({codigo:"200", message: "Senha atualizada com sucesso"});
+  }
 
   async deleta(req, res){
     await this.usuarioRepository.deleta(req.usuario);

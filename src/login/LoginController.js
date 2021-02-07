@@ -1,7 +1,6 @@
 import Login from './Login'
 const jwt = require('jsonwebtoken');
-import sha256 from 'crypto-js/sha256'
-import { next } from 'sucrase/dist/parser/tokenizer';
+import sha256 from 'crypto-js/sha256';
 const cryptoRandomString = require('crypto-random-string');
 const nodemailer = require("nodemailer");
 require('dotenv/config');

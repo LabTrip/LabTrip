@@ -1,14 +1,14 @@
 import Viagem from './Viagem'
 
 const viagemViewModel = (viagem) => ({
-  ID:  viagem.ID,
-  apelido: viagem.apelido,
+  id:  viagem.id,
+  descricao: viagem.descricao,
   dataInicio: viagem.dataInicio,
   dataFim: viagem.dataFim,
-  statusID: viagem.statusID,
-  local: viagem.local,
-  codCidade: viagem.codCidade,
-  agenciaID: viagem.agenciaID,
+  statusId: viagem.statusId,
+  agenciaId: viagem.agenciaId,
+  usuarioDonoId: viagem.usuarioDonoId,
+  criadoPorId: viagem.criadoPorId
 });
 
 const verificaStatusViagem = (dataFim) => {
@@ -28,43 +28,61 @@ export default class ViagemController {
     this.viagemRepository = viagemRepository;
   }
 
-  //GET /trips
-  async index(req, res) {
-    const viagens = await this.viagemRepository.getAll();
+  //GET /viagens
+  async buscaTodos(req, res) {
+    let viagens;
+
+    if(req.perfilId == 1){
+      viagens = await this.viagemRepository.buscaTodos();
+    }
+    else{
+      viagens = await this.viagemRepository.buscaTodosComPermissao(req.id);
+    }
+    
     res.status(200).json(viagens.map(u => viagemViewModel(u)));
   }
 
-  async save(req, res){
-    const {apelido, dataInicio, dataFim} = req.body;
+  async salva(req, res){
+    const {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes} = req.body;
 
-    const tripStatus = verificaStatusViagem(dataFim);
+    const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);
 
-    const viagem = new Viagem(apelido, dataInicio, dataFim, statusID);
+    const participantesAtualizados = [];
 
-    await this.viagemRepository.save(viagem);
+    for(let participante of participantes){
+      participantesAtualizados.push({
+        usuarioId: participante.usuarioId,
+        permissaoViagemId: participante.permissaoViagemId,
+        viagemId: viagem.id
+      });
+    }
+
+    await this.viagemRepository.salva(viagem);
+
+    await this.viagemRepository.salvaParticipantes(participantesAtualizados);
 
     res.status(201).json(viagemViewModel(viagem));
   }
 
-  show(req, res){
+  mostra(req, res){
     return res.status(200).json(viagemViewModel(req.viagem)); 
   }
 
-  async update(req,res){     
-    const{apelido, dataInicio, dataFim} = req.body;
+  async atualiza(req,res){     
+    const{descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId} = req.body;
 
     const tripStatus = verificaStatusViagem(dataFim);
 
-    const viagem = new Viagem(apelido, datInicio, dataFim, statusID, req.viagem.ID);
+    const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, req.viagem.id);
     
-    const viagemAtualizada = await this.viagemRepository.update(viagem);
+    const viagemAtualizada = await this.viagemRepository.atualiza(viagem);
 
     return res.status(200).json(viagemViewModel(viagemAtualizada));      
   }
 
 
-  async delete(req, res){
-    await this.viagemRepository.delete(req.viagem);
+  async deleta(req, res){
+    await this.viagemRepository.deleta(req.viagem);
     return res.status(204).end();
   }
 

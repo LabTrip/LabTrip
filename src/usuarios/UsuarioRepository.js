@@ -26,9 +26,21 @@ export default class UsuarioRepository{
         .update({
           nome: usuario.nome,
           email: usuario.email,
-          senha: usuario.senha,
           telefone: usuario.telefone,
           perfilId: usuario.perfilId,
+          dataNascimento: usuario.dataNascimento,
+          editadoEm: new Date().toISOString()
+        })
+        .returning("*");
+  
+        return firstRow;
+    }
+
+    async atualizaSenha(usuario){
+      const [firstRow] = await this.client('usuario')
+        .where({'id': usuario.id})
+        .update({
+          senha: usuario.senha,
           editadoEm: new Date().toISOString()
         })
         .returning("*");
