@@ -11,8 +11,8 @@ const Tab = createMaterialBottomTabNavigator();
 export default function ListaEditarViagens() {
   const navigation = useNavigation();
   return (
-    <View style={{ width: '100%', height: '100%' }}>
-      <BarraPesquisa texto={'Pesquisar viagem...'} />
+    <View style={{ width: '100%', height: '100%', backgroundColor: '#fff'}}>
+      <BarraPesquisa texto={'Pesquisar viagem...'}z/>
       <ScrollView>
         <View style={styles.conteudo}>
           <TouchableOpacity style={styles.botaoMais}>
