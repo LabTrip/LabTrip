@@ -11,50 +11,47 @@ const Tab = createMaterialBottomTabNavigator();
 export default function ListaEditarViagens() {
   const navigation = useNavigation();
   return (
-    <ScrollView>
-      <View>
-        <BarraPesquisa texto={'Pesquisar viagem...'} />
-        <ScrollView>
-          <View style={styles.conteudo}>
-            <TouchableOpacity style={styles.botaoMais}>
-              <Image source={require('../imgs/plus-circle.png')} />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cardViagens}>
-              <Text>Apelido da viagem</Text>
-              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-              <Text>Local: Nome do local</Text>
-              <Text>Status: status</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cardViagens}>
-              <Text>Apelido da viagem</Text>
-              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-              <Text>Local: Nome do local</Text>
-              <Text>Status: status</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cardViagens}>
-              <Text>Apelido da viagem</Text>
-              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-              <Text>Local: Nome do local</Text>
-              <Text>Status: status</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cardViagens}>
-              <Text>Apelido da viagem</Text>
-              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-              <Text>Local: Nome do local</Text>
-              <Text>Status: status</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.cardViagens}>
-              <Text>Apelido da viagem</Text>
-              <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-              <Text>Local: Nome do local</Text>
-              <Text>Status: status</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-        <StatusBar />
-      </View>
-    </ScrollView>
-
+    <View style={{ width: '100%', height: '100%' }}>
+      <BarraPesquisa texto={'Pesquisar viagem...'} />
+      <ScrollView>
+        <View style={styles.conteudo}>
+          <TouchableOpacity style={styles.botaoMais}>
+            <Image source={require('../imgs/plus-circle.png')} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.cardViagens}>
+            <Text>Apelido da viagem</Text>
+            <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
+            <Text>Local: Nome do local</Text>
+            <Text>Status: status</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
@@ -83,10 +80,13 @@ const styles = StyleSheet.create({
     borderRadius: 32,
   },
   cardViagens: {
-    marginTop: 30,
+    marginTop: 25,
     padding: 10,
-    backgroundColor: '#F8EC12',
+    backgroundColor: '#FAF7AE',
     borderRadius: 13,
+    borderLeftColor: '#F8EC12',
+    borderLeftWidth: 6,
+    width: '85%',
     height: 143,
     justifyContent: 'center',
     alignItems: 'center',

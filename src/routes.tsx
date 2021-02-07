@@ -11,7 +11,6 @@ import RedefinirInserirCodigo from './pages/redefinirInserirCodigo';
 import RedefinirInserirSenha from './pages/redefinirInserirSenha';
 import RedefinirSucesso from './pages/redefinirSucesso';
 import ListaViagens from './pages/listaViagens';
-import CriarAgencia from './pages/criarAgencia';
 import MenuBar from './components/menu';
 
 export default function Routes() {
