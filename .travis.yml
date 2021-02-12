@@ -1,0 +1,17 @@
+language: node_js
+
+node_js:
+- node
+- 'lts/*'
+
+cache: npm
+addons:
+  sonarcloud:
+    organization: "labtrip" # the key of the org you chose at step #3
+    token: ${SONAR_TOKEN} # encrypted value of your token
+script:
+  # other script steps might be done before running the actual analysis
+  - sonar-scanner
+
+
+  
