@@ -3,7 +3,7 @@ Repositório destinado ao projeto de software LabTrip. Uma ferramenta que tem co
 
 # OpenAPI 3.0
 
-As especificações de nossas APIs REST estão localizadas no Sweagger e podem ser acessadas através do seguinte endereço:
+As especificações de nossas REST APIs estão localizadas no Sweagger e podem ser acessadas através do seguinte endereço:
 <a>https://app.swaggerhub.com/apis/B4tzz/LabTrip_poc/1.0<a/>
 
 
