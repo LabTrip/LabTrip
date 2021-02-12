@@ -3,3 +3,7 @@ Repositório destinado ao projeto de software LabTrip. Uma ferramenta que tem co
 
 
 [![Build Status](https://secure.travis-ci.org/travis-ci/travis-ci-node.js-example.png?branch=master)](http://travis-ci.org/travis-ci/travis-ci-node.js-example)
+
+
+
+
