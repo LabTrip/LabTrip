@@ -71,6 +71,8 @@ export default class ViagemRepository{
       .where((builder) => {
         for(let participante of participantes){
           builder.where('usuarioId', participante.usuarioId).andWhere('viagemId', participante.viagemId)
+          console.log(participante.usuarioId)
+          console.log(participante.viagemId)
         }
       })
       .delete();

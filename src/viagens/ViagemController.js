@@ -14,8 +14,9 @@ const viagemViewModel = (viagem) => ({
 });
 
 const participantesViewModel = (participantes) => ({
-  usuarioId:  participantes.userId,
-  viagemId: participantes.viagemId,
+    usuarioId:  participantes.usuarioId,
+    viagemId: participantes.viagemId,
+    permissaoViagemId: participantes.permissaoViagemId,
 });
 
 const verificaStatusViagem = (dataFim) => {
@@ -124,10 +125,60 @@ export default class ViagemController {
     return res.status(200).json(viagemViewModel(viagemAtualizada));
   }
 
+  async buscaParticipantes(req, res){
+    const participantes = await this.viagemRepository.buscaParticipantes(req.viagem);
+
+    return res.status(200).json({participantes: participantes.map(p => participantesViewModel(p))});
+  }
 
   async deleta(req, res){
     await this.viagemRepository.deleta(req.viagem);
     return res.status(204).end();
+  }
+
+  async deletaParticipantes(req, res){
+    const participantes = req.body.participantes;
+    
+    if(participantes){
+      
+      const participantesDeletados = [];
+
+      for(let participante of participantes){
+        participantesDeletados.push({
+          usuarioId: participante.usuarioId,
+          viagemId: req.viagem.id
+        });
+      }
+      console.log(participantesDeletados)
+      await this.viagemRepository.deletaParticipantes(participantesDeletados);
+    }
+
+    return res.status(204).end();
+  }
+
+  async salvaParticipantes(req, res){
+    const participantes = req.body.participantes;
+
+    if(participantes){
+      const participantesAtualizados = [];
+
+      for(let participante of participantes){
+        participantesAtualizados.push({
+          usuarioId: participante.usuarioId,
+          permissaoViagemId: participante.permissaoViagemId,
+          viagemId: req.viagem.id
+        });
+      }
+
+      await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+    }
+    
+    if(req.method == 'PUT'){
+      return res.status(202).end();
+    }
+    else{
+      return res.status(201).end();
+    }
   }
 
 }

@@ -33,5 +33,13 @@ export default function defineViagemRouter(){
     .put((req, res) => viagemController.atualiza(req, res))
     .delete((req, res) => viagemController.deleta(req, res));
 
+  router.route('/participantes/:id')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => viagemMiddleware.viagemExiste(req, res, next))
+    .get((req, res) => viagemController.buscaParticipantes(req, res))
+    .post((req, res) => viagemController.salvaParticipantes(req, res))
+    .put((req, res) => viagemController.salvaParticipantes(req, res))
+    .delete((req, res) => viagemController.deletaParticipantes(req, res));
+
   return router;
 }
