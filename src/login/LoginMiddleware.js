@@ -21,10 +21,7 @@ export default class UsuarioMiddleware{
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
           if(err) return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
   
-          req.email = decoded.email;
-          req.id = decoded.id;
-          req.perfilId = decoded.perfilId;
-          req.geradoEm = decoded.geradoEm;
+          req.token = decoded;
           next();
       });
   

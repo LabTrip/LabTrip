@@ -4,7 +4,19 @@ export default class ViagemRepository{
   }
 
   async buscaTodos(){
-    return await this.client('viagem');
+    return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
+    .innerJoin('status', 'viagem.statusId', 'status.id')
+  }
+
+  async buscaTodosAtivos(){
+    return await this.client('viagem')
+      .where({'deletadoEm': null});
+  }
+
+  async buscaComFiltro(filtro, userId){
+    return await this.client('viagem')
+      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+      .where(filtro);
   }
 
   async buscaTodosComPermissao(id){
@@ -24,8 +36,9 @@ export default class ViagemRepository{
   }
 
   async buscaPorId(id){
-    return await this.client('viagem')
-      .where({'id': id.toString()}).first();
+    return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
+      .innerJoin('status', 'viagem.statusId', 'status.id')
+      .where({'viagem.id': id.toString()}).first();
   }
 
   async atualiza(viagem){
@@ -41,13 +54,30 @@ export default class ViagemRepository{
     await this.client('viagem')
       .where('id', viagem.id)
       .update({
-        deletedAt: new Date().toISOString,
+        deletadoEm: new Date().toISOString,
       })
   }
 
   async salvaParticipantes(participantes){
     await this.client('usuario_viagem')
       .insert(participantes)
+      .onConflict(["usuarioId","viagemId"])
+      .merge()
       .returning("*");
+  }
+
+  async deletaParticipantes(participantes){
+    await this.client('usuario_viagem')
+      .where((builder) => {
+        for(let participante of participantes){
+          builder.where('usuarioId', participante.usuarioId).andWhere('viagemId', participante.viagemId)
+        }
+      })
+      .delete();
+  }
+
+  async buscaParticipantes(viagem){
+    return await this.client('usuario_viagem')
+      .where('viagemId', viagem.id);
   }
 }

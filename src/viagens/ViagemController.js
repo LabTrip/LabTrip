@@ -6,9 +6,16 @@ const viagemViewModel = (viagem) => ({
   dataInicio: viagem.dataInicio,
   dataFim: viagem.dataFim,
   statusId: viagem.statusId,
+  status: viagem.status,
   agenciaId: viagem.agenciaId,
   usuarioDonoId: viagem.usuarioDonoId,
-  criadoPorId: viagem.criadoPorId
+  criadoPorId: viagem.criadoPorId,
+  participantes: viagem.participantes,
+});
+
+const participantesViewModel = (participantes) => ({
+  usuarioId:  participantes.userId,
+  viagemId: participantes.viagemId,
 });
 
 const verificaStatusViagem = (dataFim) => {
@@ -32,52 +39,89 @@ export default class ViagemController {
   async buscaTodos(req, res) {
     let viagens;
 
-    if(req.perfilId == 1){
+    if(req.token.perfilId == 1){
       viagens = await this.viagemRepository.buscaTodos();
     }
     else{
-      viagens = await this.viagemRepository.buscaTodosComPermissao(req.id);
+      viagens = await this.viagemRepository.buscaTodosComPermissao(req.token.id);
     }
     
     res.status(200).json(viagens.map(u => viagemViewModel(u)));
   }
 
+
   async salva(req, res){
     const {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes} = req.body;
 
     const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);
-
-    const participantesAtualizados = [];
-
-    for(let participante of participantes){
-      participantesAtualizados.push({
-        usuarioId: participante.usuarioId,
-        permissaoViagemId: participante.permissaoViagemId,
-        viagemId: viagem.id
-      });
-    }
-
+  
     await this.viagemRepository.salva(viagem);
 
-    await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+    if(!participantes){
+      const participantesAtualizados = [];
+
+      for(let participante of participantes){
+        participantesAtualizados.push({
+          usuarioId: participante.usuarioId,
+          permissaoViagemId: participante.permissaoViagemId,
+          viagemId: viagem.id
+        });
+      }
+
+      await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+    }
 
     res.status(201).json(viagemViewModel(viagem));
   }
 
-  mostra(req, res){
+  async mostra(req, res){
+    const participantes =  await this.viagemRepository.buscaParticipantes(req.viagem);
+    req.viagem.participantes = participantes;
     return res.status(200).json(viagemViewModel(req.viagem)); 
   }
 
   async atualiza(req,res){     
-    const{descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId} = req.body;
+    const{descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes, deletarParticipantes} = req.body;
 
     const tripStatus = verificaStatusViagem(dataFim);
 
     const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, req.viagem.id);
     
-    const viagemAtualizada = await this.viagemRepository.atualiza(viagem);
+    await this.viagemRepository.atualiza(viagem);
 
-    return res.status(200).json(viagemViewModel(viagemAtualizada));      
+    if(deletarParticipantes){
+
+      const participantesDeletados = [];
+
+      for(let participante of deletarParticipantes){
+        participantesDeletados.push({
+          usuarioId: participante.usuarioId,
+          viagemId: req.viagem.id
+        });
+      }
+
+      console.log(participantesDeletados);
+      await this.viagemRepository.deletaParticipantes(participantesDeletados);
+    }
+
+    if(participantes){
+      const participantesAtualizados = [];
+
+      for(let participante of participantes){
+        participantesAtualizados.push({
+          usuarioId: participante.usuarioId,
+          permissaoViagemId: participante.permissaoViagemId,
+          viagemId: req.viagem.id
+        });
+      }
+
+      await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+    }
+
+    const viagemAtualizada = await this.viagemRepository.buscaPorId(req.viagem.id) 
+    const novosParticipantes =  await this.viagemRepository.buscaParticipantes(req.viagem);
+    viagemAtualizada.participantes = novosParticipantes;
+    return res.status(200).json(viagemViewModel(viagemAtualizada));
   }
 
 
