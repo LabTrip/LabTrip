@@ -67,19 +67,21 @@ export default class ViagemRepository{
   }
 
   async deletaParticipantes(participantes){
-    await this.client('usuario_viagem')
-      .where((builder) => {
-        for(let participante of participantes){
+    for(let participante of participantes){
+      await this.client('usuario_viagem')
+        .where((builder) => {
           builder.where('usuarioId', participante.usuarioId).andWhere('viagemId', participante.viagemId)
-          console.log(participante.usuarioId)
-          console.log(participante.viagemId)
-        }
-      })
-      .delete();
+        })
+        .delete();
+    }
   }
 
   async buscaParticipantes(viagem){
     return await this.client('usuario_viagem')
       .where('viagemId', viagem.id);
+  }
+
+  async buscaPermissoes(){
+    return await this.client('permissao_viagem');
   }
 }

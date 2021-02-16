@@ -19,6 +19,11 @@ const participantesViewModel = (participantes) => ({
     permissaoViagemId: participantes.permissaoViagemId,
 });
 
+const permissoesViagemViewModel = (permissoes) => ({
+  id:  permissoes.id,
+  descricao: permissoes.descricao,
+});
+
 const verificaStatusViagem = (dataFim) => {
   const dataAtual = new Date()
   const dataFinal = new Date(dataFim)
@@ -149,7 +154,6 @@ export default class ViagemController {
           viagemId: req.viagem.id
         });
       }
-      console.log(participantesDeletados)
       await this.viagemRepository.deletaParticipantes(participantesDeletados);
     }
 
@@ -179,6 +183,11 @@ export default class ViagemController {
     else{
       return res.status(201).end();
     }
+  }
+
+  async buscaPermissoes(req, res){
+    const permissoes =  await this.viagemRepository.buscaPermissoes();
+    return res.status(200).json({permissoes: permissoes.map(u => permissoesViagemViewModel(u))}); 
   }
 
 }
