@@ -1,4 +1,3 @@
-import Agencia from './Perfil'
 
 const perfilViewModel = (perfil) => ({
   id: perfil.id,

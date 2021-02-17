@@ -27,12 +27,7 @@ const permissoesViagemViewModel = (permissoes) => ({
 const verificaStatusViagem = (dataFim) => {
   const dataAtual = new Date()
   const dataFinal = new Date(dataFim)
-  if(dataFinal < dataAtual){
-    return true
-  }
-  else{
-    return false
-  }
+  return (dataFinal < dataAtual)
 }
 
 export default class ViagemController {
