@@ -1,6 +1,6 @@
 import express from 'express';
 import LoginController from './LoginController'
-import UsuarioMiddleware from './LoginMiddleware'
+import LoginMiddleware from './LoginMiddleware'
 import LoginRepository from './LoginRepository'
 import {client} from '../config'
 
@@ -9,7 +9,7 @@ export default function defineLoginRouter(){
 
   const loginRepository = new LoginRepository(client);
   const loginController = new LoginController(loginRepository);
-  const loginMiddleware = new UsuarioMiddleware(loginRepository);
+  const loginMiddleware = new LoginMiddleware(loginRepository);
 
   router.route('/')
    .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))

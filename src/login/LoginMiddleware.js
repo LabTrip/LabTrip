@@ -1,13 +1,12 @@
 const jwt = require('jsonwebtoken');
 
-export default class UsuarioMiddleware{
+export default class LoginMiddleware{
   
     constructor(usuarioRepository){
       this.usuarioRepository = usuarioRepository;
     }
   
     async usuarioExiste(req, res, next){
-      //const usuario = this.usuarios.find(u => u.id == req.params.id);
       const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
       if(!usuario){
         return res.status(401).json({erro: 'E-mail e/ou senha inválidos.'});       
