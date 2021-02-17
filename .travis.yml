@@ -4,7 +4,9 @@ language: node_js
 
 node_js:
 - node
-
+dotnet: 3.1
+install:
+  - dotnet restore
 cache: npm
 addons:
   sonarcloud:
@@ -12,4 +14,5 @@ addons:
     token: ${SONAR_TOKEN} # encrypted value of your token
 script:
   # other script steps might be done before running the actual analysis
+  - dotnet build
   - sonar-scanner -X
