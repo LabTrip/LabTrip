@@ -6,9 +6,6 @@ node_js:
 - node
 
 cache: npm
-  directories:
-  - $HOME/AppData/Local/Temp/chocolatey
-  - /C/tools/msys64
 addons:
   sonarcloud:
     organization: "labtrip" # the key of the org you chose at step #3
