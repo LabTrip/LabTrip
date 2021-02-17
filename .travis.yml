@@ -1,4 +1,4 @@
-os: windows
+dist: xenial
 
 language: node_js
 
@@ -13,5 +13,3 @@ addons:
 script:
   # other script steps might be done before running the actual analysis
   - sonar-scanner -X
-git:
-  depth: false
