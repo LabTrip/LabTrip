@@ -58,7 +58,9 @@ export default class LoginController {
   async validaToken(req, res, next){
     const token = req.headers['x-access-token'];
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
-        if(err) return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
+        if(err){
+          return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
+        }
 
         req.email = decoded.email;
         req.id = decoded.id;
