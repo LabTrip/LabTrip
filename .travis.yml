@@ -6,6 +6,11 @@ node_js:
 - node
 
 dotnet: 2.1.502
+script:
+  # other script steps might be done before running the actual analysis
+  - dotnet restore
+  - dotnet test
+  - msbuild /p:Configuration=Release solution-name.sl
 
 cache: npm
 addons:
@@ -14,7 +19,4 @@ addons:
     token: ${SONAR_TOKEN} # encrypted value of your token
 script:
   # other script steps might be done before running the actual analysis
-  - dotnet restore
-  - dotnet test
-  - msbuild /p:Configuration=Release solution-name.sl
   - sonar-scanner -X
