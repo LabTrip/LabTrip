@@ -3,14 +3,8 @@ dist: xenial
 language: node_js
 
 node_js:
-- node
-
-dotnet: 2.1.502
-script:
-  # other script steps might be done before running the actual analysis
-  - dotnet restore
-  - dotnet test
-  - msbuild /p:Configuration=Release solution-name.sl
+- 'lts/*'
+- 'node'
 
 cache: npm
 addons:
