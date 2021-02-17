@@ -46,7 +46,7 @@ export default class LoginController {
     }
     else if(usuario.senha == sha256(senha).toString()){
       const token = jwt.sign({email: usuario.email, id: usuario.id, perfilId: usuario.perfilId, geradoEm: new Date().toISOString()}, process.env.SECRET, {expiresIn: 2592000});
-      const usuarioAuth = new Login(usuario.id, usuario.nome, usuario.email, usuario.foto, usuario.telefone, usuario.perfilId, token, "200")
+      const usuarioAuth = new Login(usuario.id, usuario.email, usuario.perfilId, token)
       return res.status(200).json(loginViewModel(usuarioAuth)); 
     }
     else{
@@ -105,8 +105,8 @@ export default class LoginController {
 
   async enviaCodigoVerificacao(usuario){
 
-    let info = await transporter.sendMail({
-      from: 'LabTrip <biel0828@hotmail.com>', // sender address
+    await transporter.sendMail({
+      from: 'LabTrip <labtrip.ifsp@gmail.com>', // sender address
       to: usuario.email, // list of receivers
       subject: "Código de verificação - LabTrip", // Subject line
       html: this.montaCorpoEmailVerificacao(usuario), // html body

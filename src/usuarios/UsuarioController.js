@@ -54,7 +54,7 @@ export default class UsuarioController {
 
     const usuario = new Usuario(u.nome, u.email, u.telefone, u.foto, u.perfilId, u.dataNascimento, u.codigoVerificacao, req.body.senha, req.usuario.id);
 
-    const usuarioAtualizado = await this.usuarioRepository.atualizaSenha(usuario);
+    await this.usuarioRepository.atualizaSenha(usuario);
 
     return res.status(200).json({codigo:"200", message: "Senha atualizada com sucesso"});
   }

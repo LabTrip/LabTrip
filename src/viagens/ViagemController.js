@@ -89,8 +89,6 @@ export default class ViagemController {
   async atualiza(req,res){     
     const{descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes, deletarParticipantes} = req.body;
 
-    const tripStatus = verificaStatusViagem(dataFim);
-
     const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, req.viagem.id);
     
     await this.viagemRepository.atualiza(viagem);
