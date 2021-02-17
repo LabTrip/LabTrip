@@ -11,6 +11,10 @@ addons:
   sonarcloud:
     organization: "labtrip" # the key of the org you chose at step #3
     token: ${SONAR_TOKEN} # encrypted value of your token
+
+install:
+  - npm install
+
 script:
   # other script steps might be done before running the actual analysis
-  - sonar-scanner -X
+  - sonar-scanner
