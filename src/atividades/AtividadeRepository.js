@@ -3,42 +3,41 @@ export default class AtividadeRepository{
       this.client = client;
     }
   
-    async getAll(){
-      return await this.client('atividades');
+    async buscaTodos(){
+      return await this.client('atividade');
     }
   
-    async save(atividade){
-      console.log(atividade);
-      const [firstRow] = await this.client('atividades')
+    async salva(atividade){
+      const [firstRow] = await this.client('atividade')
         .insert(atividade)
         .returning("*");
   
         return firstRow;
     }
   
-    async getById(atividadeId){
-      return await this.client('atividades')
-        .where({'atividadeId': atividadeId.toString()}).first();
+    async buscaPorId(id){
+      return await this.client('atividade')
+        .where({'id': id.toString()}).first();
     }
   
-    async update(atividade){
-      const [firstRow] = await this.client('atividades')
-        .where({'atividadeId': atividade.atividadeId})
+    async atualiza(atividade){
+      const [firstRow] = await this.client('atividade')
+        .where({'id': atividade.id})
         .update({
-          atividadeNome: atividade.atividadeNome,
-          atividadeDesc: atividade.atividadeDesc,
-          atividadeValor: atividade.atividadeValor,
-          atividadeHr: atividade.atividadeHr,
-          tripId: atividade.tripId
+          descricao: atividade.descricao,
+          localId: atividade.localId,
+          editadoEm: new Date().toISOString(),
         })
         .returning("*");
   
         return firstRow;
     }
   
-    async delete(atividade){
-      await this.client('atividades')
-        .where('atividadeId', atividade.atividadeId)
-        .del()
+    async deleta(atividade){
+      await this.client('atividade')
+        .where('id', atividade.atividadeId)
+        .update({
+          deletadoEm: new Date().toISOString()
+        });
     }
   }
