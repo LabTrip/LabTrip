@@ -23,7 +23,7 @@ const Tab = createMaterialBottomTabNavigator();
 export default function MenuBar() {
   return (
       <><Cabecalho />
-      <NavigationContainer independent={true}>
+      
         <Tab.Navigator barStyle={{ backgroundColor: '#fff' }} initialRouteName={"ListaViagens"}>
           <Tab.Screen name="Notificacoes" component={Notificacoes} options={{
             tabBarLabel: '',
@@ -61,7 +61,7 @@ export default function MenuBar() {
             )
           }} />
         </Tab.Navigator>
-      </NavigationContainer></>
+      </>
 
   );
 }

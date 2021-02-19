@@ -16,8 +16,8 @@ import CriarViagem from './pages/criarViagem';
 
 export default function Routes() {
     return (
-        <NavigationContainer>
-            <Navigator screenOptions={{ headerShown: false }}>
+        <NavigationContainer independent={true}>
+            <Navigator initialRouteName={"Login"} screenOptions={{ headerShown: false }}>
                 <Screen name="Login" component={Login} />
                 <Screen name="ListaViagens" component={ListaViagens} />
                 <Screen name="RedefinirInserirEmail" component={RedefinirInserirEmail} />
