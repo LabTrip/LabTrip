@@ -5,7 +5,7 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView 
 import { useNavigation } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import BarraPesquisa from '../components/barraPesquisa';
-import CriarViagem from '../pages/criarViagem';
+
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -16,7 +16,7 @@ export default function ListaEditarViagens() {
       <BarraPesquisa texto={'Pesquisar viagem...'}z/>
       <ScrollView>
         <View style={styles.conteudo}>
-          <TouchableOpacity style={styles.botaoMais}>
+          <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarViagem')}>
             <Image source={require('../imgs/plus-circle.png')} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.cardViagens}>
