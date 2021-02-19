@@ -5,6 +5,7 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView 
 import { useNavigation } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import BarraPesquisa from '../components/barraPesquisa';
+import CriarViagem from '../pages/criarViagem';
 
 const Tab = createMaterialBottomTabNavigator();
 
