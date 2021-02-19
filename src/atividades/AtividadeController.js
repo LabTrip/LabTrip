@@ -5,6 +5,12 @@ const atividadeViewModel = (atividade) => ({
     id: atividade.id,
     descricao: atividade.descricao,
     localId: atividade.localId,
+    local: atividade.local,
+    endereco: atividade.endereco,
+    cidade: atividade.cidade,
+    pais: atividade.pais,
+    latitude: atividade.latitude,
+    longitude: atividade.longitude,
   });
   
   export default class AtividadeController {
@@ -37,6 +43,7 @@ const atividadeViewModel = (atividade) => ({
     }
   
     mostra(req, res){
+      console.log(req.atividade)
       return res.status(200).json(atividadeViewModel(req.atividade)); 
     }
   

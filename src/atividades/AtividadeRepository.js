@@ -4,7 +4,8 @@ export default class AtividadeRepository{
     }
   
     async buscaTodos(){
-      return await this.client('atividade');
+      return await this.client.select(['local.*', 'atividade.*']).from('atividade')
+      .innerJoin('local', 'atividade.localId', 'local.id');
     }
   
     async salva(atividade){
@@ -36,8 +37,9 @@ export default class AtividadeRepository{
     }
   
     async buscaPorId(id){
-      return await this.client('atividade')
-        .where({'id': id.toString()}).first();
+      return await this.client.select(['local.*', 'atividade.*']).from('atividade')
+      .innerJoin('local', 'atividade.localId', 'local.id')
+      .where({'atividade.id': id.toString()}).first();
     }
   
     async atualiza(atividade){
