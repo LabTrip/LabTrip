@@ -14,6 +14,26 @@ export default class AtividadeRepository{
   
         return firstRow;
     }
+
+    async salvaLocal(local){
+      const [firstRow] = await this.client('local')
+        .insert({
+          cidade: local.cidade,
+          pais: local.pais,
+          endereco: local.endereco,
+          latitude: local.latitude,
+          longitude: local.longitude,
+          local: local.local
+        })
+        .returning("*");
+  
+        return firstRow;
+    }
+
+    async buscaLocalPorId(id){
+      return await this.client('local')
+        .where({'id': id.toString()}).first();
+    }
   
     async buscaPorId(id){
       return await this.client('atividade')

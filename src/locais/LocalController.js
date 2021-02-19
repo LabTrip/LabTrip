@@ -24,8 +24,7 @@ const localViewModel = (local) => ({
     }
   
     async salva(req, res){
-      const {poi} = req.body;
-      const {address, position} = req.body;
+      const {poi, address, position} = req.body;
       const localidade = new Local(poi.name, address.freeformAddress, address.municipality, address.country, position.lat, position.lon);
       return res.status(201).json(localViewModel(await this.localRepository.salva(localidade)));
     }

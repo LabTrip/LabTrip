@@ -1,4 +1,3 @@
-import {v4 as uuidv4} from 'uuid';
 
 export default class Local{
   constructor(local, endereco, cidade, pais, latitude, longitude, id = null){
