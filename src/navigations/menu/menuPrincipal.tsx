@@ -59,10 +59,3 @@ export default function MenuPrincipal() {
 
   );
 }
-
-
-const styles = StyleSheet.create({
-  menu: {
-    backgroundColor: '#fff'
-  }
-});
