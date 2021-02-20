@@ -12,7 +12,7 @@ import RedefinirInserirCodigo from '../pages/redefinirInserirCodigo';
 import RedefinirInserirSenha from '../pages/redefinirInserirSenha';
 import RedefinirSucesso from '../pages/redefinirSucesso';
 import CriarAgencia from '../pages/criarAgencia';
-import EdicaoPerfil from '../pages/edicaoPerfil';
+import EditarPerfil from '../pages/editarPerfil';
 import Cabecalho from './cabecalho';
 
 import Notificacoes from '../pages/notificacoes';
@@ -55,7 +55,7 @@ export default function MenuPrincipal() {
               <MaterialCommunityIcons name="message" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="EdicaoPerfil" component={EdicaoPerfil} options={{
+          <Tab.Screen name="EditarPerfil" component={EditarPerfil} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (

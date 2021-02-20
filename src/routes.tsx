@@ -12,7 +12,6 @@ import RedefinirInserirSenha from './pages/redefinirInserirSenha';
 import RedefinirSucesso from './pages/redefinirSucesso';
 import ListaViagens from './pages/listaViagens';
 import MenuPrincipal from './components/menuPrincipal';
-import CriarViagem from './pages/criarViagem';
 
 export default function Routes() {
     return (

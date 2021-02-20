@@ -1,10 +1,8 @@
 import React from 'react';
 import { StyleSheet, Platform, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import Cabecalho from '../components/cabecalho';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function EdicaoPerfil() {
+export default function EditarPerfil() {
     const [nome, onChangeTextNome] = React.useState('Ednaldo Pereira');
     const [email, onChangeTextEmail] = React.useState('ednaldo.chance@yahoo.com.br');
     const [data, onChangeTextData] = React.useState('17/10/1967');
