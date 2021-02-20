@@ -14,6 +14,23 @@ export default class AgenciaRepository{
   
         return firstRow;
     }
+
+    async salvaFuncionario(usuarioId, agenciaId){
+      const [firstRow] = await this.client('funcionario')
+        .insert({
+          usuarioId: usuarioId,
+          agenciaId: agenciaId,
+          registradoEm: new Date().toISOString()
+        })
+        .returning("*");
+  
+        return firstRow;
+    }
+
+    async buscaFuncionariosAgencia(agenciaId){
+      return await this.client('funcionario')
+        .where({'agenciaId': agenciaId.toString()}).first();
+    }
   
     async buscaPorId(id){
       return await this.client('agencia')
