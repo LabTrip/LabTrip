@@ -1,10 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import BarraPesquisa from '../components/barraPesquisa';
+import BarraPesquisa from '../../components/barraPesquisa';
 
 const Tab = createMaterialBottomTabNavigator();
 

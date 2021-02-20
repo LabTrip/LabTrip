@@ -23,7 +23,7 @@ export default function CriarViagem() {
         
             <View style={styles.participantes}>
                 <View style={styles.participanteIndividual}>
-                    <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
+                    <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
                         
                         <View style={styles.proprietario}>
                             <Text style={styles.textoParticipante}>Ednaldo Pereira</Text>
@@ -42,7 +42,7 @@ export default function CriarViagem() {
                 </View>
 
                 <View style={styles.participanteIndividual}>
-                    <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
+                    <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
                         
                         <View style={styles.proprietario}>
                             <Text style={styles.textoParticipante}>Ednaldo Pereira</Text>

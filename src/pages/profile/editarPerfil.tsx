@@ -12,7 +12,7 @@ export default function EditarPerfil() {
             <ScrollView>
                 <View style={styles.conteudo}>
                     <TouchableOpacity>
-                        <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
+                        <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
                     </TouchableOpacity>
                     <TextInput placeholder={"Nome"} value={nome} style={styles.input}
                         onChangeText={text => onChangeTextNome(text)} />

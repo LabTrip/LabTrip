@@ -32,7 +32,7 @@ export default function RedefinirInserirSenha({route}) {
   }
   return (
     <View style={styles.container}>
-      <Image source={require('../imgs/logo.png')} style={styles.logo} />
+      <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
       <Text style={styles.texto}>Insira sua nova senha e a comfirmação.</Text>
       <TextInput placeholder={"Digite a nova senha"} secureTextEntry={true} style={styles.input} 

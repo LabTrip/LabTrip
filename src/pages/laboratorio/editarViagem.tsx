@@ -34,7 +34,7 @@ export default function EditarViagem() {
         
             <View style={styles.participantes}>
                 <View style={styles.participanteIndividual}>
-                    <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
+                    <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
                         
                         <View style={styles.proprietario}>
                             <Text style={styles.textoParticipante}>Ednaldo Pereira</Text>
@@ -53,7 +53,7 @@ export default function EditarViagem() {
                 </View>
 
                 <View style={styles.participanteIndividual}>
-                    <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />
+                    <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
                         
                         <View style={styles.proprietario}>
                             <Text style={styles.textoParticipante}>Ednaldo Pereira</Text>

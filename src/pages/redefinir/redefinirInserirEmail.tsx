@@ -20,7 +20,7 @@ export default function RedefinirInserirEmail() {
       }
     return (
         <View style={styles.container}>
-            <Image source={require('../imgs/logo.png')} style={styles.logo} />
+            <Image source={require('../../imgs/logo.png')} style={styles.logo} />
             <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
             <Text style={styles.texto}>Insira o e-mail cadastrado.</Text>
             <TextInput placeholder={"seuemail@email.com"} style={styles.input}

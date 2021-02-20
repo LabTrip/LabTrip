@@ -24,7 +24,7 @@ export default function RedefinirInserirCodigo({route}) {
   }
   return (
     <View style={styles.container}>
-      <Image source={require('../imgs/logo.png')} style={styles.logo} />
+      <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
       <Text style={styles.texto}>Insira o código recebido por e-mail.</Text>
       <TextInput placeholder={"Código"} style={styles.input}

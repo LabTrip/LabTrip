@@ -5,13 +5,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 const { Navigator, Screen } = createStackNavigator();
 
-import Login from './pages/login';
-import RedefinirInserirEmail from './pages/redefinirInserirEmail';
-import RedefinirInserirCodigo from './pages/redefinirInserirCodigo';
-import RedefinirInserirSenha from './pages/redefinirInserirSenha';
-import RedefinirSucesso from './pages/redefinirSucesso';
-import ListaViagens from './pages/listaViagens';
-import MenuPrincipal from './components/menuPrincipal';
+import Login from './pages/login/login';
+import RedefinirInserirEmail from './pages/redefinir/redefinirInserirEmail';
+import RedefinirInserirCodigo from './pages/redefinir/redefinirInserirCodigo';
+import RedefinirInserirSenha from './pages/redefinir/redefinirInserirSenha';
+import RedefinirSucesso from './pages/redefinir/redefinirSucesso';
+import ListaViagens from './pages/listaViagens/listaViagens';
+import MenuPrincipal from './navigations/menu/menuPrincipal';
 
 export default function Routes() {
     return (

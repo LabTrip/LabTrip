@@ -11,7 +11,7 @@ export default function RedefinirSucesso() {
  
   return (
     <View style={styles.container}>
-      <Image source={require('../imgs/logo.png')} style={styles.logo} />
+      <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       
       <Text style={styles.texto}>Sucesso a senha foi redefinida!</Text>
       <TouchableOpacity style={styles.botaoRedefinir} onPress={() => navigation.navigate('Login')}>

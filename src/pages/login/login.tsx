@@ -2,7 +2,7 @@ import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, TextComponent  } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { i18n } from '../translate/i18n';
+import { i18n } from '../../translate/i18n';
 
 
 
@@ -26,7 +26,7 @@ export default function Login({}) {
   let descErro = null;
   return (
     <View style={styles.container}>
-      <Image source={require('../imgs/logo.png')} style={styles.logo} />
+      <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Olá!</Text>
       <Text style={styles.title}>Seja bem-vindo ao Labtrip.</Text>
       <TextInput placeholder='email@email.com' style={styles.input}

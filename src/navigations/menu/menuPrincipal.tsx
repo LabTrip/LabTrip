@@ -1,23 +1,15 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Login from '../pages/login';
-import ListaViagens from '../pages/listaViagens';
-import RedefinirInserirEmail from '../pages/redefinirInserirEmail';
-import RedefinirInserirCodigo from '../pages/redefinirInserirCodigo';
-import RedefinirInserirSenha from '../pages/redefinirInserirSenha';
-import RedefinirSucesso from '../pages/redefinirSucesso';
-import CriarAgencia from '../pages/criarAgencia';
-import EditarPerfil from '../pages/editarPerfil';
-import Cabecalho from './cabecalho';
+import ListaViagens from '../../pages/listaViagens/listaViagens';
+import EditarPerfil from '../../pages/profile/editarPerfil';
+import Cabecalho from '../../components/cabecalho';
 
-import Notificacoes from '../pages/notificacoes';
-import Mensagens from '../pages/mensagens';
-import TelasLaboratorio from './telasLaboratorio';
+import Notificacoes from '../../pages/notificacoes/notificacoes';
+import Mensagens from '../../pages/chat/mensagens';
+import TelasLaboratorio from '../screens/telasLaboratorio';
 
 
 const Tab = createMaterialBottomTabNavigator();

@@ -1,10 +1,9 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import BarraPesquisa from '../components/barraPesquisa';
+import BarraPesquisa from '../../components/barraPesquisa';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -17,7 +16,7 @@ export default function ListaEditarViagens() {
       <ScrollView>
         <View style={styles.conteudo}>
           <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarViagem')}>
-            <Image source={require('../imgs/plus-circle.png')} />
+            <Image source={require('../../imgs/plus-circle.png')} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.cardViagens} onPress={() => navigation.navigate('EditarViagem')}>
             <Text>Apelido da viagem</Text>
