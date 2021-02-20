@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
 
     botaoSalvar: {
         backgroundColor: '#3385FF',
-        width: 180,
+        width: 200,
         height: 50,
         padding: 10,
         borderRadius: 40,
