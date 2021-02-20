@@ -61,11 +61,18 @@ export default class AgenciaController {
       agencia: agencia.nome,
       link:  process.env.BASE_URL + 'agencias/convida-funcionarios/' + token
     }
-    console.log('CONVITE: ' + convite.agencia);
 
     await this.enviaConvite(convite);
 
     res.status(200).json({status: '200', mensagem: 'Convite enviado com sucesso'});
+  }
+
+  async deletaFuncionariosAgencia(req, res){
+    const {usuarioId, agenciaId} = req.body;
+
+    await this.agenciaRepository.deletaFuncionariosAgencia(usuarioId, agenciaId);
+
+    return res.status(201).json({status: '201', mensagem: 'Funcionário deletado com sucesso.'});
   }
 
   async aceitaConviteFuncionario(req, res){
@@ -86,7 +93,7 @@ export default class AgenciaController {
 
     await this.agenciaRepository.salvaFuncionario(usuarioId,agenciaId);
 
-    res.status(200).json(this.retornoConvite());
+    res.status(200).send(this.retornoConvite());
   }
 
   mostra(req, res){

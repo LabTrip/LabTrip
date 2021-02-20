@@ -29,6 +29,10 @@ export default function defineAgenciaRouter(){
   router.route('/convida-funcionarios/:convite')
     .get((req, res) => agenciaController.aceitaConviteFuncionario(req,res))
 
+  router.route('/funcionarios')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .delete((req, res) => agenciaController.deletaFuncionariosAgencia(req, res))
+
   router.route('/funcionarios/:id')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => agenciaMiddleware.agenciaExiste(req, res, next))

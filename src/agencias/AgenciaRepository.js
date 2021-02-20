@@ -31,6 +31,13 @@ export default class AgenciaRepository{
       return await this.client('funcionario')
         .where({'agenciaId': agenciaId.toString()}).first();
     }
+
+    async deletaFuncionariosAgencia(usuarioId, agenciaId){
+      return await this.client('funcionario')
+        .where({'agenciaId': agenciaId.toString()})
+        .andWhere({'usuarioId': usuarioId.toString()})
+        .delete();
+    }
   
     async buscaPorId(id){
       return await this.client('agencia')
