@@ -17,12 +17,12 @@ import Cabecalho from './cabecalho';
 
 import Notificacoes from '../pages/notificacoes';
 import Mensagens from '../pages/mensagens';
-import TelasLaboratorio from '../components/telasLaboratorio';
+import TelasLaboratorio from './telasLaboratorio';
 
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function MenuBar() {
+export default function MenuPrincipal() {
   return (
      <><Cabecalho/>
       

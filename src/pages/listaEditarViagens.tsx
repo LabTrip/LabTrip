@@ -19,7 +19,7 @@ export default function ListaEditarViagens() {
           <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarViagem')}>
             <Image source={require('../imgs/plus-circle.png')} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.cardViagens}>
+          <TouchableOpacity style={styles.cardViagens} onPress={() => navigation.navigate('EditarViagem')}>
             <Text>Apelido da viagem</Text>
             <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
             <Text>Local: Nome do local</Text>

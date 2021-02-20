@@ -1,7 +1,7 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react'
 import ListaEditarViagens from '../pages/listaEditarViagens';
-import LaboratorioCadastro from './laboratorioCadastro';
+import LaboratorioCadastro from './menuLaboratorioCadastro';
 
 const Tab = createMaterialTopTabNavigator();
 

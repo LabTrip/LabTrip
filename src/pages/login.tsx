@@ -40,7 +40,7 @@ export default function Login({}) {
           }).then((json) => {
             if(json.codigo == "200"){
               console.log("Autenticação ok");
-              navigation.navigate('MenuBar');
+              navigation.navigate('MenuPrincipal');
             }
             else{
               console.log("Credenciais inválidas");
