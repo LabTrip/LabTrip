@@ -14,9 +14,11 @@ import RedefinirSucesso from '../pages/redefinirSucesso';
 import CriarAgencia from '../pages/criarAgencia';
 import EdicaoPerfil from '../pages/edicaoPerfil';
 import Cabecalho from './cabecalho';
-import Laboratorio from './laboratorio';
+
 import Notificacoes from '../pages/notificacoes';
 import Mensagens from '../pages/mensagens';
+import TelasLaboratorio from '../components/telasLaboratorio';
+
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -32,7 +34,7 @@ export default function MenuBar() {
               <MaterialCommunityIcons name="bell" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="Laboratorio" component={Laboratorio} options={{
+          <Tab.Screen name="TelasLaboratorio" component={TelasLaboratorio} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (
@@ -61,11 +63,11 @@ export default function MenuBar() {
             )
           }} />
         </Tab.Navigator>
-      
       </>
 
   );
 }
+
 
 const styles = StyleSheet.create({
   menu: {
