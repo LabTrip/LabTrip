@@ -36,7 +36,9 @@ export default function CriarViagem() {
                                 <Text style={styles.textoParticipante}>Proprietário</Text>
                             </View>
                         </View>
-                    <Text style={styles.xis}>X</Text>
+                    <TouchableOpacity onPress = {() => navigation.navigate('MenuBar')}>
+                        <Text style={styles.xis}>X</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.participanteIndividual}>
@@ -53,7 +55,9 @@ export default function CriarViagem() {
                                 <Text style={styles.textoParticipante}>Proprietário</Text>
                             </View>
                         </View>
-                    <Text style={styles.xis}>X</Text>
+                        <TouchableOpacity onPress = {() => navigation.navigate('MenuBar')}>
+                        <   Text style={styles.xis}>X</Text>
+                        </TouchableOpacity>
                 </View>
             </View>
         
