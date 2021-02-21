@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, TextComponent } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { i18n } from '../../translate/i18n';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -28,36 +28,44 @@ export default function Login({ }) {
   let descErro = null;
   return (
     <SafeAreaView style={styles.container} >
-      <Image source={require('../../imgs/logo.png')} style={styles.logo} />
-      <Text style={styles.title}>Olá!</Text>
-      <Text style={styles.title}>Seja bem-vindo ao Labtrip.</Text>
-      <TextInput placeholder='email@email.com' style={styles.input}
-        onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
-      <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
-        onChangeText={text => onChangeTextSenha(text)} value={senha} />
-      <TouchableOpacity style={styles.botaoLogin} onPress={() => {
-        auth().then(response => {
-          console.log(response.status)
-          return response.json();
-        }).then((json) => {
-          if (json.codigo == "200") {
-            console.log("Autenticação ok");
-            navigation.navigate('MenuPrincipal');
-          }
-          else {
-            console.log("Credenciais inválidas");
-            alert(json.erro);
-          }
-        });
-      }}>
-        <Text style={styles.botaoLoginTexto}>Entrar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
-        <Text style={styles.link} >
-          Esqueceu sua senha?
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center',  }}>
+        <View style={styles.scrollContainer}>
+          <Image source={require('../../imgs/logo.png')} style={styles.logo} />
+
+          <Text style={styles.title}>Olá!</Text>
+          <Text style={styles.title}>Seja bem-vindo ao Labtrip.</Text>
+          <TextInput placeholder='email@email.com' style={styles.input}
+            onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
+          <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
+            onChangeText={text => onChangeTextSenha(text)} value={senha} />
+          <TouchableOpacity style={styles.botaoLogin} onPress={() => {
+            auth().then(response => {
+              console.log(response.status)
+              return response.json();
+            }).then((json) => {
+              if (json.codigo == "200") {
+                console.log("Autenticação ok");
+                navigation.navigate('MenuPrincipal');
+              }
+              else {
+                console.log("Credenciais inválidas");
+                alert(json.erro);
+              }
+            });
+          }}>
+            <Text style={styles.botaoLoginTexto}>Entrar</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
+            <Text style={styles.link} >
+              Esqueceu sua senha?
       </Text>
-      </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <StatusBar />
     </SafeAreaView >
+
+
   );
 }
 
@@ -65,6 +73,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#3385FF',
+  },
+  scrollContainer: {
     alignItems: 'center',
     justifyContent: 'center',
   },

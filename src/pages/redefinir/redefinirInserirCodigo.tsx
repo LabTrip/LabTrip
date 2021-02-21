@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -42,7 +42,7 @@ export default function RedefinirInserirCodigo({route}) {
           else{
             console.log("Código incorreto!");
             console.log(email);
-            alert(json.erro);
+            alert('Código incorreto!');
           }
         });        
         }}>
