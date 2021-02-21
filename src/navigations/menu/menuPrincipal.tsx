@@ -3,13 +3,12 @@ import { StyleSheet } from 'react-native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import ListaViagens from '../../pages/listaViagens/listaViagens';
 import EditarPerfil from '../../pages/profile/editarPerfil';
 import Cabecalho from '../../components/cabecalho';
-
 import Notificacoes from '../../pages/notificacoes/notificacoes';
 import Mensagens from '../../pages/chat/mensagens';
 import TelasLaboratorio from '../screens/telasLaboratorio';
+import TelasListaViagens from   '../screens/telasListaViagens';
 
 
 const Tab = createMaterialBottomTabNavigator();
@@ -33,7 +32,7 @@ export default function MenuPrincipal() {
               <MaterialCommunityIcons name="pen" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="ListaViagens" component={ListaViagens} options={{
+          <Tab.Screen name="TelasListaViagens" component={TelasListaViagens} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (

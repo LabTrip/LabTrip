@@ -14,7 +14,7 @@ export default function ListaViagens() {
       <BarraPesquisa texto="Pesquisar Viagem..." />
       <ScrollView>
         <View style={styles.conteudo} >
-        <TouchableOpacity style={styles.cardViagens}>
+        <TouchableOpacity style={styles.cardViagens} onPress={() => navigation.navigate('MenuDetalhesViagem')}>
           <Text>Apelido da viagem</Text>
           <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
           <Text>Local: Nome do local</Text>
