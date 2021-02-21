@@ -1,7 +1,8 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function RedefinirInserirSenha({route}) {
   const {email, codigoVerificacao} = route.params;
@@ -31,7 +32,7 @@ export default function RedefinirInserirSenha({route}) {
     return true;
   }
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
       <Text style={styles.texto}>Insira sua nova senha e a comfirmação.</Text>
@@ -58,8 +59,7 @@ export default function RedefinirInserirSenha({route}) {
         }}>
         <Text style={styles.botaoRedefinirTexto}>Redefinir</Text>
       </TouchableOpacity>
-      <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 

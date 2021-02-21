@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function RedefinirInserirEmail() {
@@ -19,7 +19,7 @@ export default function RedefinirInserirEmail() {
         });
       }
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <Image source={require('../../imgs/logo.png')} style={styles.logo} />
             <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
             <Text style={styles.texto}>Insira o e-mail cadastrado.</Text>
@@ -43,8 +43,7 @@ export default function RedefinirInserirEmail() {
                 }}>
                 <Text style={styles.botaoLoginTexto}>Confirmar</Text>
             </TouchableOpacity>
-            <StatusBar style="auto" />
-        </View>
+        </SafeAreaView>
     );
 }
 

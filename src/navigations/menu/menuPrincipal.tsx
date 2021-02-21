@@ -17,7 +17,7 @@ export default function MenuPrincipal() {
   return (
      <><Cabecalho/>
       
-        <Tab.Navigator barStyle={{ backgroundColor: '#fff' }} initialRouteName={"ListaViagens"}>
+        <Tab.Navigator barStyle={{ backgroundColor: '#fff' }} initialRouteName={"TelasListaViagens"}>
           <Tab.Screen name="Notificacoes" component={Notificacoes} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',

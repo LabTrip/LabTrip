@@ -1,18 +1,20 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, TextComponent  } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, TextComponent } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { i18n } from '../../translate/i18n';
+import { ScrollView } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
-export default function Login({}) {
+export default function Login({ }) {
   const navigation = useNavigation();
   const [email, onChangeTextEmail] = React.useState('');
   const [senha, onChangeTextSenha] = React.useState('');
   const auth = async () => {
-    return await fetch('https://labtrip-backend.herokuapp.com/login',{
-      method:'POST',
+    return await fetch('https://labtrip-backend.herokuapp.com/login', {
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -20,43 +22,42 @@ export default function Login({}) {
       body: JSON.stringify({
         email: email,
         senha: senha
-      })      
+      })
     });
   }
   let descErro = null;
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container} >
       <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.title}>Olá!</Text>
       <Text style={styles.title}>Seja bem-vindo ao Labtrip.</Text>
       <TextInput placeholder='email@email.com' style={styles.input}
-      onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
+        onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
       <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
-      onChangeText={text => onChangeTextSenha(text)} value={senha} />
+        onChangeText={text => onChangeTextSenha(text)} value={senha} />
       <TouchableOpacity style={styles.botaoLogin} onPress={() => {
-          auth().then(response => {
-            console.log(response.status)
-            return response.json();
-          }).then((json) => {
-            if(json.codigo == "200"){
-              console.log("Autenticação ok");
-              navigation.navigate('MenuPrincipal');
-            }
-            else{
-              console.log("Credenciais inválidas");
-              alert(json.erro);
-            }
-          });
-        }}>
+        auth().then(response => {
+          console.log(response.status)
+          return response.json();
+        }).then((json) => {
+          if (json.codigo == "200") {
+            console.log("Autenticação ok");
+            navigation.navigate('MenuPrincipal');
+          }
+          else {
+            console.log("Credenciais inválidas");
+            alert(json.erro);
+          }
+        });
+      }}>
         <Text style={styles.botaoLoginTexto}>Entrar</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
-      <Text style={styles.link} >
-      Esqueceu sua senha?
+        <Text style={styles.link} >
+          Esqueceu sua senha?
       </Text>
       </TouchableOpacity>
-      <StatusBar style="auto" />
-    </View>
+    </SafeAreaView >
   );
 }
 
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#3385FF',
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'column',
   },
   title: {
     color: 'white',
@@ -112,11 +112,5 @@ const styles = StyleSheet.create({
     marginTop: 30,
     textDecorationLine: 'underline',
     color: '#fff'
-  },
-  erro: {
-    marginTop: 20,
-    fontSize: 20,
-    color: '#ff0000',
-    display: 'flex'
   }
 });
