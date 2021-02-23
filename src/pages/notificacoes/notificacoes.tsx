@@ -1,6 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import BarraNotificacao from '../../components/barraNotificacao';
 
 export default function Notificacoes() {
