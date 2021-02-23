@@ -7,4 +7,4 @@ As especificações de nossas REST APIs estão localizadas no Sweagger e podem s
 <a>https://app.swaggerhub.com/apis/B4tzz/LabTrip_poc/1.0<a/>
 
 
-[![Build Status](https://secure.travis-ci.org/travis-ci/travis-ci-node.js-example.png?branch=master)](http://travis-ci.org/travis-ci/travis-ci-node.js-example)
+[![Build Status](https://travis-ci.com/LabTrip/LabTrip.svg?branch=dev)](https://travis-ci.com/LabTrip/LabTrip.svg?branch=dev)
