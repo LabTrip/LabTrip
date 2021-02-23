@@ -6,9 +6,7 @@ const Tab = createMaterialTopTabNavigator();
 
 function Usuarios() {
   return (
-    (
       <Text>Usuários</Text>
-    )
   )
 }
 

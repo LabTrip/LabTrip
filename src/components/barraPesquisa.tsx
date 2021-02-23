@@ -3,7 +3,6 @@ import { View, TextInput, Image, TouchableOpacity, StyleSheet } from 'react-nati
 
 
 export default function BarraPesquisa(props) {
-    const funcao = props.funcao;
     return (
         <View style={styles.barra}>
             <TextInput placeholder={props.texto} style={styles.input} />
