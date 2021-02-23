@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 
-export default function Login({ }) {
+export default function Login() {
   const navigation = useNavigation();
   const [email, onChangeTextEmail] = React.useState('');
   const [senha, onChangeTextSenha] = React.useState('');
