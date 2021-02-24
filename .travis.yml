@@ -16,6 +16,7 @@ install:
 
 script:
   # other script steps might be done before running the actual analysis
+  - npm test
   - sonar-scanner
 
 git:
