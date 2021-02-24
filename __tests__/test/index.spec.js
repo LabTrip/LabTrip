@@ -1,5 +1,7 @@
+import 'regenerator-runtime/runtime';
+
 const request = require('supertest') 
-import LabTrip from './app';
+import LabTrip from '../../src/app';
 
 const app = LabTrip();
 
