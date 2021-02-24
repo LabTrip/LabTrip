@@ -39,13 +39,26 @@ export default class LoginController {
     const{email, senha} = req.body;
 
     const usuario = await this.loginRepository.buscaPorEmail(email);
+    
 
     if(usuario.verificado == false){
       return res.status(401).json({erro:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar",
       codigo:"401"});
     }
     else if(usuario.senha == sha256(senha).toString()){
-      const token = jwt.sign({email: usuario.email, id: usuario.id, perfilId: usuario.perfilId, geradoEm: new Date().toISOString()}, process.env.SECRET, {expiresIn: 2592000});
+      let tokenContent = {
+        email: usuario.email,
+        id: usuario.id, 
+        perfilId: usuario.perfilId, 
+        geradoEm: new Date().toISOString()
+      };
+
+      if(usuario && usuario.perfilId == 2){
+        const funcionario = await this.loginRepository.buscaAgenciaId(usuario.id);
+        tokenContent.agenciaId = funcionario.agenciaId;
+      }
+      
+      const token = jwt.sign(tokenContent, process.env.SECRET, {expiresIn: 2592000});
       const usuarioAuth = new Login(usuario.id, usuario.email, usuario.perfilId, token)
       return res.status(200).json(loginViewModel(usuarioAuth)); 
     }

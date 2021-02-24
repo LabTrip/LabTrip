@@ -18,6 +18,11 @@ export default class LoginRepository{
       return firstRow;
     }
 
+    async buscaAgenciaId(id){
+      return await this.client('funcionario')
+        .where({'usuarioId': id.toString()}).first();
+    }
+
     async redefineSenha(email, senha, novoCodigo){
       const [firstRow] = await this.client('usuario')
       .where({'email': email.toString()})

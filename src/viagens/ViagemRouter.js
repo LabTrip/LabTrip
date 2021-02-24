@@ -4,6 +4,8 @@ import ViagemMiddleware from './ViagemMiddleware'
 import ViagemRepository from './ViagemRepository'
 import LoginMiddleware from '../login/LoginMiddleware'
 import LoginRepository from '../login/LoginRepository'
+import AcessoRotaMiddleware from '../acesso_rota/AcessoRotaMiddleware'
+import AcessoRotaRepository from '../acesso_rota/AcessoRotaRepository'
 import {client} from '../config'
 
 export default function defineViagemRouter(){
@@ -17,8 +19,12 @@ export default function defineViagemRouter(){
   const loginRepository = new LoginRepository(client);
   const loginMiddleware = new LoginMiddleware(loginRepository);
 
+  const acessoRotaRepository = new AcessoRotaRepository(client)
+  const acessoRotaMiddleware = new AcessoRotaMiddleware(acessoRotaRepository)
+
   router.route('/')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
    .get((req, res) => viagemController.buscaTodos(req, res))
    .post((req, res) => viagemController.salva(req, res));
 

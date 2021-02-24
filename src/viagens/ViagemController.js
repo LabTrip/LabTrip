@@ -40,11 +40,19 @@ export default class ViagemController {
   async buscaTodos(req, res) {
     let viagens;
 
-    if(req.token.perfilId == 1){
-      viagens = await this.viagemRepository.buscaTodos();
-    }
-    else{
-      viagens = await this.viagemRepository.buscaTodosComPermissao(req.token.id);
+    switch(req.acesso.tipoAcesso){
+      case 'Total':
+          viagens = await this.viagemRepository.buscaTodos();
+        break;
+      case 'Gerencial':
+          viagens = await this.viagemRepository.buscaTodosDaAgencia(req.token.agenciaId);
+        break;
+      case 'Parcial':
+          viagens = await this.viagemRepository.buscaTodosComPermissao(req.token.id);
+        break;
+      default:
+          return res.status(404).json({status:'404', mensagem:'Acesso restrito.'})
+        break;
     }
     
     res.status(200).json(viagens.map(u => viagemViewModel(u)));
@@ -99,7 +107,6 @@ export default class ViagemController {
         });
       }
 
-      console.log(participantesDeletados);
       await this.viagemRepository.deletaParticipantes(participantesDeletados);
     }
 

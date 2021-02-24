@@ -27,6 +27,13 @@ export default class ViagemRepository{
       });
   }
 
+  async buscaTodosDaAgencia(agenciaId){
+    return await this.client('viagem')
+      .where({
+        agenciaId: agenciaId.toString(),
+      });
+  }
+
   async salva(viagem){
     const [firstRow] = await this.client('viagem')
       .insert(viagem)
