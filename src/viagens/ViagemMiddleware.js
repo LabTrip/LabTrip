@@ -5,11 +5,30 @@ export default class ViagemMiddleware{
     }
   
     async viagemExiste(req, res, next){
-      const viagem = await this.viagemRepository.buscaPorId(req.params.id)
+      const viagem = await this.verificaAcesso(req)
+      
       if(!viagem){
-        return res.status(404).json({erro: 'Viagem não encontrada.'});       
+        return res.status(404).json({erro: 'Viagem não encontrada ou sem permissão de acesso.'});       
       }
       req.viagem = viagem;
       next(); 
     }
+
+    async verificaAcesso(req){
+      
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          return await this.viagemRepository.buscaPorId(req.params.id);
+          break;
+        case 'Gerencial':
+            return await this.viagemRepository.buscaPorIdGerencial(req.params.id, req.token.agenciaId);
+          break;
+        case 'Parcial':
+          return await this.viagemRepository.buscaPorIdParcial(req.params.id,req.token.id);
+          break;
+        default:
+          return undefined;
+      }
+    }
+
   }

@@ -52,7 +52,6 @@ export default class ViagemController {
         break;
       default:
           return res.status(404).json({status:'404', mensagem:'Acesso restrito.'})
-        break;
     }
     
     res.status(200).json(viagens.map(u => viagemViewModel(u)));

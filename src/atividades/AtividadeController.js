@@ -21,8 +21,7 @@ const atividadeViewModel = (atividade) => ({
   
     //GET /atividades
     async buscaTodos(req, res) {
-      const atividades = await this.atividadeRepository.buscaTodos2();
-      console.log(atividades)
+      const atividades = await this.atividadeRepository.buscaTodos();
       res.status(200).json(atividades.map(u => atividadeViewModel(u)));
     }
 

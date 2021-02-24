@@ -48,6 +48,21 @@ export default class ViagemRepository{
       .where({'viagem.id': id.toString()}).first();
   }
 
+  async buscaPorIdGerencial(id, agenciaId){
+    return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
+      .innerJoin('status', 'viagem.statusId', 'status.id')
+      .where({'viagem.id': id.toString()})
+      .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
+  }
+
+  async buscaPorIdParcial(id, usuarioId){
+    return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
+      .innerJoin('status', 'viagem.statusId', 'status.id')
+      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+      .where({'viagem.id': id.toString()})
+      .where({'usuario_viagem.usuarioId': usuarioId.toString()}).first();
+  }
+
   async atualiza(viagem){
     const [firstRow] = await this.client('viagem')
       .where({'id': viagem.id})

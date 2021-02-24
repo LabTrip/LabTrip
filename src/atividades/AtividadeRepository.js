@@ -7,11 +7,6 @@ export default class AtividadeRepository{
       return await this.client.select(['local.*', 'atividade.*']).from('atividade')
       .innerJoin('local', 'atividade.localId', 'local.id');
     }
-
-    async buscaTodos2(){
-      return await this.client.select('local.* as l').select('a.*').from('atividade as a')
-      .innerJoin('local', 'a.localId', 'local.id');
-    }
   
     async salva(atividade){
       const [firstRow] = await this.client('atividade')
