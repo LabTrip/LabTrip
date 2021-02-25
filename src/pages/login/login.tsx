@@ -28,7 +28,7 @@ export default function Login() {
   let descErro = null;
   return (
     <SafeAreaView style={styles.container} >
-      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center',  }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', }}>
         <View style={styles.scrollContainer}>
           <Image source={require('../../imgs/logo.png')} style={styles.logo} />
 
@@ -58,14 +58,12 @@ export default function Login() {
           <TouchableOpacity onPress={() => navigation.navigate('RedefinirInserirEmail')}>
             <Text style={styles.link} >
               Esqueceu sua senha?
-      </Text>
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
       <StatusBar />
     </SafeAreaView >
-
-
   );
 }
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 
 export default function RedefinirInserirEmail() {
@@ -20,28 +21,33 @@ export default function RedefinirInserirEmail() {
   }
   return (
     <SafeAreaView style={styles.container}>
-        <Image source={require('../../imgs/logo.png')} style={styles.logo} />
-        <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
-        <Text style={styles.texto}>Insira o e-mail cadastrado.</Text>
-        <TextInput placeholder={"seuemail@email.com"} style={styles.input}
-          onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
-        <TouchableOpacity style={styles.botaoConfirmar} onPress={() => {
-          geraCodigo().then(response => {
-            console.log(response.status)
-            return response.json();
-          }).then((json) => {
-            if (json.codigo == "200") {
-              console.log("Autenticação ok");
-              navigation.navigate('RedefinirInserirCodigo', { email: email });
-            }
-            else {
-              console.log("E-mail não cadastrado!");
-              alert(json.erro);
-            }
-          });
-        }}>
-          <Text style={styles.botaoLoginTexto}>Confirmar</Text>
-        </TouchableOpacity>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', }}>
+        <View style={styles.scrollContainer}>
+          <Image source={require('../../imgs/logo.png')} style={styles.logo} />
+          <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
+          <Text style={styles.texto}>Insira o e-mail cadastrado.</Text>
+          <TextInput placeholder={"seuemail@email.com"} style={styles.input}
+            onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
+          <TouchableOpacity style={styles.botaoConfirmar} onPress={() => {
+            geraCodigo().then(response => {
+              console.log(response.status)
+              return response.json();
+            }).then((json) => {
+              if (json.codigo == "200") {
+                console.log("Autenticação ok");
+                navigation.navigate('RedefinirInserirCodigo', { email: email });
+              }
+              else {
+                console.log("E-mail não cadastrado!");
+                alert(json.erro);
+              }
+            });
+          }}>
+            <Text style={styles.botaoLoginTexto}>Confirmar</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+      <StatusBar/>
     </SafeAreaView>
   );
 }
@@ -53,6 +59,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+  },
+  scrollContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   titulo: {
     color: 'white',

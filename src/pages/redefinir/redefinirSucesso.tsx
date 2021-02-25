@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -12,11 +12,11 @@ export default function RedefinirSucesso() {
   return (
     <SafeAreaView style={styles.container}>
       <Image source={require('../../imgs/logo.png')} style={styles.logo} />
-      
       <Text style={styles.texto}>Sucesso a senha foi redefinida!</Text>
       <TouchableOpacity style={styles.botaoRedefinir} onPress={() => navigation.navigate('Login')}>
         <Text style={styles.botaoRedefinirTexto}>Fazer login</Text>
       </TouchableOpacity>
+      <StatusBar/>
     </SafeAreaView>
   );
 }

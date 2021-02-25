@@ -1,18 +1,15 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, StatusBar, ScrollView, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-
-
-export default function RedefinirInserirCodigo({route}) {
-  const {email} = route.params;
+export default function RedefinirInserirCodigo({ route }) {
+  const { email } = route.params;
   const navigation = useNavigation();
   const [codigo, onChangeTextCodigo] = React.useState('');
   const verificaCodigo = async () => {
-    return fetch('https://labtrip-backend.herokuapp.com/login/verificacodigo',{
-      method:'POST',
+    return fetch('https://labtrip-backend.herokuapp.com/login/verificacodigo', {
+      method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json'
@@ -20,35 +17,39 @@ export default function RedefinirInserirCodigo({route}) {
       body: JSON.stringify({
         email: email,
         codigoVerificacao: codigo
-      })      
+      })
     });
   }
   return (
     <SafeAreaView style={styles.container}>
-      <Image source={require('../../imgs/logo.png')} style={styles.logo} />
-      <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
-      <Text style={styles.texto}>Insira o código recebido por e-mail.</Text>
-      <TextInput placeholder={"Código"} style={styles.input}
-      onChangeText={text => onChangeTextCodigo(text)} value={codigo} />
-      <TouchableOpacity style={styles.botaoEnviar} onPress={() => {
-        verificaCodigo().then(response => {
-          console.log(response.status)
-          return response.json();
-        }).then((json) => {
-          if(json.codigo == "200"){
-            console.log("Autenticação ok");
-            navigation.navigate('RedefinirInserirSenha',{email: email, codigoVerificacao: codigo});
-          }
-          else{
-            console.log("Código incorreto!");
-            console.log(email);
-            alert('Código incorreto!');
-          }
-        });        
-        }}>
-        <Text style={styles.botaoLoginTexto}>Enviar</Text>
-      </TouchableOpacity>
-      <StatusBar style="auto" />
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', }}>
+        <View style={styles.scrollContainer}>
+          <Image source={require('../../imgs/logo.png')} style={styles.logo} />
+          <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
+          <Text style={styles.texto}>Insira o código recebido por e-mail.</Text>
+          <TextInput placeholder={"Código"} style={styles.input}
+            onChangeText={text => onChangeTextCodigo(text)} value={codigo} />
+          <TouchableOpacity style={styles.botaoEnviar} onPress={() => {
+            verificaCodigo().then(response => {
+              console.log(response.status)
+              return response.json();
+            }).then((json) => {
+              if (json.codigo == "200") {
+                console.log("Autenticação ok");
+                navigation.navigate('RedefinirInserirSenha', { email: email, codigoVerificacao: codigo });
+              }
+              else {
+                console.log("Código incorreto!");
+                console.log(email);
+                alert('Código incorreto!');
+              }
+            });
+          }}>
+            <Text style={styles.botaoLoginTexto}>Enviar</Text>
+          </TouchableOpacity>
+          <StatusBar />
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -60,6 +61,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+  },
+  scrollContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
   titulo: {
     color: 'white',

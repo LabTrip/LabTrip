@@ -25,7 +25,7 @@ export default function EditarPerfil() {
                     <TouchableOpacity>
                         <Text style={styles.link}>
                             Redefinir senha
-                    </Text>
+                        </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.botaoSalvar} >
                         <Text style={styles.botaoSalvarTexto}>Salvar</Text>

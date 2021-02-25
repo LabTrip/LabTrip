@@ -1,6 +1,6 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, Image, TextInput, TouchableOpacity, View, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -33,6 +33,8 @@ export default function RedefinirInserirSenha({route}) {
   }
   return (
     <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', }}>
+        <View style={styles.scrollContainer}>
       <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
       <Text style={styles.texto}>Insira sua nova senha e a comfirmação.</Text>
@@ -59,6 +61,9 @@ export default function RedefinirInserirSenha({route}) {
         }}>
         <Text style={styles.botaoRedefinirTexto}>Redefinir</Text>
       </TouchableOpacity>
+      </View>
+      </ScrollView>
+      <StatusBar/>
     </SafeAreaView>
   );
 }
@@ -70,6 +75,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
+  },
+  scrollContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   titulo: {
     color: 'white',
