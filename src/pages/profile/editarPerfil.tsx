@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Platform, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function EditarPerfil() {

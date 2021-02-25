@@ -1,96 +1,33 @@
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import BarraPesquisa from '../../components/barraPesquisa';
-
-const Tab = createMaterialBottomTabNavigator();
+import CardViagem from '../../components/cardViagem';
 
 export default function ListaViagens() {
-  const navigation = useNavigation();
+
   return (
-    <View style={{width: '100%', height: '100%'}}>
+    <View style={{ flex: 1 }}>
       <BarraPesquisa texto="Pesquisar Viagem..." />
-      <ScrollView>
+      <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
         <View style={styles.conteudo} >
-        <TouchableOpacity style={styles.cardViagens} onPress={() => navigation.navigate('MenuDetalhesViagem')}>
-          <Text>Apelido da viagem</Text>
-          <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-          <Text>Local: Nome do local</Text>
-          <Text>Status: status</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cardViagens}>
-          <Text>Apelido da viagem</Text>
-          <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-          <Text>Local: Nome do local</Text>
-          <Text>Status: status</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cardViagens}>
-          <Text>Apelido da viagem</Text>
-          <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-          <Text>Local: Nome do local</Text>
-          <Text>Status: status</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cardViagens}>
-          <Text>Apelido da viagem</Text>
-          <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-          <Text>Local: Nome do local</Text>
-          <Text>Status: status</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cardViagens}>
-          <Text>Apelido da viagem</Text>
-          <Text>Início: DD/MM/YYYY, Fim: DD/MM/YYYY</Text>
-          <Text>Local: Nome do local</Text>
-          <Text>Status: status</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.cardViagens}>
-          <Text>Bahia</Text>
-          <Text>Início: 10/03/2021, Fim: 25/03/2021</Text>
-          <Text>Local: Salvador, BA</Text>
-          <Text>Status: Em andamento</Text>
-        </TouchableOpacity>
+          <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
+            dataFim="28/02/2021" local="Ubatuba - SP" status="Agendada" navigate="MenuDetalhesViagem" />
+          <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
+            dataFim="28/02/2021" local="Ubatuba - SP" status="Em andamento" navigate="MenuDetalhesViagem" />
+          <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
+            dataFim="28/02/2021" local="Ubatuba - SP" status="Concluida" navigate="MenuDetalhesViagem" />
+            <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
+            dataFim="28/02/2021" local="Ubatuba - SP" status="Cancelada" navigate="MenuDetalhesViagem" />
         </View>
       </ScrollView>
-      <StatusBar />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  barra: {
-    width: '100%',
-    backgroundColor: '#000000',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 48,
-  },
   conteudo: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
+    flex: 1,
     flexDirection: 'column',
-    height: '100%',
-  },
-  input: {
-    marginRight: 25,
-    width: 266,
-    height: 30,
-    backgroundColor: '#fff',
-    textAlign: 'center',
-    fontWeight: 'bold',
-    borderRadius: 32,
-  },
-  cardViagens: {
-    marginTop: 25,
-    padding: 10,
-    backgroundColor: '#FAF7AE',
-    borderRadius: 13,
-    borderLeftColor: '#F8EC12',
-    borderLeftWidth: 6,
-    width: '85%',
-    height: 143,
-    justifyContent: 'center',
     alignItems: 'center',
   },
 });
