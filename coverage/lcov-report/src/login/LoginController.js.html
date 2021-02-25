@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.56% </span>
+                <span class="strong">14.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/45</span>
+                <span class='fraction'>7/49</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>0/14</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.91% </span>
+                <span class="strong">14.58% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/44</span>
+                <span class='fraction'>7/48</span>
             </div>
         
             
@@ -223,7 +223,20 @@
 <a name='L164'></a><a href='#L164'>164</a>
 <a name='L165'></a><a href='#L165'>165</a>
 <a name='L166'></a><a href='#L166'>166</a>
-<a name='L167'></a><a href='#L167'>167</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -265,11 +278,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -430,13 +456,26 @@ export default class LoginController {
     const{email, senha} = <span class="cstat-no" title="statement not covered" >req.body;</span>
 &nbsp;
     const usuario = <span class="cstat-no" title="statement not covered" >await this.loginRepository.buscaPorEmail(email);</span>
+    
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    if(usuario.verificado == false){</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(401).json({erro:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar",</span>
       codigo:"401"});
     }
     else <span class="cstat-no" title="statement not covered" >if(usuario.senha == sha256(senha).toString()){</span>
-      const token = <span class="cstat-no" title="statement not covered" >jwt.sign({email: usuario.email, id: usuario.id, perfilId: usuario.perfilId, geradoEm: new Date().toISOString()}, process.env.SECRET, {expiresIn: 2592000});</span>
+      let tokenContent = <span class="cstat-no" title="statement not covered" >{</span>
+        email: usuario.email,
+        id: usuario.id, 
+        perfilId: usuario.perfilId, 
+        geradoEm: new Date().toISOString()
+      };
+&nbsp;
+<span class="cstat-no" title="statement not covered" >      if(usuario &amp;&amp; usuario.perfilId == 2){</span>
+        const funcionario = <span class="cstat-no" title="statement not covered" >await this.loginRepository.buscaAgenciaId(usuario.id);</span>
+<span class="cstat-no" title="statement not covered" >        tokenContent.agenciaId = funcionario.agenciaId;</span>
+      }
+      
+      const token = <span class="cstat-no" title="statement not covered" >jwt.sign(tokenContent, process.env.SECRET, {expiresIn: 2592000});</span>
       const usuarioAuth = <span class="cstat-no" title="statement not covered" >new Login(usuario.id, usuario.email, usuario.perfilId, token)</span>
 <span class="cstat-no" title="statement not covered" >      return res.status(200).json(loginViewModel(usuarioAuth)); </span>
     }
@@ -562,7 +601,7 @@ export default class LoginController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Feb 23 2021 23:27:25 GMT-0300 (GMT-03:00)
+                at Wed Feb 24 2021 23:11:58 GMT-0300 (GMT-03:00)
             </div>
         </div>
         <script src="../../prettify.js"></script>

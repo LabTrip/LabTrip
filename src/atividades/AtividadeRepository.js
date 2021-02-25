@@ -19,6 +19,7 @@ export default class AtividadeRepository{
     async salvaLocal(local){
       const [firstRow] = await this.client('local')
         .insert({
+          id: local.id,
           cidade: local.cidade,
           pais: local.pais,
           endereco: local.endereco,
@@ -26,6 +27,8 @@ export default class AtividadeRepository{
           longitude: local.longitude,
           local: local.local
         })
+        .onConflict('id')
+        .ignore()
         .returning("*");
   
         return firstRow;

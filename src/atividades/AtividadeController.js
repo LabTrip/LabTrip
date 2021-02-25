@@ -27,9 +27,10 @@ const atividadeViewModel = (atividade) => ({
     }
 
     async salvaLocal(local){
-      const {poi, address, position} = local;
-      const localidade = new Local(poi.name, address.freeformAddress, address.municipality, address.country, position.lat, position.lon);
-      return await this.atividadeRepository.salvaLocal(localidade);
+      const {id, poi, address, position} = local;
+      const localidade = new Local(poi.name, address.freeformAddress, address.municipality, address.country, position.lat, position.lon, id);
+      console.log(localidade)
+      return await this.atividadeRepository.salvaLocal(localidade) || localidade;
     }
   
     async salva(req, res){

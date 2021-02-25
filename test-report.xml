@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\suporte\Documents\git\LabTrip\__tests__\test\index.spec.js">
-    <testCase name="Testando servidor Deve buscar a rota principal" duration="53"/>
+  <file path="D:\Users\Batz\Documents\IFSP\5º Semestre\PI1A5\back-end\LabTrip\__tests__\test\index.spec.js">
+    <testCase name="Testando servidor Deve buscar a rota principal" duration="60"/>
   </file>
 </testExecutions>

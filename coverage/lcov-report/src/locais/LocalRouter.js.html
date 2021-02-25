@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.94% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/17</span>
+                <span class='fraction'>11/22</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">11.11% </span>
+                <span class="strong">8.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/9</span>
+                <span class='fraction'>1/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.94% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/17</span>
+                <span class='fraction'>11/22</span>
             </div>
         
             
@@ -88,7 +88,17 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L32'></a><a href='#L32'>32</a>
+<a name='L33'></a><a href='#L33'>33</a>
+<a name='L34'></a><a href='#L34'>34</a>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -100,6 +110,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,8 +123,11 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -125,6 +141,8 @@ import LocalMiddleware from './LocalMiddleware'
 import LocalRepository from './LocalRepository'
 import LoginMiddleware from '../login/LoginMiddleware'
 import LoginRepository from '../login/LoginRepository'
+import AcessoRotaMiddleware from '../acesso_rota/AcessoRotaMiddleware'
+import AcessoRotaRepository from '../acesso_rota/AcessoRotaRepository'
 import {client} from '../config'
 &nbsp;
 export default function defineLocalRouter(){
@@ -137,14 +155,20 @@ export default function defineLocalRouter(){
   const loginRepository = new LoginRepository(client);
   const loginMiddleware = new LoginMiddleware(loginRepository);
 &nbsp;
+  const acessoRotaRepository = new AcessoRotaRepository(client)
+  const acessoRotaMiddleware = new AcessoRotaMiddleware(acessoRotaRepository)
+&nbsp;
   router.route('/')
    .all(<span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >loginMiddleware.validaToken(req,res, next))</span>
+   .all(<span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >acessoRotaMiddleware.acessoRota(req, res, next))</span>
+   .all(<span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >localMiddleware.verificaAcesso(req, res, next))</span>
    .get(<span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; <span class="cstat-no" title="statement not covered" >localController.buscaTodos(req, res))</span>
    .post(<span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; <span class="cstat-no" title="statement not covered" >localController.salva(req, res))</span>;
 &nbsp;
   router.route('/:id')
     .all(<span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >loginMiddleware.validaToken(req,res, next))</span>
-    .all(<span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >localMiddleware.atividadeExiste(req, res, next))</span>
+    .all(<span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >acessoRotaMiddleware.acessoRota(req, res, next))</span>
+    .all(<span class="fstat-no" title="function not covered" >(r</span>eq, res, next) =&gt; <span class="cstat-no" title="statement not covered" >localMiddleware.localExiste(req, res, next))</span>
     .get(<span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; <span class="cstat-no" title="statement not covered" >localController.mostra(req, res))</span>
     .put(<span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; <span class="cstat-no" title="statement not covered" >localController.atualiza(req, res))</span>
     .delete(<span class="fstat-no" title="function not covered" >(r</span>eq, res) =&gt; <span class="cstat-no" title="statement not covered" >localController.deleta(req, res))</span>;
@@ -157,7 +181,7 @@ export default function defineLocalRouter(){
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Feb 23 2021 23:27:25 GMT-0300 (GMT-03:00)
+                at Wed Feb 24 2021 23:11:58 GMT-0300 (GMT-03:00)
             </div>
         </div>
         <script src="../../prettify.js"></script>
