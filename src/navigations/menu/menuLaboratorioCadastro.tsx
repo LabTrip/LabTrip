@@ -16,7 +16,7 @@ function Agencias() {
   )
 }
 
-export default function LaboratorioCadastro() {
+export default function MenuLaboratorioCadastro() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Usuários" component={Usuarios} />
