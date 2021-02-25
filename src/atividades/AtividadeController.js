@@ -5,6 +5,7 @@ const atividadeViewModel = (atividade) => ({
     id: atividade.id,
     descricao: atividade.descricao,
     localId: atividade.localId,
+    agenciaId: atividade.agenciaId,
     local: atividade.local,
     endereco: atividade.endereco,
     cidade: atividade.cidade,
@@ -32,12 +33,12 @@ const atividadeViewModel = (atividade) => ({
     }
   
     async salva(req, res){
-      const {descricao, localId, local} = req.body;
-      
+      const {descricao, localId, local, agenciaId} = req.body;
+    
       const localidade = await this.salvaLocal(local);
 
-      const atividade = new Atividade(descricao, localidade.id);
-
+      const atividade = new Atividade(descricao, agenciaId, localidade.id);
+      
       await this.atividadeRepository.salva(atividade);
       res.status(201).json(atividadeViewModel(atividade));
     }

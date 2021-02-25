@@ -1,3 +1,5 @@
+
+
 export default class LocalMiddleware{
   
     constructor(localRepository){
@@ -5,11 +7,41 @@ export default class LocalMiddleware{
     }
   
     async localExiste(req, res, next){
-      const local = await this.localRepository.buscaPorId(req.params.id)
+      const local = await this.verificaAcessoAoLocal(req);
       if(!local){
-        return res.status(404).json({erro: 'Local não encontrado.'});       
+        return res.status(403).json({status:'403', erro: 'Local não encontrado ou sem permissão de acesso..'});       
       }
       req.local = local;
       next(); 
+    }
+
+    async verificaAcesso(req, res, next){
+
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          next();
+          break;
+        case 'Gerencial':
+          next();
+          break;
+        case 'Parcial':
+          next();
+          break;
+        default:
+          return res.status(403).json({erro: 'Sem permissão de acesso.'});
+      }
+
+    }
+
+    async verificaAcessoAoLocal(req){
+
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          return await this.localRepository.buscaPorId(req.params.id)
+          break;
+        default:
+          return undefined;
+      }
+
     }
   }

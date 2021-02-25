@@ -15,7 +15,7 @@ export default class AcessoRotaMiddleware{
       const acesso = await this.acessoRotaRepository.buscaAcesso(requistante)
       
       if(!acesso){
-        return res.status(404).json({erro: 'Viagem não encontrada.'});       
+        return res.status(403).json({status:'403', erro: 'Sem permissão de acesso.'});       
       }
       req.acesso = acesso;
       next(); 

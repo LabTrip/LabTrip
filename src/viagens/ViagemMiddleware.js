@@ -8,7 +8,7 @@ export default class ViagemMiddleware{
       const viagem = await this.verificaAcesso(req)
       
       if(!viagem){
-        return res.status(404).json({erro: 'Viagem não encontrada ou sem permissão de acesso.'});       
+        return res.status(403).json({erro: 'Viagem não encontrada ou sem permissão de acesso.'});       
       }
       req.viagem = viagem;
       next(); 

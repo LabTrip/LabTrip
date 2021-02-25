@@ -5,20 +5,41 @@ export default class PerfilMiddleware{
     }
   
     async perfilExiste(req, res, next){
-      const perfil = await this.perfilRepository.buscaPorId(req.params.id)
+      const perfil = await this.verificaAcessoAoPerfil(req);
       if(!perfil){
-        return res.status(404).json({erro: 'Perfil não encontrado.'});       
+        return res.status(404).json({status:'403',erro: 'Perfil não encontrado ou sem permissão de acesso.'});       
       }
       req.perfil = perfil;
       next(); 
     }
 
-    async perfilUsuarioExiste(req, res, next){
-      const perfil = await this.perfilRepository.buscaPorId(req.body.perfilId)
-      if(!perfil){
-        return res.status(404).json({erro: 'Perfil não encontrado.'});       
+    async verificaAcesso(req, res, next){
+
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          next();
+          break;
+        case 'Gerencial':
+          next();
+          break;
+        case 'Parcial':
+          next();
+          break;
+        default:
+          return res.status(403).json({erro: 'Sem permissão de acesso.'});
       }
-      req.perfil = perfil;
-      next(); 
+
+    }
+
+    async verificaAcessoAoPerfil(req){
+
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          return await this.perfilRepository.buscaPorId(req.params.id)
+          break;
+        default:
+          return undefined;
+      }
+
     }
   }

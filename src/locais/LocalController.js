@@ -17,7 +17,7 @@ const localViewModel = (local) => ({
       this.localRepository = localRepository;
     }
   
-    //GET /atividades
+    //GET /locais
     async buscaTodos(req, res) {
       const locais = await this.localRepository.buscaTodos();
       res.status(200).json(locais.map(u => localViewModel(u)));

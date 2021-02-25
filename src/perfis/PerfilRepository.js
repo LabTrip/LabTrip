@@ -7,6 +7,16 @@ export default class PerfilRepository{
       return await this.client('perfil');
     }
 
+    async buscaTodosGerencial(){
+      return await this.client('perfil')
+      .whereIn('descricao', ['Gerente de agencia', 'Agente', 'Cliente']);
+    }
+
+    async buscaTodosParcial(){
+      return await this.client('perfil')
+      .whereIn('descricao', ['Cliente']);
+    }
+
     async buscaPorId(id){
       return await this.client('perfil')
         .where({'id': id.toString()}).first();
