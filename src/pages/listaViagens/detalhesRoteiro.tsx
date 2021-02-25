@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import CardRoteiro from '../../components/cardRoteiro';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function DetalhesRoteiro() {
     const [selectedValue, setSelectedValue] = useState();
@@ -20,10 +21,19 @@ export default function DetalhesRoteiro() {
                 <Picker.Item label="22/01/2021" value="22/01/2021" />
 
             </Picker>
-            <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50"/>
-            <CardRoteiro nome="Visita a Arq" local="São Paulo - SP" horario="18:50"/>
-            <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50"/>
-            <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50"/>
+            <ScrollView>
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita a Arq" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+            </ScrollView>
         </View>
     );
 }
@@ -33,13 +43,10 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff'
     },
-    labelPicker: {
-        marginTop: 20,
-        marginLeft: '3%',
-    },
     texto: {
-        margin: 5,
+        marginTop: '2%',
+        marginLeft: '6%',
         color: '#999999',
-        fontSize: 20,
+        fontSize: 18,
     },
 });
