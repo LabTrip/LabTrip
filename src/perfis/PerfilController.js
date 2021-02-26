@@ -27,7 +27,7 @@ export default class PerfilController {
           return res.status(404).json({status:'404', mensagem:'Acesso restrito.'})
     }
     
-    res.status(200).json(perfis.map(u => perfilViewModel(u)));
+    res.status(200).json({perfis: perfis.map(u => perfilViewModel(u))});
   }
 
   mostra(req, res){

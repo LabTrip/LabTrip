@@ -19,6 +19,11 @@ export default class UsuarioRepository{
       return await this.client('usuario')
         .where({'id': id.toString()}).first();
     }
+
+    async buscaPorEmail(email){
+      return await this.client('usuario')
+        .where({'email': email.toString()}).first();
+    }
   
     async atualiza(usuario){
       const [firstRow] = await this.client('usuario')

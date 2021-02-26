@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/LabTrip/LabTrip#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",
     "crypto-random-string": "^3.3.0",
