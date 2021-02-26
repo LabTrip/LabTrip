@@ -22,9 +22,10 @@ export default function DetalhesRoteiro() {
 
             </Picker>
             <ScrollView>
-                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Sarau contra o bolsonaro no IFSP" 
+                local="R. Pedro Vicente, 625 - Canindé, São Paulo - SP, 01109-010" horario="18:50" />
                 <CardRoteiro nome="Visita a Arq" local="São Paulo - SP" horario="18:50" />
-                <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
+                <CardRoteiro nome="Visita ao IFSP" local="Osasco - SP" horario="18:50" />
                 <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
                 <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
                 <CardRoteiro nome="Visita ao IFSP" local="São Paulo - SP" horario="18:50" />
