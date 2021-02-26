@@ -2,13 +2,17 @@ import React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
-export default function EditarPerfil() {
+export default function EditarPerfil({ route }) {
     const [nome, onChangeTextNome] = React.useState('Ednaldo Pereira');
     const [email, onChangeTextEmail] = React.useState('ednaldo.chance@yahoo.com.br');
     const [data, onChangeTextData] = React.useState('17/10/1967');
     const [telefone, onChangeTextTelefone] = React.useState('(11) 4002-8922');
+    const { token } = route.params;
+
     return (
+
         <View style={styles.container}>
+            {console.log('caiu no profile ' + token)}
             <ScrollView>
                 <View style={styles.conteudo}>
                     <TouchableOpacity>
@@ -37,7 +41,7 @@ export default function EditarPerfil() {
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         flex: 1,
         backgroundColor: '#fff',
     },

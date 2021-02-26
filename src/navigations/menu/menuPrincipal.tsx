@@ -8,14 +8,17 @@ import Notificacoes from '../../pages/notificacoes/notificacoes';
 import Mensagens from '../../pages/chat/mensagens';
 import TelasLaboratorio from '../screens/telasLaboratorio';
 import TelasListaViagens from   '../screens/telasListaViagens';
+import { useNavigation } from '@react-navigation/native';
 
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function MenuPrincipal() {
+export default function MenuPrincipal({ route }) {
+  const { token } = route.params;
+
   return (
-     <><Cabecalho/>
-      
+     <>
+     <Cabecalho/>
         <Tab.Navigator barStyle={{ backgroundColor: '#fff' }} initialRouteName={"TelasListaViagens"}>
           <Tab.Screen name="Notificacoes" component={Notificacoes} options={{
             tabBarLabel: '',
@@ -45,7 +48,7 @@ export default function MenuPrincipal() {
               <MaterialCommunityIcons name="message" color={'#BABABA'} size={29} />
             )
           }} />
-          <Tab.Screen name="EditarPerfil" component={EditarPerfil} options={{
+          <Tab.Screen name="EditarPerfil" initialParams={{token: token}} component={EditarPerfil} options={{
             tabBarLabel: '',
             tabBarColor: '#fff',
             tabBarIcon: () => (

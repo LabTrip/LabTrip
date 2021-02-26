@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     textoTitulo: {
         fontSize: 18,
         color: '#999999',
-
         marginLeft: 15,
     },
     textoDetalhes: {

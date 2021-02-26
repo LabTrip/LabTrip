@@ -34,18 +34,19 @@ export default function Login() {
 
           <Text style={styles.title}>Olá!</Text>
           <Text style={styles.title}>Seja bem-vindo ao Labtrip.</Text>
-          <TextInput placeholder='email@email.com' style={styles.input}
+          <TextInput keyboardType={'email-address'} placeholder='email@email.com' style={styles.input}
             onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
-          <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
+          <TextInput keyboardType={'visible-password'} placeholder='senha' style={styles.input} secureTextEntry={true}
             onChangeText={text => onChangeTextSenha(text)} value={senha} />
           <TouchableOpacity style={styles.botaoLogin} onPress={() => {
             auth().then(response => {
-              console.log(response.status)
               return response.json();
             }).then((json) => {
               if (json.codigo == "200") {
-                console.log("Autenticação ok");
-                navigation.navigate('MenuPrincipal');
+                const token =  json.token;
+                navigation.navigate('MenuPrincipal', {
+                  token: token,
+                });
               }
               else {
                 console.log("Credenciais inválidas");
