@@ -16,7 +16,7 @@ module.exports = {
   transform: {
     "^.+\\.(tsx|ts|js)$": "typescript-babel-jest",
     "^.+\\.(ts|tsx|js)$": "ts-jest",
-    //"^.+\\.(ts|js|jsx)$": "babel-jest",
+    "^.+\\.(ts|js|jsx)$": "babel-jest",
     "^.+\\.(ts|js|jsx)$": "babel7-jest"
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(ts|tsx|js)?$",
@@ -28,9 +28,15 @@ module.exports = {
     "json",
     "node"
   ],
-  testPathIgnorePatterns: ["<rootDir>/node_modules/"],
+  testPathIgnorePatterns: [
+    "<rootDir>/node_modules/"
+  ],
   snapshotSerializers: ["enzyme-to-json/serializer"],
-
+  transformIgnorePatterns: [
+    " node_modules / (?! ((jest -)? react-native|react-navigation|@react-navigation/.*)) ",
+    "node_modules/(?!(jest-)?react-native)",
+    "node_modules/?!(react-navigation)"
+  ],
 
 
   globals: {
