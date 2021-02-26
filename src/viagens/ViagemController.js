@@ -60,26 +60,31 @@ export default class ViagemController {
 
   async salva(req, res){
     const {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes} = req.body;
-
-    const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);
+    if(req.token.agenciaId == agenciaId || req.acesso.tipoAcesso == "Total"){
+      const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);
   
-    await this.viagemRepository.salva(viagem);
+      await this.viagemRepository.salva(viagem);
 
-    if(!participantes){
-      const participantesAtualizados = [];
+      if(!participantes){
+        const participantesAtualizados = [];
 
-      for(let participante of participantes){
-        participantesAtualizados.push({
-          usuarioId: participante.usuarioId,
-          permissaoViagemId: participante.permissaoViagemId,
-          viagemId: viagem.id
-        });
+        for(let participante of participantes){
+          participantesAtualizados.push({
+            usuarioId: participante.usuarioId,
+            permissaoViagemId: participante.permissaoViagemId,
+            viagemId: viagem.id
+          });
+        }
+
+        await this.viagemRepository.salvaParticipantes(participantesAtualizados);
       }
 
-      await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+      return res.status(201).json(viagemViewModel(viagem));
     }
-
-    res.status(201).json(viagemViewModel(viagem));
+    else{
+      return res.status(403).json({status: '403', mensagem: 'Você não tem permissão para criar viagens na agencia informada.'}); 
+    }
+    
   }
 
   async mostra(req, res){

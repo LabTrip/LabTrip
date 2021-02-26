@@ -21,10 +21,10 @@ export default class ViagemMiddleware{
           return await this.viagemRepository.buscaPorId(req.params.id);
           break;
         case 'Gerencial':
-            return await this.viagemRepository.buscaPorIdGerencial(req.params.id, req.token.agenciaId);
+            return await this.viagemRepository.buscaPorId_AcessoGerencial(req.params.id, req.token.agenciaId);
           break;
         case 'Parcial':
-          return await this.viagemRepository.buscaPorIdParcial(req.params.id,req.token.id);
+          return await this.viagemRepository.buscaPorId_AcessoParcial(req.params.id,req.token.id);
           break;
         default:
           return undefined;

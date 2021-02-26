@@ -7,12 +7,12 @@ export default class PerfilRepository{
       return await this.client('perfil');
     }
 
-    async buscaTodosGerencial(){
+    async buscaTodos_AcessoGerencial(){
       return await this.client('perfil')
       .whereIn('descricao', ['Gerente de agencia', 'Agente', 'Cliente']);
     }
 
-    async buscaTodosParcial(){
+    async buscaTodos_AcessoParcial(){
       return await this.client('perfil')
       .whereIn('descricao', ['Cliente']);
     }

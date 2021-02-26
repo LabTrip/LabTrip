@@ -18,10 +18,10 @@ export default class PerfilController {
           perfis = await this.perfilRepository.buscaTodos();
         break;
       case 'Gerencial':
-          perfis = await this.perfilRepository.buscaTodosGerencial();
+          perfis = await this.perfilRepository.buscaTodos_AcessoGerencial();
         break;
       case 'Parcial':
-          perfis = await this.perfilRepository.buscaTodosParcial();
+          perfis = await this.perfilRepository.buscaTodos_AcessoParcial();
         break;
       default:
           return res.status(404).json({status:'404', mensagem:'Acesso restrito.'})

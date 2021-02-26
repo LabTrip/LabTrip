@@ -7,6 +7,12 @@ export default class AtividadeRepository{
       return await this.client.select(['local.*', 'atividade.*']).from('atividade')
       .innerJoin('local', 'atividade.localId', 'local.id');
     }
+
+    async buscaTodos_AcessoParcial(agenciaId){
+      return await this.client.select(['local.*', 'atividade.*']).from('atividade')
+      .innerJoin('local', 'atividade.localId', 'local.id')
+      .where({'atividade.agenciaId': agenciaId.toString()});
+    }
   
     async salva(atividade){
       const [firstRow] = await this.client('atividade')
@@ -43,6 +49,13 @@ export default class AtividadeRepository{
       return await this.client.select(['local.*', 'atividade.*']).from('atividade')
       .innerJoin('local', 'atividade.localId', 'local.id')
       .where({'atividade.id': id.toString()}).first();
+    }
+
+    async buscaPorId_AcessoParcial(id, agenciaId){
+      return await this.client.select(['local.*', 'atividade.*']).from('atividade')
+      .innerJoin('local', 'atividade.localId', 'local.id')
+      .where({'atividade.id': id.toString()})
+      .andWhere({'atividade.agenciaId': agenciaId.toString()}).first();
     }
   
     async atualiza(atividade){

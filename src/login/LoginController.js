@@ -53,7 +53,7 @@ export default class LoginController {
         geradoEm: new Date().toISOString()
       };
 
-      if(usuario && usuario.perfilId == 2){
+      if(usuario && (usuario.perfilId == 2 || usuario.perfilId == 3)){
         const funcionario = await this.loginRepository.buscaAgenciaId(usuario.id);
         tokenContent.agenciaId = funcionario.agenciaId;
       }

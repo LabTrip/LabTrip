@@ -48,14 +48,14 @@ export default class ViagemRepository{
       .where({'viagem.id': id.toString()}).first();
   }
 
-  async buscaPorIdGerencial(id, agenciaId){
+  async buscaPorId_AcessoGerencial(id, agenciaId){
     return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
       .innerJoin('status', 'viagem.statusId', 'status.id')
       .where({'viagem.id': id.toString()})
       .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
   }
 
-  async buscaPorIdParcial(id, usuarioId){
+  async buscaPorId_AcessoParcial(id, usuarioId){
     return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
       .innerJoin('status', 'viagem.statusId', 'status.id')
       .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')

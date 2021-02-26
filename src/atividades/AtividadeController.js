@@ -22,30 +22,47 @@ const atividadeViewModel = (atividade) => ({
   
     //GET /atividades
     async buscaTodos(req, res) {
-      const atividades = await this.atividadeRepository.buscaTodos();
-      res.status(200).json(atividades.map(u => atividadeViewModel(u)));
+      let atividades;
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          atividades = await this.atividadeRepository.buscaTodos();
+          break;
+        case 'Gerencial':
+          atividades = await this.atividadeRepository.buscaTodos_AcessoParcial(req.token.agenciaId);
+          break;
+        case 'Parcial':
+          atividades = await this.atividadeRepository.buscaTodos_AcessoParcial(req.token.agenciaId);
+          break;
+        default:
+          return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});
+      }
+      
+      return res.status(200).json(atividades.map(u => atividadeViewModel(u)));
     }
 
     async salvaLocal(local){
       const {id, poi, address, position} = local;
       const localidade = new Local(poi.name, address.freeformAddress, address.municipality, address.country, position.lat, position.lon, id);
-      console.log(localidade)
+
       return await this.atividadeRepository.salvaLocal(localidade) || localidade;
     }
   
     async salva(req, res){
       const {descricao, localId, local, agenciaId} = req.body;
-    
-      const localidade = await this.salvaLocal(local);
+      if(req.token.agenciaId == agenciaId || req.acesso.tipoAcesso == "Total"){
+        const localidade = await this.salvaLocal(local);
 
-      const atividade = new Atividade(descricao, agenciaId, localidade.id);
-      
-      await this.atividadeRepository.salva(atividade);
-      res.status(201).json(atividadeViewModel(atividade));
+        const atividade = new Atividade(descricao, agenciaId, localidade.id);
+        
+        await this.atividadeRepository.salva(atividade);
+        return res.status(201).json(atividadeViewModel(atividade));
+      }
+      else{
+        return res.status(403).json({status: '403', mensagem: 'Você não tem permissão para criar atividades na agencia informada.'}); 
+      }      
     }
   
     mostra(req, res){
-      console.log(req.atividade)
       return res.status(200).json(atividadeViewModel(req.atividade)); 
     }
   

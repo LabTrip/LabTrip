@@ -29,7 +29,7 @@ export default class AgenciaMiddleware{
 
       switch(req.acesso.tipoAcesso){
         case 'Total':
-          return await this.perfilRepository.buscaPorId(req.params.id)
+          return await this.agenciaRepository.buscaPorId(req.params.id)
           break;
         case 'Gerencial':
           return await this.agenciaRepository.buscaPorId_AcessoParcial(req.params.id, req.token.agenciaId)
