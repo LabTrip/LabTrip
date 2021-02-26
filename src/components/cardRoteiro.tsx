@@ -9,10 +9,10 @@ export default function CardRoteiro(props) {
             <View style={styles.detalhes}>
                 <Text style={styles.textoDetalhes}>Local: {props.local}  Horário: {props.horario}</Text>
                 <View style={styles.icones} >
-                    <TouchableOpacity style={styles.icone}>
+                    <TouchableOpacity>
                         <MaterialCommunityIcons name="check-bold" color={'#0FD06F'} size={29} />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.icone}>
+                    <TouchableOpacity>
                         <MaterialCommunityIcons name="close-thick" color={'#FF2424'} size={29} />
                     </TouchableOpacity>
                 </View>
@@ -43,10 +43,6 @@ const styles = StyleSheet.create({
     detalhes: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-    },
-    icone: {
-        marginLeft: '5%',
-        marginRight: '5%',
     },
     icones: {
         flexDirection: 'row',
