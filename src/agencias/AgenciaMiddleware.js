@@ -5,11 +5,41 @@ export default class AgenciaMiddleware{
     }
   
     async agenciaExiste(req, res, next){
-      const agencia = await this.agenciaRepository.buscaPorId(req.params.id)
+      const agencia = await verificaAcessoAAgencia(req);
       if(!agencia){
-        return res.status(404).json({erro: 'Agencia não encontrada.'});       
+        return res.status(404).json({status: '403', mensagem: 'Agencia não encontrada ou sem permissão de acesso.'});       
       }
       req.agencia = agencia;
       next(); 
+    }
+
+    async verificaAcesso(req, res, next){
+
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          next();
+          break;
+        default:
+          return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});
+      }
+
+    }
+
+    async verificaAcessoAAgencia(req){
+
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          return await this.perfilRepository.buscaPorId(req.params.id)
+          break;
+        case 'Gerencial':
+          return await this.agenciaRepository.buscaPorId_AcessoParcial(req.params.id, req.token.agenciaId)
+          break;
+        case 'Parcial':
+          return await this.agenciaRepository.buscaPorId_AcessoParcial(req.params.id, req.token.agenciaId)
+          break;
+        default:
+          return undefined;
+      }
+
     }
   }

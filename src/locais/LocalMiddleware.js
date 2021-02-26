@@ -9,7 +9,7 @@ export default class LocalMiddleware{
     async localExiste(req, res, next){
       const local = await this.verificaAcessoAoLocal(req);
       if(!local){
-        return res.status(403).json({status:'403', erro: 'Local não encontrado ou sem permissão de acesso..'});       
+        return res.status(403).json({status: '403', mensagem: 'Local não encontrado ou sem permissão de acesso..'});       
       }
       req.local = local;
       next(); 
@@ -28,7 +28,7 @@ export default class LocalMiddleware{
           next();
           break;
         default:
-          return res.status(403).json({erro: 'Sem permissão de acesso.'});
+          return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});
       }
 
     }

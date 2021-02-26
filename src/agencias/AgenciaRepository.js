@@ -43,6 +43,12 @@ export default class AgenciaRepository{
       return await this.client('agencia')
         .where({'id': id.toString()}).first();
     }
+
+    async buscaPorId_AcessoParcial(id, agenciaId){
+      return await this.client('agencia')
+        .where({'id': id.toString()})
+        .andWhere({'id': agenciaId.toString()}).first();
+    }
   
     async atualiza(agencia){
       const [firstRow] = await this.client('agencia')

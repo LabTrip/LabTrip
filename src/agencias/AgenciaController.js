@@ -25,9 +25,7 @@ export default class AgenciaController {
     const {nome} = req.body;
 
     const agencia = new Agencia(nome);
-
-    console.log(agencia)
-
+    
     await this.agenciaRepository.salva(agencia);
 
     res.status(201).json(agenciaViewModel(agencia));
@@ -68,16 +66,15 @@ export default class AgenciaController {
   }
 
   async deletaFuncionariosAgencia(req, res){
-    const {usuarioId, agenciaId} = req.body;
+    const {usuarioId} = req.body;
 
-    await this.agenciaRepository.deletaFuncionariosAgencia(usuarioId, agenciaId);
+    await this.agenciaRepository.deletaFuncionariosAgencia(usuarioId, req.params.id);
 
     return res.status(201).json({status: '201', mensagem: 'Funcionário deletado com sucesso.'});
   }
 
   async aceitaConviteFuncionario(req, res){
     const convite = req.params.convite;
-    console.log(convite)
 
     let usuarioId;
     let agenciaId;
