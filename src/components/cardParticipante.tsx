@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, Image, View, Switch, TouchableOpacity } from 'react-native';
-
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function CardParticipante(props) {
@@ -91,5 +90,5 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
-    },
+    }
 });

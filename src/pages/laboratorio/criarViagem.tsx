@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
     },
     headerCardParticipante: {
         flexDirection: 'column',
-
         justifyContent: 'space-around',
         alignItems: 'center',
     },
