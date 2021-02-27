@@ -1,26 +1,16 @@
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React from 'react';
-import { Text} from 'react-native';
+import CadastroAgencias from '../../pages/laboratorio/cadastroAgencias';
+import CadastroUsuarios from '../../pages/laboratorio/cadastroUsuarios';
 
 const Tab = createMaterialTopTabNavigator();
-
-function Usuarios() {
-  return (
-      <Text>Usuários</Text>
-  )
-}
-
-function Agencias() {
-  return (
-    <Text>Agências</Text>
-  )
-}
 
 export default function MenuLaboratorioCadastro() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Usuários" component={Usuarios} />
-      <Tab.Screen name="Agências" component={Agencias} />
+      <Tab.Screen name="Agência" component={CadastroAgencias} />
+      <Tab.Screen name="Usuário" component={CadastroUsuarios} />
+      
     </Tab.Navigator>
   );
 }

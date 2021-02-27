@@ -1,11 +1,10 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 
-export default function CriarAgencia() {
-
+export default function CriarUsuario() {
   return (
     <View>
-      <Text>Criar Agencia</Text>
+      <Text>Criar Usuario</Text>
     </View>
   );
 }
