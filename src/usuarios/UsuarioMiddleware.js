@@ -20,4 +20,13 @@ export default class UsuarioMiddleware{
       req.usuario = usuario;
       next(); 
     }
+
+    async verificaUsuarioJaCadastrado(req, res, next){
+      const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email)
+      
+      if(usuario){
+        return res.status(403).json({status: '403', mensagem: 'O e-mail informado já foi cadastrado. Insira outro e-mail'});
+      }
+      next();
+    }
   }

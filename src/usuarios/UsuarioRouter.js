@@ -31,6 +31,7 @@ export default function defineUsuarioRouter(){
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
    .get((req, res) => usuarioController.buscaTodos(req, res))
+   .all((req, res, next) => usuarioMiddleware.verificaUsuarioJaCadastrado(req, res, next))
    .post((req, res) => usuarioController.salva(req, res));
 
   router.route('/:id')
