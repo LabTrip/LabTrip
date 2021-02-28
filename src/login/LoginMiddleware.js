@@ -7,12 +7,19 @@ export default class LoginMiddleware{
     }
   
     async usuarioExiste(req, res, next){
-      const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
-      if(!usuario){
-        return res.status(401).json({erro: 'E-mail e/ou senha inválidos.'});       
+      try{
+        console.log(re.body.email)
+        const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
+        if(!usuario){
+          return res.status(401).json({erro: 'E-mail e/ou senha inválidos.'});       
+        }
+        req.usuario = usuario;
+        next();
       }
-      req.usuario = usuario;
-      next(); 
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+       
     }
 
     async validaToken(req, res, next){
