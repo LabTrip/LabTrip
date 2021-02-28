@@ -17,110 +17,168 @@ export default class AgenciaController {
 
   //GET /agencias
   async buscaTodos(req, res) {
-    const agencias = await this.agenciaRepository.buscaTodos();
-    res.status(200).json(agencias.map(u => agenciaViewModel(u)));
+    try{
+      const agencias = await this.agenciaRepository.buscaTodos();
+      res.status(200).json(agencias.map(u => agenciaViewModel(u)));  
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
   async salva(req, res){
-    const {nome} = req.body;
+    try{
+      const {nome} = req.body;
 
-    const agencia = new Agencia(nome);
+      const agencia = new Agencia(nome);
+      
+      await this.agenciaRepository.salva(agencia);
+  
+      res.status(201).json(agenciaViewModel(agencia));  
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
     
-    await this.agenciaRepository.salva(agencia);
-
-    res.status(201).json(agenciaViewModel(agencia));
   }
 
   async buscaFuncionarios(req, res){
-    const agenciaId = req.params.id;
+    try{
+      const agenciaId = req.params.id;
 
-    const funcionarios = await this.agenciaRepository.buscaFuncionariosAgencia(agenciaId);
-
-    return res.status(200).json({funcionarios: [funcionarios]})
+      const funcionarios = await this.agenciaRepository.buscaFuncionariosAgencia(agenciaId);
+  
+      return res.status(200).json({funcionarios: [funcionarios]})  
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
   async enviaConviteFuncionario(req, res){
-    const {usuario, agencia} = req.body;
+    try{
+      const {usuario, agencia} = req.body;
 
-    const token = jwt.sign(
-      {
-        usuarioId: usuario.id, 
-        agenciaId: agencia.id
-      }, 
-        process.env.SECRET,
-      {
-        expiresIn: 600000
+      const token = jwt.sign(
+        {
+          usuarioId: usuario.id, 
+          agenciaId: agencia.id
+        }, 
+          process.env.SECRET,
+        {
+          expiresIn: 600000
+        }
+      );
+  
+      const convite = {
+        email: usuario.email,
+        destinatario: usuario.nome,
+        agencia: agencia.nome,
+        link:  process.env.BASE_URL + 'agencias/convida-funcionarios/' + token
       }
-    );
-
-    const convite = {
-      email: usuario.email,
-      destinatario: usuario.nome,
-      agencia: agencia.nome,
-      link:  process.env.BASE_URL + 'agencias/convida-funcionarios/' + token
+  
+      await this.enviaConvite(convite);
+  
+      res.status(200).json({status: '200', mensagem: 'Convite enviado com sucesso'});  
     }
-
-    await this.enviaConvite(convite);
-
-    res.status(200).json({status: '200', mensagem: 'Convite enviado com sucesso'});
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
   async deletaFuncionariosAgencia(req, res){
-    const {usuarioId} = req.body;
+    try{
+      const {usuarioId} = req.body;
 
-    await this.agenciaRepository.deletaFuncionariosAgencia(usuarioId, req.params.id);
-
-    return res.status(201).json({status: '201', mensagem: 'Funcionário deletado com sucesso.'});
+      await this.agenciaRepository.deletaFuncionariosAgencia(usuarioId, req.params.id);
+  
+      return res.status(201).json({status: '201', mensagem: 'Funcionário deletado com sucesso.'});  
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
   async aceitaConviteFuncionario(req, res){
-    const convite = req.params.convite;
+    try{
+      const convite = req.params.convite;
 
-    let usuarioId;
-    let agenciaId;
-
-    jwt.verify(convite, process.env.SECRET, (err, decoded) => {
-      if(err){
-        return res.status(401).json({status:"401",message:"Convite expirado."}).end();
-      }
-
-      usuarioId = decoded.usuarioId;
-      agenciaId = decoded.agenciaId;
-    });
-
-    await this.agenciaRepository.salvaFuncionario(usuarioId,agenciaId);
-
-    res.status(200).send(this.retornoConvite());
+      let usuarioId;
+      let agenciaId;
+  
+      jwt.verify(convite, process.env.SECRET, (err, decoded) => {
+        if(err){
+          return res.status(401).json({status:"401",message:"Convite expirado."}).end();
+        }
+  
+        usuarioId = decoded.usuarioId;
+        agenciaId = decoded.agenciaId;
+      });
+  
+      await this.agenciaRepository.salvaFuncionario(usuarioId,agenciaId);
+  
+      res.status(200).send(this.retornoConvite());  
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
   mostra(req, res){
-    return res.status(200).json(agenciaViewModel(req.agencia)); 
+    try{
+      return res.status(200).json(agenciaViewModel(req.agencia));   
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
-  async atualiza(req,res){     
-    const{nome} = req.body;
+  async atualiza(req,res){   
+    try{
+      const{nome} = req.body;
 
-    const agencia = new Agencia(nome, req.agencia.id);
-
-    const agenciaAtualizada = await this.agenciaRepository.atualiza(agencia);
-
-    return res.status(200).json(agenciaViewModel(agenciaAtualizada));      
+      const agencia = new Agencia(nome, req.agencia.id);
+  
+      const agenciaAtualizada = await this.agenciaRepository.atualiza(agencia);
+  
+      return res.status(200).json(agenciaViewModel(agenciaAtualizada));        
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }  
+    
   }
 
 
   async deleta(req, res){
-    await this.agenciaRepository.deleta(req.agencia);
-    return res.status(204).end();
+    try{
+      await this.agenciaRepository.deleta(req.agencia);
+      return res.status(204).end();  
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
   async enviaConvite(convite){
-
-    await mailer.sendMail({
-      from: 'LabTrip <labtrip.ifsp@gmail.com>', // sender address
-      to: convite.email, // list of receivers
-      subject: "Convite para participar de agencia - LabTrip", // Subject line
-      html: this.montaCorpoEmailConvite(convite), // html body
-    });
+    try{
+      await mailer.sendMail({
+        from: 'LabTrip <labtrip.ifsp@gmail.com>', // sender address
+        to: convite.email, // list of receivers
+        subject: "Convite para participar de agencia - LabTrip", // Subject line
+        html: this.montaCorpoEmailConvite(convite), // html body
+      });  
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
 
   }
 
