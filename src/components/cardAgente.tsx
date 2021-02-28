@@ -3,9 +3,7 @@ import { StyleSheet, Text, Image, View, Switch, TouchableOpacity } from 'react-n
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function CardAgente(props) {
-    let icon = 'close-thick', color = 'red';
-
-
+    const icon = 'close-thick', color = 'red';
     return (
         <View style={styles.cardParticipante}>
             <Image source={require('../imgs/perfil.png')} style={styles.fotoPerfil} />

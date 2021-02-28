@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 
-
 export default function CriarUsuario() {
   const navigation = useNavigation();
-
+  const [selectedValue, setSelectedValue] = useState();
   return (
     <View style={styles.container}>
       <TextInput placeholder={"Nome"} style={styles.input} />
@@ -16,23 +15,27 @@ export default function CriarUsuario() {
         <TextInput placeholder={"Data Nascimento"} style={styles.inputDataCelular} />
         <TextInput placeholder={"Celular"} style={styles.inputDataCelular} />
       </View>
+    <Text style={styles.label}>Tipo de usuário:</Text>
+      <Picker style={styles.pickerComponente}
+        prompt="Tipo de usuário"
+        mode="dropdown"
+        
+        selectedValue={selectedValue}
+        onValueChange={(itemValue, itemIndex) => {
+          setSelectedValue(itemValue)
+        }}>
 
-      <Picker style={styles.pickerComponente}>
-
-        <Picker.Item label="Tipo de usuário: " value=""/>
         <Picker.Item label="Gerente" value="gerente" />
         <Picker.Item label="Agente" value="agente" />
         <Picker.Item label="Viajante" value="viajante" />
-
       </Picker>
 
       <TouchableOpacity style={styles.botaoCadastrar} onPress={() => {
-        alert('Clicou em criar viagem!')
+        alert('Clicou em criar usuario!')
         navigation.goBack();
       }}>
         <Text style={styles.botaoCadastrarTexto}>Cadastrar</Text>
       </TouchableOpacity>
-
     </View>
   );
 }
@@ -73,6 +76,11 @@ const styles = StyleSheet.create({
     borderRadius: 41,
     backgroundColor: '#EBEBEB',
     color: '#333333'
+  },
+  label:{
+    fontSize: 16,
+    color: '#333333',
+    marginTop: '3%'
   },
   botaoCadastrar: {
     backgroundColor: '#3385FF',

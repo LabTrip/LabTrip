@@ -2,24 +2,11 @@ import React from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CardParticipante from '../../components/cardParticipante';
+import ScrollViewFlat from '../../components/scrollViewFlat';
 
 
 export default function CriarViagem() {
-  const navigation = useNavigation();
-
-    function VirtualizedView(props: any) {
-        return (
-            <FlatList
-                data={[]}
-                ListEmptyComponent={null}
-                keyExtractor={() => "dummy"}
-                renderItem={null}
-                ListHeaderComponent={() => (
-                    <React.Fragment>{props.children}</React.Fragment>
-                )}
-            />
-        );
-    }
+    const navigation = useNavigation();
 
     let participantesData = [
         {
@@ -49,7 +36,7 @@ export default function CriarViagem() {
     ];
 
     return (
-        <VirtualizedView>
+        <ScrollViewFlat>
             <View style={styles.container}>
                 <TextInput placeholder={"Apelido da viagem"} style={styles.input} />
                 <View style={styles.containerData}>
@@ -76,9 +63,7 @@ export default function CriarViagem() {
                     <Text style={styles.botaoCriarTexto}>Criar viagem</Text>
                 </TouchableOpacity>
             </View>
-        </VirtualizedView>
-
-
+        </ScrollViewFlat>
     );
 }
 
