@@ -29,21 +29,15 @@ export default function RedefinirInserirCodigo({ route }) {
           <Text style={styles.texto}>Insira o código recebido por e-mail.</Text>
           <TextInput placeholder={"Código"} style={styles.input}
             onChangeText={text => onChangeTextCodigo(text)} value={codigo} />
-          <TouchableOpacity style={styles.botaoEnviar} onPress={() => {
-            verificaCodigo().then(response => {
-              console.log(response.status)
-              return response.json();
-            }).then((json) => {
-              if (json.codigo == "200") {
-                console.log("Autenticação ok");
-                navigation.navigate('RedefinirInserirSenha', { email: email, codigoVerificacao: codigo });
-              }
-              else {
-                console.log("Código incorreto!");
-                console.log(email);
-                alert('Código incorreto!');
-              }
-            });
+          <TouchableOpacity style={styles.botaoEnviar} onPress={async () => {
+            let response = await verificaCodigo();
+            let json = await response.json();
+            if (response.status >= 200 && response.status <= 299) {
+              navigation.navigate('RedefinirInserirSenha', { email: email, codigoVerificacao: codigo });
+            }
+            else {
+              alert(json.mensagem);
+            }
           }}>
             <Text style={styles.botaoLoginTexto}>Enviar</Text>
           </TouchableOpacity>

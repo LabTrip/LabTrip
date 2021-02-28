@@ -40,21 +40,19 @@ export default function Login() {
           <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
             onChangeText={text => onChangeTextSenha(text)} value={senha} autoCompleteType={'password'}
              />
-          <TouchableOpacity style={styles.botaoLogin} onPress={() => {
-            auth().then(response => {
-              return response.json();
-            }).then((json) => {
-              if (json.codigo == "200") {
-                const token =  json.token;
-                navigation.navigate('MenuPrincipal', {
-                  token: token,
-                });
-              }
-              else {
-                console.log("Credenciais inválidas");
-                alert(json.erro);
-              }
-            });
+          <TouchableOpacity style={styles.botaoLogin} onPress={async () => {
+            let response = await auth();
+            let json = await response.json();
+            if (response.status == 200) {
+              const token =  json.token;
+              navigation.navigate('MenuPrincipal', {
+                token: token,
+              });
+            }
+            else {
+              console.log(json)
+              alert(json.mensagem);
+            }
           }}>
             <Text style={styles.botaoLoginTexto}>Entrar</Text>
           </TouchableOpacity>

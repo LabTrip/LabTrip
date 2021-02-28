@@ -42,21 +42,16 @@ export default function RedefinirInserirSenha({route}) {
       onChangeText={text => onChangeSenha(text)} value={senha}/>
       <TextInput placeholder={"Confirme a nova senha"} secureTextEntry={true} style={styles.input} 
       onChangeText={text => onChangeConfirmSenha(text)} value={confirmSenha}/>
-      <TouchableOpacity style={styles.botaoRedefinir} onPress={() => {
+      <TouchableOpacity style={styles.botaoRedefinir} onPress={async () => {
         if(verificaSenhas()){
-          redefine().then(response => {
-            console.log(response.status)
-            return response.json();
-          }).then((json) => {
-            if(json.codigo == "200"){
-              console.log("redefinição ok");
+          let response = await redefine();
+            let json = await response.json();
+            if (response.status >= 200 && response.status <= 299) {
               navigation.navigate('RedefinirSucesso')
             }
-            else{
-              console.log("Código incorreto!");
-              alert(json.erro);
+            else {
+              alert(json.mensagem);
             }
-          });
         }
         }}>
         <Text style={styles.botaoRedefinirTexto}>Redefinir</Text>

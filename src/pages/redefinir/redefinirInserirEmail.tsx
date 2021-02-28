@@ -28,20 +28,15 @@ export default function RedefinirInserirEmail() {
           <Text style={styles.texto}>Insira o e-mail cadastrado.</Text>
           <TextInput placeholder={"seuemail@email.com"} style={styles.input}
             onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
-          <TouchableOpacity style={styles.botaoConfirmar} onPress={() => {
-            geraCodigo().then(response => {
-              console.log(response.status)
-              return response.json();
-            }).then((json) => {
-              if (json.codigo == "200") {
-                console.log("Autenticação ok");
-                navigation.navigate('RedefinirInserirCodigo', { email: email });
-              }
-              else {
-                console.log("E-mail não cadastrado!");
-                alert(json.erro);
-              }
-            });
+          <TouchableOpacity style={styles.botaoConfirmar} onPress={async () => {
+            let response = await geraCodigo();
+            let json = await response.json();
+            if (response.status >= 200 && response.status <= 299) {
+              navigation.navigate('RedefinirInserirCodigo', { email: email });
+            }
+            else {
+              alert(json.mensagem);
+            }
           }}>
             <Text style={styles.botaoLoginTexto}>Confirmar</Text>
           </TouchableOpacity>
