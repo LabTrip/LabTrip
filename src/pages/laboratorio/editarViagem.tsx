@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, Image, View, TextInput, Switch, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import CardParticipante from '../../components/cardParticipante';
-
 
 export default function EditarViagem() {
     const navigation = useNavigation();
@@ -136,5 +135,4 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
     },
-
 });
