@@ -27,12 +27,6 @@ export default function CriarViagem() {
             dono: false,
             proprietario: false
         },
-        {
-            id: '4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fde',
-            nome: "Ednalda Pereira",
-            dono: false,
-            proprietario: false
-        },
     ];
 
     return (
