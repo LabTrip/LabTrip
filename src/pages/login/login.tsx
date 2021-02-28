@@ -34,10 +34,12 @@ export default function Login() {
 
           <Text style={styles.title}>Olá!</Text>
           <Text style={styles.title}>Seja bem-vindo ao Labtrip.</Text>
-          <TextInput keyboardType={'email-address'} placeholder='email@email.com' style={styles.input}
-            onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
-          <TextInput keyboardType={'visible-password'} placeholder='senha' style={styles.input} secureTextEntry={true}
-            onChangeText={text => onChangeTextSenha(text)} value={senha} />
+          <TextInput  placeholder='email@email.com' style={styles.input}
+            onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'}
+            autoCompleteType={'email'} />
+          <TextInput placeholder='senha' style={styles.input} secureTextEntry={true}
+            onChangeText={text => onChangeTextSenha(text)} value={senha} autoCompleteType={'password'}
+             />
           <TouchableOpacity style={styles.botaoLogin} onPress={() => {
             auth().then(response => {
               return response.json();
@@ -80,7 +82,6 @@ const styles = StyleSheet.create({
   title: {
     color: 'white',
     fontSize: 40,
-    fontFamily: 'Roboto',
     textAlign: 'center'
   },
   logo: {

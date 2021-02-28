@@ -38,7 +38,7 @@ export default function CriarViagem() {
                     <TextInput keyboardType='numeric' placeholder={"Data fim"} style={styles.inputData} />
                 </View>
                 <TextInput placeholder={"Local da viagem"} style={styles.input} />
-                <TextInput placeholder={"Adicionar participantes"} style={styles.input} />
+                <TextInput placeholder={"Adicionar participantes"} style={styles.input} clearButtonMode={'always'} />
                 <View style={styles.containerParticipantes}>
                     <FlatList
                         data={participantesData}
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: '90%',
         alignItems: 'center',
-        flexDirection: 'column',
+        flexDirection: 'column',      
     },
     botaoCriar: {
         backgroundColor: '#3385FF',

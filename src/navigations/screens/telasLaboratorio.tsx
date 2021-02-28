@@ -7,6 +7,7 @@ import CadastroAgencias from '../../pages/laboratorio/cadastroAgencias';
 import CadastroUsuarios from '../../pages/laboratorio/cadastroUsuarios';
 import CriarAgencia from '../../pages/laboratorio/criarAgencia';
 import CriarUsuario from '../../pages/laboratorio/criarUsuario';
+import { color } from 'react-native-reanimated';
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -14,12 +15,12 @@ export default function TelasLaboratorio() {
   return (
     <Navigator>
       <Screen name="Laboratorio" options={{ headerShown: false }} component={MenuLaboratorio} />
-      <Screen name="CriarViagem" component={CriarViagem} />
-      <Screen name="EditarViagem" component={EditarViagem} />
+      <Screen name="CriarViagem" options={{ title: 'Criar viagem'}} component={CriarViagem} />
+      <Screen name="EditarViagem" options={{ title: 'Editar viagem'}} component={EditarViagem} />
       <Screen name="CadastrarAgencia" component={CadastroAgencias} />
       <Screen name="CadastrarUsuario" component={CadastroUsuarios} />
-      <Screen name="CriarAgencia" component={CriarAgencia} />
-      <Screen name="CriarUsuario" component={CriarUsuario} />
+      <Screen name="CriarAgencia" options={{ title: 'Criar agência'}} component={CriarAgencia} />
+      <Screen name="CriarUsuario" options={{ title: 'Criar usuário'}} component={CriarUsuario} />
     </Navigator>
   );
 }

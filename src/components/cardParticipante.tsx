@@ -39,17 +39,6 @@ export default function CardParticipante(props) {
 }
 
 const styles = StyleSheet.create({
-    containerParticipantes: {
-        borderStyle: 'dotted',
-        borderColor: '#333333',
-        borderWidth: 1,
-        borderRadius: 20,
-        marginTop: 10,
-        width: '90%',
-        alignItems: 'center',
-        flexDirection: 'column',
-    },
-
     cardParticipante: {
         flexDirection: 'row',
         alignItems: 'center',
