@@ -12,7 +12,7 @@ export default class LoginMiddleware{
         console.log(req.body.email)
         const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
         if(!usuario){
-          return res.status(401).json({erro: 'E-mail e/ou senha inválidos.'});       
+          return res.status(401).json({status: '400', mensagem: 'E-mail e/ou senha inválidos.'});       
         }
         req.usuario = usuario;
         next();
@@ -27,7 +27,7 @@ export default class LoginMiddleware{
       const token = req.headers['x-access-token'];
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
           if(err){
-            return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
+            return res.status(401).json({status:"401", mensagem:"Token inválido ou faltando."});
           }  
           req.token = decoded;
           next();

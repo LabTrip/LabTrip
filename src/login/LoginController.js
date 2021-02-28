@@ -43,7 +43,7 @@ export default class LoginController {
       
 
       if(usuario.verificado == false){
-        return res.status(401).json({erro:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar",
+        return res.status(401).json({status: "401", mensagem:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar",
         codigo:"401"});
       }
       else if(usuario.senha == sha256(senha).toString()){
@@ -64,7 +64,7 @@ export default class LoginController {
         return res.status(200).json(loginViewModel(usuarioAuth)); 
       }
       else{
-        return res.status(401).json({erro:"E-mail e/ou senha inválidos.",codigo:"401"});
+        return res.status(401).json({status: "401", mensagem:"E-mail e/ou senha inválidos.",codigo:"401"});
       }
     }
     catch(e){
@@ -79,7 +79,7 @@ export default class LoginController {
       const token = req.headers['x-access-token'];
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
           if(err){
-            return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
+            return res.status(401).json({status:"401", mensagem:"Token inválido ou faltando."});
           }
 
           req.email = decoded.email;
@@ -101,7 +101,7 @@ export default class LoginController {
       const codigoVerificacao = cryptoRandomString({length: 6, type: 'distinguishable'});
       const usuario = await this.loginRepository.geraCodigo(email, codigoVerificacao);
       await this.enviaCodigoVerificacao(usuario);
-      return res.status(200).json({codigo:"200", message: "Código gerado com sucesso"});
+      return res.status(200).json({codigo:"200", mensagem: "Código gerado com sucesso"});
     }
     catch(e){
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
@@ -115,10 +115,10 @@ export default class LoginController {
       const dados = await this.loginRepository.buscaPorEmail(email);
 
       if(codigoVerificacao == dados.codigoVerificacao.toString()){
-        return res.status(200).json({codigo:"200", message: "Código verificado com sucesso."});
+        return res.status(200).json({codigo:"200", mensagem: "Código verificado com sucesso."});
       }
       else{
-        return res.status(401).json({codigo:"402", error: "Código incorreto."});
+        return res.status(401).json({codigo:"402", mensagem: "Código incorreto."});
       }
     }
     catch(e){
@@ -133,10 +133,10 @@ export default class LoginController {
       const dados = await this.loginRepository.buscaPorEmail(email);
       if(codigoVerificacao == dados.codigoVerificacao.toString()){
         await this.loginRepository.redefineSenha(email, sha256(senha).toString(),cryptoRandomString({length: 6, type: 'distinguishable'}));
-        return res.status(200).json({codigo:"200", message: "Senha redefinida com sucesso."});
+        return res.status(200).json({codigo:"200", mensagem: "Senha redefinida com sucesso."});
       }
       else{
-        return res.status(401).json({codigo:"401", error: "Código incorreto."});
+        return res.status(401).json({codigo:"401", mensagem: "Código incorreto."});
       }
     }
     catch(e){
