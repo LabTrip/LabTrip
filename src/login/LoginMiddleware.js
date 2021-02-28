@@ -8,7 +8,8 @@ export default class LoginMiddleware{
   
     async usuarioExiste(req, res, next){
       try{
-        console.log(re.body.email)
+        console.log(req.body)
+        console.log(req.body.email)
         const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
         if(!usuario){
           return res.status(401).json({erro: 'E-mail e/ou senha inválidos.'});       
