@@ -9,10 +9,12 @@ import definePerfilRouter from './perfis/PerfilRouter'
 import defineLocalRouter from './locais/LocalRouter'
 import defineRoteiroRouter from './roteiros/RoteiroRouter'
 import defineRoteiroAtividadeRouter from './roteiroAtividades/RoteiroAtividadeRouter'
+var helmet = require('helmet');
 
 export default function LabTrip() {
   const app = express();
   app.use(express.json());
+  app.use(helmet());
   app.use(cors());
   app.use('/usuarios', defineUsuarioRouter());
   app.use('/viagens', defineViagemRouter());
