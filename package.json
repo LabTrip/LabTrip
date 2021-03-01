@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "complexity-report": "./node_modules/.bin/es6-plato -r -d ./reports src",
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "nodemon --exec sucrase-node ./src/server.js --ignore __tests__"
   },
   "repository": {
@@ -28,6 +28,7 @@
     "escomplex": "^2.0.0-alpha",
     "esprima": "^4.0.1",
     "express": "^4.17.1",
+    "helmet": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.15",
     "mapbox-gl": "^2.0.1",

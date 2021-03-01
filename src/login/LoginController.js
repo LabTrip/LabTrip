@@ -36,96 +36,126 @@ export default class LoginController {
   }
 
   async autentica(req, res){
-    const{email, senha} = req.body;
+    try{
+      const{email, senha} = req.body;
 
-    const usuario = await this.loginRepository.buscaPorEmail(email);
-    
-
-    if(usuario.verificado == false){
-      return res.status(401).json({erro:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar",
-      codigo:"401"});
-    }
-    else if(usuario.senha == sha256(senha).toString()){
-      let tokenContent = {
-        email: usuario.email,
-        id: usuario.id, 
-        perfilId: usuario.perfilId, 
-        geradoEm: new Date().toISOString()
-      };
-
-      if(usuario && (usuario.perfilId == 2 || usuario.perfilId == 3)){
-        const funcionario = await this.loginRepository.buscaAgenciaId(usuario.id);
-        tokenContent.agenciaId = funcionario.agenciaId;
-      }
+      const usuario = await this.loginRepository.buscaPorEmail(email);
       
-      const token = jwt.sign(tokenContent, process.env.SECRET, {expiresIn: 2592000});
-      const usuarioAuth = new Login(usuario.id, usuario.email, usuario.perfilId, token)
-      return res.status(200).json(loginViewModel(usuarioAuth)); 
+
+      if(usuario.verificado == false){
+        return res.status(403).json({status: "403", mensagem:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar"});
+      }
+      else if(usuario.senha == sha256(senha).toString()){
+        let tokenContent = {
+          email: usuario.email,
+          id: usuario.id, 
+          perfilId: usuario.perfilId, 
+          geradoEm: new Date().toISOString()
+        };
+
+        if(usuario && (usuario.perfilId == 2 || usuario.perfilId == 3)){
+          const funcionario = await this.loginRepository.buscaAgenciaId(usuario.id);
+          tokenContent.agenciaId = funcionario.agenciaId;
+        }
+        
+        const token = jwt.sign(tokenContent, process.env.SECRET, {expiresIn: 2592000});
+        const usuarioAuth = new Login(usuario.id, usuario.email, usuario.perfilId, token)
+        return res.status(200).json(loginViewModel(usuarioAuth)); 
+      }
+      else{
+        return res.status(403).json({status: "403", mensagem:"E-mail e/ou senha inválidos.",codigo:"401"});
+      }
     }
-    else{
-      return res.status(401).json({erro:"E-mail e/ou senha inválidos.",codigo:"401"});
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
+    
     
   }
 
   async validaToken(req, res, next){
-    const token = req.headers['x-access-token'];
-    jwt.verify(token, process.env.SECRET, (err, decoded) => {
-        if(err){
-          return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
-        }
+    try{
+      const token = req.headers['x-access-token'];
+      jwt.verify(token, process.env.SECRET, (err, decoded) => {
+          if(err){
+            return res.status(401).json({status:"401", mensagem:"Token inválido ou faltando."});
+          }
 
-        req.email = decoded.email;
-        req.id = decoded.id;
-        req.perfilId = decoded.perfilId;
-        req.geradoEm = decoded.geradoEm;
-        next();
-    });
+          req.email = decoded.email;
+          req.id = decoded.id;
+          req.perfilId = decoded.perfilId;
+          req.geradoEm = decoded.geradoEm;
+          next();
+      });
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
 
   }
 
   async geraCodigo(req, res){
-    const {email} = req.body;
-    const codigoVerificacao = cryptoRandomString({length: 6, type: 'distinguishable'});
-    const usuario = await this.loginRepository.geraCodigo(email, codigoVerificacao);
-    await this.enviaCodigoVerificacao(usuario);
-    return res.status(200).json({codigo:"200", message: "Código gerado com sucesso"});
+    try{
+      const {email} = req.body;
+      const codigoVerificacao = cryptoRandomString({length: 6, type: 'distinguishable'});
+      const usuario = await this.loginRepository.geraCodigo(email, codigoVerificacao);
+      await this.enviaCodigoVerificacao(usuario);
+      return res.status(200).json({codigo:"200", mensagem: "Código gerado com sucesso"});
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
   }
 
   async validaCodigo(req, res){
-    const {email, codigoVerificacao} = req.body;
-    const dados = await this.loginRepository.buscaPorEmail(email);
+    try{
+      const {email, codigoVerificacao} = req.body;
+      const dados = await this.loginRepository.buscaPorEmail(email);
 
-    if(codigoVerificacao == dados.codigoVerificacao.toString()){
-      return res.status(200).json({codigo:"200", message: "Código verificado com sucesso."});
+      if(codigoVerificacao == dados.codigoVerificacao.toString()){
+        return res.status(200).json({codigo:"200", mensagem: "Código verificado com sucesso."});
+      }
+      else{
+        return res.status(403).json({codigo:"403", mensagem: "Código incorreto."});
+      }
     }
-    else{
-      return res.status(401).json({codigo:"402", error: "Código incorreto."});
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
   }
 
   async redefine(req, res){
-    const {email, senha, codigoVerificacao} = req.body;
-    const dados = await this.loginRepository.buscaPorEmail(email);
-    if(codigoVerificacao == dados.codigoVerificacao.toString()){
-      await this.loginRepository.redefineSenha(email, sha256(senha).toString(),cryptoRandomString({length: 6, type: 'distinguishable'}));
-      return res.status(200).json({codigo:"200", message: "Senha redefinida com sucesso."});
+    try{
+      const {email, senha, codigoVerificacao} = req.body;
+      const dados = await this.loginRepository.buscaPorEmail(email);
+      if(codigoVerificacao == dados.codigoVerificacao.toString()){
+        await this.loginRepository.redefineSenha(email, sha256(senha).toString(),cryptoRandomString({length: 6, type: 'distinguishable'}));
+        return res.status(200).json({codigo:"200", mensagem: "Senha redefinida com sucesso."});
+      }
+      else{
+        return res.status(403).json({codigo:"403", mensagem: "Código incorreto."});
+      }
     }
-    else{
-      return res.status(401).json({codigo:"401", error: "Código incorreto."});
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
-    
+        
   }
 
   async enviaCodigoVerificacao(usuario){
-
-    await transporter.sendMail({
-      from: 'LabTrip <labtrip.ifsp@gmail.com>', // sender address
-      to: usuario.email, // list of receivers
-      subject: "Código de verificação - LabTrip", // Subject line
-      html: this.montaCorpoEmailVerificacao(usuario), // html body
-    });
+    try{
+      await transporter.sendMail({
+        from: 'LabTrip <labtrip.ifsp@gmail.com>', // sender address
+        to: usuario.email, // list of receivers
+        subject: "Código de verificação - LabTrip", // Subject line
+        html: this.montaCorpoEmailVerificacao(usuario), // html body
+      });
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
 
   }
 
