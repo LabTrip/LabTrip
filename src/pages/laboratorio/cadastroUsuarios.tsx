@@ -1,15 +1,26 @@
 import React from 'react';
-import { Text, TouchableOpacity, View, Image } from 'react-native';
+import { Text, StyleSheet,TouchableOpacity, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function CadastroUsuario() {
   const navigation = useNavigation();
   return (
-    <View>
-      <TouchableOpacity onPress={() => navigation.navigate('CriarUsuario')}>
+    <View style={styles.container}>
+      <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarUsuario')}>
         <Image source={require('../../imgs/plus-circle.png')} />
       </TouchableOpacity>
       <Text>cadastro de usuarios</Text>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center'
+  },
+  botaoMais: {
+    margin: 20
+  }
+})
