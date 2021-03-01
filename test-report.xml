@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\agencias\agencia.test.js">
-    <testCase name="Testando classe Agencia Deve retornar objeto do tipo Agencia" duration="6"/>
-  </file>
   <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\agencias\AgenciaMiddleware.test.js">
-    <testCase name="Testando classe agenciaMiddleware Deve retornar objeto do tipo agenciaMiddleware" duration="7"/>
-    <testCase name="Testando classe agenciaMiddleware Deve testar condicoes do metodo agenciaExiste" duration="3"/>
-    <testCase name="Testando classe agenciaMiddleware Deve testar condicoes do metodo verificaAcesso" duration="1"/>
-    <testCase name="Testando classe agenciaMiddleware Deve testar condicoes do metodo verificaAcessoAAgencia" duration="2"/>
+    <testCase name="Testando classe agenciaMiddleware Deve retornar objeto do tipo agenciaMiddleware" duration="10"/>
+    <testCase name="Testando classe agenciaMiddleware Deve testar condicoes do metodo agenciaExiste" duration="4"/>
+    <testCase name="Testando classe agenciaMiddleware Deve testar condicoes do metodo verificaAcesso" duration="2"/>
+    <testCase name="Testando classe agenciaMiddleware Deve testar condicoes do metodo verificaAcessoAAgencia" duration="3"/>
   </file>
   <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\agencias\AgenciaController.test.js">
     <testCase name="Testando classe AgenciaController Deve retornar objeto do tipo AgenciaController" duration="7"/>
-    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo buscaTodos" duration="2"/>
+    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo buscaTodos" duration="3"/>
     <testCase name="Testando classe AgenciaController Deve retornar status 201 para o metodo salva" duration="3"/>
-    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo buscaFuncionarios" duration="2"/>
+    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo buscaFuncionarios" duration="3"/>
     <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo enviaConviteFuncionario" duration="2"/>
     <testCase name="Testando classe AgenciaController Deve retornar status 201 para o metodo deletaFuncionariosAgencia" duration="2"/>
-    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo aceitaConviteFuncionario" duration="2"/>
-    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo atualiza" duration="3"/>
-    <testCase name="Testando classe AgenciaController Deve retornar status 204 para o metodo deleta" duration="2"/>
-    <testCase name="Testando classe AgenciaController Deve retornar status 204 para o metodo enviaConvite" duration="15"/>
-    <testCase name="Testando classe AgenciaController Deve retornar status 204 para o metodo retornoConvite" duration="1"/>
+    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo aceitaConviteFuncionario" duration="3"/>
+    <testCase name="Testando classe AgenciaController Deve retornar status 200 para o metodo atualiza" duration="2"/>
+    <testCase name="Testando classe AgenciaController Deve retornar status 204 para o metodo deleta" duration="1"/>
+    <testCase name="Testando classe AgenciaController Deve retornar status 204 para o metodo enviaConvite" duration="10"/>
+    <testCase name="Testando classe AgenciaController Deve retornar status 204 para o metodo retornoConvite" duration="0"/>
+  </file>
+  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\agencias\agencia.test.js">
+    <testCase name="Testando classe Agencia Deve retornar objeto do tipo Agencia" duration="2"/>
+  </file>
+  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\roteiro\roteiro.test.js">
+    <testCase name="Testando classe Roteiro Deve retornar objeto do tipo Roteiro" duration="2"/>
+  </file>
+  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\locais\local.test.js">
+    <testCase name="Testando classe Local Deve retornar objeto do tipo Local" duration="3"/>
+  </file>
+  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\usuarios\usuario.test.js">
+    <testCase name="Testando classe Usuario Deve retornar objeto do tipo Usuario" duration="11"/>
   </file>
   <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\viagens\viagem.test.js">
     <testCase name="Testando classe Viagem Deve retornar objeto do tipo Viagem" duration="3"/>
   </file>
-  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\atividades\atividade.test.js">
-    <testCase name="Testando classe Atividade Deve retornar objeto do tipo Atividade" duration="3"/>
-  </file>
-  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\usuarios\usuario.test.js">
-    <testCase name="Testando classe Usuario Deve retornar objeto do tipo Usuario" duration="6"/>
-  </file>
   <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\perfis\perfil.test.js">
-    <testCase name="Testando classe Perfil Deve retornar objeto do tipo Perfil" duration="1"/>
-  </file>
-  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\locais\local.test.js">
-    <testCase name="Testando classe Local Deve retornar objeto do tipo Local" duration="4"/>
-  </file>
-  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\index.spec.js">
-    <testCase name="Testando servidor Deve buscar a rota principal" duration="57"/>
-  </file>
-  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\roteiro\roteiro.test.js">
-    <testCase name="Testando classe Roteiro Deve retornar objeto do tipo Roteiro" duration="1"/>
+    <testCase name="Testando classe Perfil Deve retornar objeto do tipo Perfil" duration="2"/>
   </file>
   <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\login\login.test.js">
-    <testCase name="Testando classe Login Deve retornar objeto do tipo Login" duration="4"/>
+    <testCase name="Testando classe Login Deve retornar objeto do tipo Login" duration="8"/>
+  </file>
+  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\atividades\atividade.test.js">
+    <testCase name="Testando classe Atividade Deve retornar objeto do tipo Atividade" duration="2"/>
+  </file>
+  <file path="C:\Users\suporte\Documents\git\tcc\dev\LabTrip\__tests__\test\index.spec.js">
+    <testCase name="Testando servidor Deve buscar a rota principal" duration="29"/>
   </file>
 </testExecutions>
