@@ -5,9 +5,9 @@ export default class AgenciaMiddleware{
     }
   
     async agenciaExiste(req, res, next){
-      const agencia = await verificaAcessoAAgencia(req);
+      const agencia = await this.verificaAcessoAAgencia(req);
       if(!agencia){
-        return res.status(404).json({status: '403', mensagem: 'Agencia não encontrada ou sem permissão de acesso.'});       
+        return res.status(403).json({status: '403', mensagem: 'Agencia não encontrada ou sem permissão de acesso.'});       
       }
       req.agencia = agencia;
       next(); 

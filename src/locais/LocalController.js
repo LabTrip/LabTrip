@@ -19,32 +19,62 @@ const localViewModel = (local) => ({
   
     //GET /locais
     async buscaTodos(req, res) {
-      const locais = await this.localRepository.buscaTodos();
-      res.status(200).json(locais.map(u => localViewModel(u)));
+      try{
+        const locais = await this.localRepository.buscaTodos();
+        res.status(200).json(locais.map(u => localViewModel(u)));
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+      
     }
   
     async salva(req, res){
-      const {poi, address, position} = req.body;
-      const localidade = new Local(poi.name, address.freeformAddress, address.municipality, address.country, position.lat, position.lon);
-      return res.status(201).json(localViewModel(await this.localRepository.salva(localidade)));
+      try{
+        const {poi, address, position} = req.body;
+        const localidade = new Local(poi.name, address.freeformAddress, address.municipality, address.country, position.lat, position.lon);
+        return res.status(201).json(localViewModel(await this.localRepository.salva(localidade)));
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+      
     }
   
     mostra(req, res){
-      return res.status(200).json(localViewModel(req.local)); 
+      try{
+        return res.status(200).json(localViewModel(req.local)); 
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+      
     }
   
     async atualiza(req,res){     
-      const{descricao, localId} = req.body;
-      const local = new Local(descricao, localId, req.atividade.id); 
+      try{
+        const{descricao, localId} = req.body;
+        const local = new Local(descricao, localId, req.atividade.id); 
+        
+        const localAtualizado = await this.localRepository.atualiza(local);
+        return res.status(200).json(localViewModel(localAtualizado));      
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
       
-      const localAtualizado = await this.localRepository.atualiza(local);
-      return res.status(200).json(localViewModel(localAtualizado));      
     }
   
   
     async deleta(req, res){
-      await this.localRepository.deleta(req.local);
-      return res.status(204).end();
+      try{
+        await this.localRepository.deleta(req.local);
+        return res.status(204).end();
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+      
     }
   
   }

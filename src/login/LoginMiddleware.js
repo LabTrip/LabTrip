@@ -7,19 +7,27 @@ export default class LoginMiddleware{
     }
   
     async usuarioExiste(req, res, next){
-      const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
-      if(!usuario){
-        return res.status(401).json({erro: 'E-mail e/ou senha inválidos.'});       
+      try{
+        console.log(req.body)
+        console.log(req.body.email)
+        const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
+        if(!usuario){
+          return res.status(403).json({status: '403', mensagem: 'E-mail e/ou senha inválidos.'});       
+        }
+        req.usuario = usuario;
+        next();
       }
-      req.usuario = usuario;
-      next(); 
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+       
     }
 
     async validaToken(req, res, next){
       const token = req.headers['x-access-token'];
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
           if(err){
-            return res.status(401).json({status:"401",message:"Token inválido ou faltando."});
+            return res.status(401).json({status:"401", mensagem:"Token inválido ou faltando."});
           }  
           req.token = decoded;
           next();
