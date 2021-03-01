@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">6.76% </span>
+                <span class="strong">6.58% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/74</span>
+                <span class='fraction'>5/76</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.35% </span>
+                <span class="strong">7.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/68</span>
+                <span class='fraction'>5/70</span>
             </div>
         
             
@@ -248,7 +248,12 @@
 <a name='L189'></a><a href='#L189'>189</a>
 <a name='L190'></a><a href='#L190'>190</a>
 <a name='L191'></a><a href='#L191'>191</a>
-<a name='L192'></a><a href='#L192'>192</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,17 +315,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -330,6 +335,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -492,7 +502,7 @@ export default class ViagemController {
 <span class="cstat-no" title="statement not covered" >          viagens = await this.viagemRepository.buscaTodosComPermissao(req.token.id);</span>
 <span class="cstat-no" title="statement not covered" >        break;</span>
       default:
-<span class="cstat-no" title="statement not covered" >          return res.status(404).json({status:'404', mensagem:'Acesso restrito.'})</span>
+<span class="cstat-no" title="statement not covered" >          return res.status(404).json({status:'403', mensagem:'Acesso restrito.'})</span>
     }
     
 <span class="cstat-no" title="statement not covered" >    res.status(200).json(viagens.map(<span class="fstat-no" title="function not covered" >u </span>=&gt; <span class="cstat-no" title="statement not covered" >viagemViewModel(u))</span>);</span>
@@ -501,26 +511,31 @@ export default class ViagemController {
 &nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync salva(req, res){
     const {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes} = <span class="cstat-no" title="statement not covered" >req.body;</span>
-&nbsp;
-    const viagem = <span class="cstat-no" title="statement not covered" >new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);</span>
+<span class="cstat-no" title="statement not covered" >    if(req.token.agenciaId == agenciaId || req.acesso.tipoAcesso == "Total"){</span>
+      const viagem = <span class="cstat-no" title="statement not covered" >new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);</span>
   
-<span class="cstat-no" title="statement not covered" >    await this.viagemRepository.salva(viagem);</span>
+<span class="cstat-no" title="statement not covered" >      await this.viagemRepository.salva(viagem);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    if(!participantes){</span>
-      const participantesAtualizados = <span class="cstat-no" title="statement not covered" >[];</span>
+<span class="cstat-no" title="statement not covered" >      if(!participantes){</span>
+        const participantesAtualizados = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      for(let participante of participantes){</span>
-<span class="cstat-no" title="statement not covered" >        participantesAtualizados.push({</span>
-          usuarioId: participante.usuarioId,
-          permissaoViagemId: participante.permissaoViagemId,
-          viagemId: viagem.id
-        });
+<span class="cstat-no" title="statement not covered" >        for(let participante of participantes){</span>
+<span class="cstat-no" title="statement not covered" >          participantesAtualizados.push({</span>
+            usuarioId: participante.usuarioId,
+            permissaoViagemId: participante.permissaoViagemId,
+            viagemId: viagem.id
+          });
+        }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >        await this.viagemRepository.salvaParticipantes(participantesAtualizados);</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      await this.viagemRepository.salvaParticipantes(participantesAtualizados);</span>
+<span class="cstat-no" title="statement not covered" >      return res.status(201).json(viagemViewModel(viagem));</span>
     }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    res.status(201).json(viagemViewModel(viagem));</span>
+    else{
+<span class="cstat-no" title="statement not covered" >      return res.status(403).json({status: '403', mensagem: 'Você não tem permissão para criar viagens na agencia informada.'}); </span>
+    }
+    
   }
 &nbsp;
 <span class="fstat-no" title="function not covered" >  as</span>ync mostra(req, res){
@@ -637,7 +652,7 @@ export default class ViagemController {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Feb 24 2021 23:11:58 GMT-0300 (GMT-03:00)
+                at Mon Mar 01 2021 12:25:54 GMT-0300 (GMT-03:00)
             </div>
         </div>
         <script src="../../prettify.js"></script>

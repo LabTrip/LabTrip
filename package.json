@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "complexity-report": "./node_modules/.bin/es6-plato -r -d ./reports src",
-    "test": "jest",
+    "test": "jest --coverage",
     "start": "nodemon --exec sucrase-node ./src/server.js --ignore __tests__"
   },
   "repository": {

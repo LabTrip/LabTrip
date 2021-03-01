@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -77,33 +77,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {v4 as uuidv4} from 'uuid';
 &nbsp;
 export default class Viagem{
-<span class="fstat-no" title="function not covered" >  co</span>nstructor(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, id = <span class="branch-0 cbranch-no" title="branch not covered" >uuidv4())</span>{
-<span class="cstat-no" title="statement not covered" >      this.id = id;</span>
-<span class="cstat-no" title="statement not covered" >      this.descricao = descricao;</span>
-<span class="cstat-no" title="statement not covered" >      this.dataInicio = new Date(dataInicio).toISOString();</span>
-<span class="cstat-no" title="statement not covered" >      this.dataFim = new Date(dataFim).toISOString();</span>
-<span class="cstat-no" title="statement not covered" >      this.statusId = statusId;</span>
-<span class="cstat-no" title="statement not covered" >      this.agenciaId = agenciaId;</span>
-<span class="cstat-no" title="statement not covered" >      this.usuarioDonoId = usuarioDonoId;</span>
-<span class="cstat-no" title="statement not covered" >      this.criadoPorId = criadoPorId;</span>
-<span class="cstat-no" title="statement not covered" >      this.criadoEm = new Date().toISOString();</span>
-<span class="cstat-no" title="statement not covered" >      this.editadoEm = new Date().toISOString();</span>
-<span class="cstat-no" title="statement not covered" >      this.deletadoEm = null;</span>
+  constructor(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, id = <span class="branch-0 cbranch-no" title="branch not covered" >uuidv4())</span>{
+      this.id = id;
+      this.descricao = descricao;
+      this.dataInicio = new Date(dataInicio).toISOString();
+      this.dataFim = new Date(dataFim).toISOString();
+      this.statusId = statusId;
+      this.agenciaId = agenciaId;
+      this.usuarioDonoId = usuarioDonoId;
+      this.criadoPorId = criadoPorId;
+      this.criadoEm = new Date().toISOString();
+      this.editadoEm = new Date().toISOString();
+      this.deletadoEm = null;
   }
 }</pre></td></tr></table></pre>
 
@@ -112,7 +112,7 @@ export default class Viagem{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Feb 24 2021 23:11:58 GMT-0300 (GMT-03:00)
+                at Mon Mar 01 2021 12:25:54 GMT-0300 (GMT-03:00)
             </div>
         </div>
         <script src="../../prettify.js"></script>
