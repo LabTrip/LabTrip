@@ -25,7 +25,7 @@ export default class PerfilController {
             perfis = await this.perfilRepository.buscaTodos_AcessoParcial();
           break;
         default:
-            return res.status(404).json({status:'404', mensagem:'Acesso restrito.'})
+            return res.status(403).json({status:'403', mensagem:'Sem permissão de acesso.'})
       }
       
       res.status(200).json({perfis: perfis.map(u => perfilViewModel(u))});

@@ -43,8 +43,7 @@ export default class LoginController {
       
 
       if(usuario.verificado == false){
-        return res.status(401).json({status: "401", mensagem:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar",
-        codigo:"401"});
+        return res.status(403).json({status: "403", mensagem:"A conta do usuário ainda não foi verificada. Por favor, redefina sua senha antes de tentar autenticar"});
       }
       else if(usuario.senha == sha256(senha).toString()){
         let tokenContent = {
@@ -64,7 +63,7 @@ export default class LoginController {
         return res.status(200).json(loginViewModel(usuarioAuth)); 
       }
       else{
-        return res.status(401).json({status: "401", mensagem:"E-mail e/ou senha inválidos.",codigo:"401"});
+        return res.status(403).json({status: "403", mensagem:"E-mail e/ou senha inválidos.",codigo:"401"});
       }
     }
     catch(e){
@@ -118,7 +117,7 @@ export default class LoginController {
         return res.status(200).json({codigo:"200", mensagem: "Código verificado com sucesso."});
       }
       else{
-        return res.status(401).json({codigo:"402", mensagem: "Código incorreto."});
+        return res.status(403).json({codigo:"403", mensagem: "Código incorreto."});
       }
     }
     catch(e){
@@ -136,7 +135,7 @@ export default class LoginController {
         return res.status(200).json({codigo:"200", mensagem: "Senha redefinida com sucesso."});
       }
       else{
-        return res.status(401).json({codigo:"401", mensagem: "Código incorreto."});
+        return res.status(403).json({codigo:"403", mensagem: "Código incorreto."});
       }
     }
     catch(e){

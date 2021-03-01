@@ -112,7 +112,7 @@ export default class AgenciaController {
   
       jwt.verify(convite, process.env.SECRET, (err, decoded) => {
         if(err){
-          return res.status(401).json({status:"401",message:"Convite expirado."}).end();
+          return res.status(403).json({status:"403",message:"Convite expirado."}).end();
         }
   
         usuarioId = decoded.usuarioId;

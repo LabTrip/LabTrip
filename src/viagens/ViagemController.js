@@ -53,7 +53,7 @@ export default class ViagemController {
             viagens = await this.viagemRepository.buscaTodosComPermissao(req.token.id);
           break;
         default:
-            return res.status(404).json({status:'403', mensagem:'Acesso restrito.'})
+            return res.status(403).json({status:'403', mensagem:'Acesso restrito.'})
       }
       
       res.status(200).json(viagens.map(u => viagemViewModel(u)));

@@ -12,7 +12,7 @@ export default class LoginMiddleware{
         console.log(req.body.email)
         const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
         if(!usuario){
-          return res.status(401).json({status: '400', mensagem: 'E-mail e/ou senha inválidos.'});       
+          return res.status(403).json({status: '403', mensagem: 'E-mail e/ou senha inválidos.'});       
         }
         req.usuario = usuario;
         next();

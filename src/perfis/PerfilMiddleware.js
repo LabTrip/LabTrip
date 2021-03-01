@@ -7,7 +7,7 @@ export default class PerfilMiddleware{
     async perfilExiste(req, res, next){
       const perfil = await this.verificaAcessoAoPerfil(req);
       if(!perfil){
-        return res.status(404).json({status: '403', mensagem: 'Perfil não encontrado ou sem permissão de acesso.'});       
+        return res.status(403).json({status: '403', mensagem: 'Perfil não encontrado ou sem permissão de acesso.'});       
       }
       req.perfil = perfil;
       next(); 
