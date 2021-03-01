@@ -1,16 +1,18 @@
 import 'regenerator-runtime/runtime';
 const request = require('supertest');
 const jwt = require('jsonwebtoken');
+import {v4 as uuidv4} from 'uuid';
 
 import AgenciaController from '../../../src/agencias/AgenciaController';
 import Agencia from '../../../src/agencias/Agencia';
 
-const agencia = new Agencia('LabTrip', '11bf5b37-e0b8-42e0-8dcf-dc8c4aefc000');
+const idAgencia = uuidv4();
+const agencia = new Agencia('LabTrip', idAgencia);
 const agenciaController = new AgenciaController(agencia.nome, agencia.id);
 
 const token = jwt.sign(
     {
-        usuarioId: 'cdb63720-9628-5ef6-bbca-2e5ce6094f3c',
+        usuarioId: uuidv4(),
         agenciaId: agencia.id
     },
     'secret',
