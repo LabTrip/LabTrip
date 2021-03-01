@@ -46,7 +46,7 @@ export default function DetalhesRoteiro() {
             <ScrollViewFlat>
                 <FlatList
                     data={participantesData}
-                    keyExtractor={(item, index) => item.id}
+                    keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
                         <CardRoteiro nome={item.nome} local={item.local} horario={item.horario} />
                     )}

@@ -53,15 +53,16 @@ export default function ListaEditarViagens() {
   return (
     <View style={{ flex: 1, backgroundColor: '#fff' }}>
       <BarraPesquisa texto={'Pesquisar viagem...'} />
-      <ScrollViewFlat>
+      
         <View style={{ alignItems: 'center' }}>
           <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarViagem')}>
             <Image source={require('../../imgs/plus-circle.png')} />
           </TouchableOpacity>
         </View>
-        <View style={{ width: 2000, alignItems: 'center' }}>
+        
           <FlatList
-            style={{ flexGrow: 1, flex: 1 }}
+            style={{ flexGrow: 1, flex: 1, flexDirection: 'column'}}
+            contentContainerStyle={{alignItems: 'center'}}
             data={viagensData}
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
@@ -69,8 +70,7 @@ export default function ListaEditarViagens() {
                 local={item.local} status={item.status} navigate={item.navigate} item={item} />
             )}
           />
-        </View>
-      </ScrollViewFlat>
+      
     </View >
   );
 }
