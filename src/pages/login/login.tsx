@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { i18n } from '../../translate/i18n';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export default function Login() {
@@ -25,6 +25,16 @@ export default function Login() {
       })
     });
   }
+
+  const storeData = async (value) => {
+    try {
+      const jsonValue = JSON.stringify(value)
+      await AsyncStorage.setItem('AUTH', jsonValue)
+    } catch (e) {
+      // saving error
+    }
+  }
+
   let descErro = null;
   return (
     <SafeAreaView style={styles.container} >
@@ -44,6 +54,7 @@ export default function Login() {
             let response = await auth();
             let json = await response.json();
             if (response.status == 200) {
+              storeData(json);
               const token =  json.token;
               navigation.navigate('MenuPrincipal', {
                 token: token,

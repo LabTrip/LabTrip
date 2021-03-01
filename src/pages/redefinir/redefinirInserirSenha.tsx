@@ -24,6 +24,8 @@ export default function RedefinirInserirSenha({route}) {
     });
   }
 
+  
+
   const verificaSenhas = () => {
     if(senha != confirmSenha){
       alert("As senhas não conferem.");

@@ -9,13 +9,23 @@ import Mensagens from '../../pages/chat/mensagens';
 import TelasLaboratorio from '../screens/telasLaboratorio';
 import TelasListaViagens from   '../screens/telasListaViagens';
 import { useNavigation } from '@react-navigation/native';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default function MenuPrincipal({ route }) {
   const { token } = route.params;
-
+  async () => {
+    console.log('entrou')
+    try {
+      const value = await AsyncStorage.getItem('AUTH')
+      if(value !== null) {
+        alert(value)
+      }
+    } catch(e) {
+      // error reading value
+    }
+  }
   return (
      <>
      <Cabecalho/>
