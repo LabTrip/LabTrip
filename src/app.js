@@ -14,15 +14,11 @@ var helmet = require('helmet');
 export default function LabTrip() {
   const app = express();
   app.use(express.json());
+  app.use((req, res, next) => { //Cria um middleware onde todas as requests passam por ele
+    console.log(req.secure)//Redireciona a requisição para o mesmo host e url mas com HTTPS e termina a request
+});
   app.use(helmet());
   app.use(cors());
-  app.use((req, res, next) => { //Cria um middleware onde todas as requests passam por ele
-    if (req.secure) //Se a requisição feita é segura (é HTTPS)
-        next(); //Não precisa redirecionar, passa para os próximos middlewares que servirão com o conteúdo desejado
-    else //Se a requisição não for segura (é HTTP)
-    console.log('https://'+req.hostname+req.url)
-        res.redirect('https://'+req.hostname+req.url); //Redireciona a requisição para o mesmo host e url mas com HTTPS e termina a request
-});
   app.use('/usuarios', defineUsuarioRouter());
   app.use('/viagens', defineViagemRouter());
   app.use('/atividades', defineAtividadeRouter());
