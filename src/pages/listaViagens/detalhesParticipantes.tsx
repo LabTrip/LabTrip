@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import { View, StyleSheet, FlatList, RefreshControl, Alert } from 'react-native';
 import BotaoMais from '../../components/botaoMais';
 import CardParticipante from '../../components/cardParticipante';
 import { useNavigation } from '@react-navigation/native';
 
-const wait = timeout => {
-    return new Promise(resolve => {
-        setTimeout(resolve, timeout);
-    });
-};
+
 
 export default function DetalhesParticipantes() {
     const navigation = useNavigation();
@@ -17,35 +13,42 @@ export default function DetalhesParticipantes() {
 
     let participantesData = [
         {
-            id: '6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b',
+            id: '1',
             nome: "Ednaldo Pereira",
             dono: true,
             proprietario: true
         },
         {
-            id: 'd4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35',
+            id: '2',
             nome: "Ednaldo Pereiro",
             dono: false,
             proprietario: true
         },
         {
-            id: '4e07408562bed22b8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce',
+            id: '3',
             nome: "Ednalda Pereira",
             dono: false,
             proprietario: false
         },
+        {
+            id: '50',
+            nome: "Ednalda Pereira50mano",
+            dono: false,
+            proprietario: false
+        }
     ];
 
     let [listData, setListData] = React.useState(participantesData);
+    const [id, setId] = useState(4);
 
     let [addUser, setAddUser] = React.useState({
-        id: '0',
-        nome: "Participante 0",
-        dono: false,
-        proprietario: false
+        id: id.toString(),
+        nome: "Testeaaaa n" + id.toString(),
+        dono: true,
+        proprietario: true,
     });
 
-    const [id, setId] = useState(0);
+
 
     const onRefresh = React.useCallback(async () => {
         setRefreshing(true);
@@ -59,11 +62,11 @@ export default function DetalhesParticipantes() {
                 setId(id + 1);
                 setAddUser({
                     id: id.toString(),
-                    nome: "Participantebobobo " + id,
-                    dono: false,
-                    proprietario: false
-                });
-
+                    nome: "Participante extra n" + id.toString(),
+                    dono: true,
+                    proprietario: true,
+                })
+                console.log(addUser)
             }} />
             <FlatList
                 contentContainerStyle={{ alignItems: 'center' }}
