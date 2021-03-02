@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import BarraPesquisa from '../../components/barraPesquisa';
 import CardViagem from '../../components/cardViagem';
 
@@ -13,7 +13,7 @@ export default function ListaViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: "Agendada",
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagem"
     },
     {
       id: 'a6b86b273ff34fce19d6b804efaaaf5a3f5747ada4eaa22f1d49c01e52ddb7875b4b',
@@ -22,7 +22,7 @@ export default function ListaViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: "Em andamento",
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagem"
     },
     {
       id: '4e07408562bedb8b60aaaace05c1decfe3ad16b72230967de01f640b7e4729b49fce',
@@ -31,7 +31,7 @@ export default function ListaViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: "Concluida",
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagem"
     },
     {
       id: '4e07408562bedb8b60ce05c1decfe3ad16b72230961fe01f640b7e4729baaa49fce',
@@ -40,7 +40,7 @@ export default function ListaViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: "Cancelada",
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagem"
     }
   ];
 
