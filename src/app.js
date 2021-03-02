@@ -10,13 +10,12 @@ import defineLocalRouter from './locais/LocalRouter'
 import defineRoteiroRouter from './roteiros/RoteiroRouter'
 import defineRoteiroAtividadeRouter from './roteiroAtividades/RoteiroAtividadeRouter'
 var helmet = require('helmet');
+var httpsRedirect = require('express-https-redirect');
 
 export default function LabTrip() {
   const app = express();
   app.use(express.json());
-  app.use((req, res, next) => { //Cria um middleware onde todas as requests passam por ele
-    console.log(req.secure)//Redireciona a requisição para o mesmo host e url mas com HTTPS e termina a request
-});
+  app.use('/', httpsRedirect());
   app.use(helmet());
   app.use(cors());
   app.use('/usuarios', defineUsuarioRouter());
