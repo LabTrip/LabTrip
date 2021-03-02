@@ -27,11 +27,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 71,
         textAlign: 'center',
+        
 
     },
     textoNotificacao: {
         fontSize: 14,
-        flex: 1
+        width: '80%',
+        flexWrap: 'wrap',
     },
     icone: {
         marginLeft: 20,

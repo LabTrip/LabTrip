@@ -64,6 +64,7 @@ const styles = StyleSheet.create({
         width: '60%',
         maxWidth: '60%',
         flexWrap: 'wrap',
+        textAlign: 'center'
     },
 
     xis: {

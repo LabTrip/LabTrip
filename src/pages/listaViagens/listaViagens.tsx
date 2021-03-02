@@ -1,5 +1,5 @@
 import React, { useEffect, useState} from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
 import BarraPesquisa from '../../components/barraPesquisa';
 import CardViagem from '../../components/cardViagem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,29 +53,58 @@ export default function ListaViagens() {
   }, [])
 
 
+  let viagensData = [
+    {
+      id: 'a6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b',
+      nome: "Fim de semana em Ubatuba",
+      dataInicio: "26/02/2021",
+      dataFim: "28/02/2021",
+      local: "Ubatuba - SP",
+      status: "Agendada",
+      navigate: "MenuDetalhesViagem"
+    },
+    {
+      id: 'a6b86b273ff34fce19d6b804efaaaf5a3f5747ada4eaa22f1d49c01e52ddb7875b4b',
+      nome: "Fim de semana em Ubatuba",
+      dataInicio: "26/02/2021",
+      dataFim: "28/02/2021",
+      local: "Ubatuba - SP",
+      status: "Em andamento",
+      navigate: "MenuDetalhesViagem"
+    },
+    {
+      id: '4e07408562bedb8b60aaaace05c1decfe3ad16b72230967de01f640b7e4729b49fce',
+      nome: "Fim de semana em Ubatuba",
+      dataInicio: "26/02/2021",
+      dataFim: "28/02/2021",
+      local: "Ubatuba - SP",
+      status: "Concluida",
+      navigate: "MenuDetalhesViagem"
+    },
+    {
+      id: '4e07408562bedb8b60ce05c1decfe3ad16b72230961fe01f640b7e4729baaa49fce',
+      nome: "Fim de semana em Ubatuba",
+      dataInicio: "26/02/2021",
+      dataFim: "28/02/2021",
+      local: "Ubatuba - SP",
+      status: "Cancelada",
+      navigate: "MenuDetalhesViagem"
+    }
+  ];
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.conteudo}>
       <BarraPesquisa texto="Pesquisar Viagem..." />
-      <ScrollView style={{ flex: 1, backgroundColor: '#fff' }}>
-        <View style={styles.conteudo} >
-          {
-            viagens.map(v => 
-              {
-                return (<CardViagem key={v.id} nome={v.descricao} dataInicio={moment(v.dataInicio).format('DD/MM/yyyy')}
-                dataFim={moment(v.dataFim).format('DD/MM/yyyy')} local="Ubatuba - SP" status={v.status} navigate="MenuDetalhesViagem" />)
-              }
-            )
-          }
-          <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
-            dataFim="28/02/2021" local="Ubatuba - SP" status="Agendada" navigate="MenuDetalhesViagem" />
-          <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
-            dataFim="28/02/2021" local="Ubatuba - SP" status="Em andamento" navigate="MenuDetalhesViagem" />
-          <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
-            dataFim="28/02/2021" local="Ubatuba - SP" status="Concluida" navigate="MenuDetalhesViagem" />
-            <CardViagem nome="Fim de semana em Ubatuba" dataInicio="26/02/2021"
-            dataFim="28/02/2021" local="Ubatuba - SP" status="Cancelada" navigate="MenuDetalhesViagem" />
-        </View>
-      </ScrollView>
+      <FlatList
+        style={{ flexGrow: 1, flex: 1, flexDirection: 'column' }}
+        contentContainerStyle={{ alignItems: 'center' }}
+        data={viagens}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <CardViagem nome={item.descricao} dataInicio={moment(item.dataInicio).format('DD/MM/yyyy')} dataFim={moment(item.dataFim).format('DD/MM/yyyy')}
+            local={""} status={item.status} navigate={"MenuDetalhesViagem"} item={item} />
+        )}
+      />
     </View>
   );
 }
@@ -83,7 +112,6 @@ export default function ListaViagens() {
 const styles = StyleSheet.create({
   conteudo: {
     flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
+    backgroundColor: '#ffffff'
   },
 });

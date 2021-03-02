@@ -4,16 +4,13 @@ import { useNavigation } from '@react-navigation/native';
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import CardParticipante from '../../components/cardParticipante';
 
-export default function EditarViagem() {
+export default function EditarViagem({route}) {
     const navigation = useNavigation();
 
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-
-    const [apelidoViagem, onChangeTextApelidoViagem] = React.useState('Mundo de Terabitia');
-    const [dataInicio, onChangeTextDataInicio] = React.useState('05/07/2021');
-    const [dataFim, onChangeTextDataFim] = React.useState('21/07/2021');
-    const [localViagem, onChangeTextLocalViagem] = React.useState('Terabitia');
+    const [apelidoViagem, onChangeTextApelidoViagem] = React.useState(route.params.item.nome);
+    const [dataInicio, onChangeTextDataInicio] = React.useState(route.params.item.dataInicio);
+    const [dataFim, onChangeTextDataFim] = React.useState(route.params.item.dataFim);
+    const [localViagem, onChangeTextLocalViagem] = React.useState(route.params.item.local);
     const [nomeParticipante, onChangeTextNomeParticipante] = React.useState('Ednaldo Pereira');
 
     let participantesData = [
