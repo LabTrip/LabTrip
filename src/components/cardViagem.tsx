@@ -3,40 +3,45 @@ import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function CardViagem(props) {
-    let corDoCard, corBordaDoCard;
+    let corDoCard, corBordaDoCard, status;
     const navigation = useNavigation();
 
     switch (props.status) {
-        case "Em andamento":
-            corDoCard = '#CCEEFF';
-            corBordaDoCard = '#00AEFF';
-            break;
-        case "Concluida":
-            corDoCard = '#CEF7E3';
-            corBordaDoCard = '#0FD06F';
-            break;
-        case "Agendada":
+        case 1:
             corDoCard = '#FFFDD1';
             corBordaDoCard = '#F8EC12';
+            status = "Em Planejamento";
             break;
-        case 'Cancelada':
-            corDoCard = '#F0F0F0';
-            corBordaDoCard = '#787878';
+        case 2:
+            corDoCard = '#FFFDD1';
+            corBordaDoCard = '#F8EC12';
+            status = "Planejado";
+            break;
+        case 3:
+            corDoCard = '#CCEEFF';
+            corBordaDoCard = '#00AEFF';
+            status = "Em andamento";
+            break;
+        case 5:
+            corDoCard = '#CEF7E3';
+            corBordaDoCard = '#0FD06F';
+            status = "Concluído";
             break;
         default:
             corDoCard = '#F0F0F0';
-            corBordaDoCard= '#787878';
+            corBordaDoCard = '#787878';
+            status = "Cancelado"
             break;
     }
 
     return (
-        <TouchableOpacity style={[styles.cardViagens, 
-        { backgroundColor: corDoCard, borderLeftColor: corBordaDoCard }]} 
-        onPress={() => navigation.navigate(props.navigate, {item: props.item})}>
+        <TouchableOpacity style={[styles.cardViagens,
+        { backgroundColor: corDoCard, borderLeftColor: corBordaDoCard }]}
+            onPress={() => navigation.navigate(props.navigate)}>
             <Text>{props.nome}</Text>
             <Text>Início: {props.dataInicio}, Fim: {props.dataFim}</Text>
             <Text>Local: {props.local}</Text>
-            <Text>Status: {props.status}</Text>
+            <Text>Status: {status}</Text>
         </TouchableOpacity>
     )
 }

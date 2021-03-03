@@ -1,61 +1,61 @@
-import React, { useEffect, useState} from 'react';
-import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import BarraPesquisa from '../../components/barraPesquisa';
 import CardViagem from '../../components/cardViagem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const moment = require('moment');
 
 interface Viagem {
   id: string,
   descricao: string,
   dataInicio: Date,
   dataFim: Date,
-  status: string
+  statusId: number
 }
 
-
 export default function ListaViagens() {
-  const [token, setToken] = useState("");
-  let tokenn;
+  const moment = require('moment');
+  let token;
   const [viagens, setViagens] = useState<Viagem[]>([])
+
   const getViagens = async () => {
     return await fetch('https://labtrip-backend.herokuapp.com/viagens', {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-      'Content-Type': 'application/json',
-        'x-access-token': tokenn
+        'Content-Type': 'application/json',
+        'x-access-token': token
       }
     });
   }
 
   useEffect(() => {
     const request = async () => {
-      try{
+      try {
         const value = await AsyncStorage.getItem('AUTH');
-        //setToken(value);
-        tokenn = JSON.parse(value)
-        //console.log(tokenn)
-        const response = await getViagens();
-        const json = await response.json();
-        //console.log(response.status)
-        if(response.status == 200){
-          setViagens(json);
+        if (value != null) {
+          token = JSON.parse(value)
+          const response = await getViagens();
+          const json = await response.json();
+          if (response.status == 200) {
+            setViagens(json);
+            console.log(json)
+          }
         }
       }
-      catch(e){
+      catch (e) {
         console.log(e)
       }
     }
-
     request()
-    
-  }, [])
+  }, []);
 
+  const [refreshing, setRefreshing] = React.useState(false);
 
-  let viagensData = [
-    
-  ];
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    setRefreshing(false)
+}, [refreshing]);
+
 
   return (
     <View style={styles.conteudo}>
@@ -64,10 +64,13 @@ export default function ListaViagens() {
         style={{ flexGrow: 1, flex: 1, flexDirection: 'column' }}
         contentContainerStyle={{ alignItems: 'center' }}
         data={viagens}
+        extraData={viagens}
         keyExtractor={(item) => item.id}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         renderItem={({ item }) => (
-          <CardViagem nome={item.descricao} dataInicio={moment(item.dataInicio).format('DD/MM/yyyy')} dataFim={moment(item.dataFim).format('DD/MM/yyyy')}
-            local={""} status={item.status} navigate={"MenuDetalhesViagem"} item={item} />
+          <CardViagem nome={item.descricao} dataInicio={moment(item.dataInicio).format('DD/MM/yyyy')}
+            dataFim={moment(item.dataFim).format('DD/MM/yyyy')}
+            local={""} status={item.statusId} navigate={"MenuDetalhesViagem"} item={item} />
         )}
       />
     </View>
