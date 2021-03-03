@@ -1,10 +1,13 @@
 import React from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, Image, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
+import TabelaCadastroUsuario from '../../components/tabelaCadastroUsuario';
+
 
 export default function CadastroUsuario() {
   const navigation = useNavigation();
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarUsuario')}>
@@ -48,7 +51,6 @@ export default function CadastroUsuario() {
           </DataTable.Row>
         </TouchableOpacity>
       </DataTable>
-
     </View>
   );
 }
