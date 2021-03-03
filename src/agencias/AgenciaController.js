@@ -59,28 +59,33 @@ export default class AgenciaController {
 
   async enviaConviteFuncionario(req, res){
     try{
-      const {usuario, agencia} = req.body;
+      const funcionarios = req.body;
+      const agencia = req.agencia
 
-      const token = jwt.sign(
-        {
-          usuarioId: usuario.id, 
-          agenciaId: agencia.id
-        }, 
-          process.env.SECRET,
-        {
-          expiresIn: 600000
+      for(let funcionario of funcionarios){
+        let {usuario} = funcionario;
+
+        let token = jwt.sign(
+          {
+            usuarioId: usuario.id, 
+            agenciaId: agencia.id
+          }, 
+            process.env.SECRET,
+          {
+            expiresIn: 600000
+          }
+        );
+    
+        let convite = {
+          email: usuario.email,
+          destinatario: usuario.nome,
+          agencia: agencia.nome,
+          link:  process.env.BASE_URL + 'agencias/convida-funcionarios/aceitar/' + token
         }
-      );
-  
-      const convite = {
-        email: usuario.email,
-        destinatario: usuario.nome,
-        agencia: agencia.nome,
-        link:  process.env.BASE_URL + 'agencias/convida-funcionarios/' + token
+    
+        await this.enviaConvite(convite);
       }
-  
-      await this.enviaConvite(convite);
-  
+      
       res.status(200).json({status: '200', mensagem: 'Convite enviado com sucesso'});  
     }
     catch(e){

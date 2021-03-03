@@ -29,13 +29,13 @@ export default function defineAgenciaRouter(){
    .get((req, res) => agenciaController.buscaTodos(req, res))
    .post((req, res) => agenciaController.salva(req, res));
 
-  router.route('/convida-funcionarios')
+  router.route('/convida-funcionarios/:id')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => agenciaMiddleware.agenciaExiste(req, res, next))
     .post((req, res) => agenciaController.enviaConviteFuncionario(req,res))
 
-  router.route('/convida-funcionarios/:convite')
+  router.route('/convida-funcionarios/aceitar/:convite')
     .get((req, res) => agenciaController.aceitaConviteFuncionario(req,res))
 
   router.route('/funcionarios')

@@ -29,7 +29,7 @@ export default class AgenciaRepository{
 
     async buscaFuncionariosAgencia(agenciaId){
       return await this.client('funcionario')
-        .where({'agenciaId': agenciaId.toString()}).first();
+        .where({'agenciaId': agenciaId.toString()});
     }
 
     async deletaFuncionariosAgencia(usuarioId, agenciaId){
