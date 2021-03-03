@@ -35,10 +35,10 @@ export default function ListaViagens() {
         const value = await AsyncStorage.getItem('AUTH');
         //setToken(value);
         tokenn = JSON.parse(value)
-        console.log(tokenn)
+        //console.log(tokenn)
         const response = await getViagens();
         const json = await response.json();
-        console.log(response.status)
+        //console.log(response.status)
         if(response.status == 200){
           setViagens(json);
         }
@@ -54,42 +54,7 @@ export default function ListaViagens() {
 
 
   let viagensData = [
-    {
-      id: 'a6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b',
-      nome: "Fim de semana em Ubatuba",
-      dataInicio: "26/02/2021",
-      dataFim: "28/02/2021",
-      local: "Ubatuba - SP",
-      status: "Agendada",
-      navigate: "MenuDetalhesViagem"
-    },
-    {
-      id: 'a6b86b273ff34fce19d6b804efaaaf5a3f5747ada4eaa22f1d49c01e52ddb7875b4b',
-      nome: "Fim de semana em Ubatuba",
-      dataInicio: "26/02/2021",
-      dataFim: "28/02/2021",
-      local: "Ubatuba - SP",
-      status: "Em andamento",
-      navigate: "MenuDetalhesViagem"
-    },
-    {
-      id: '4e07408562bedb8b60aaaace05c1decfe3ad16b72230967de01f640b7e4729b49fce',
-      nome: "Fim de semana em Ubatuba",
-      dataInicio: "26/02/2021",
-      dataFim: "28/02/2021",
-      local: "Ubatuba - SP",
-      status: "Concluida",
-      navigate: "MenuDetalhesViagem"
-    },
-    {
-      id: '4e07408562bedb8b60ce05c1decfe3ad16b72230961fe01f640b7e4729baaa49fce',
-      nome: "Fim de semana em Ubatuba",
-      dataInicio: "26/02/2021",
-      dataFim: "28/02/2021",
-      local: "Ubatuba - SP",
-      status: "Cancelada",
-      navigate: "MenuDetalhesViagem"
-    }
+    
   ];
 
   return (

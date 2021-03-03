@@ -27,10 +27,10 @@ export default function Login() {
     });
   }
 
-  const storeData = async (value) => {
+  const storeData = async (value, key) => {
     try {
       const jsonValue = JSON.stringify(value)
-      await AsyncStorage.setItem('AUTH', jsonValue)
+      await AsyncStorage.setItem(key, jsonValue)
     } catch (e) {
       // saving error
     }
@@ -55,7 +55,8 @@ export default function Login() {
             let response = await auth();
             let json = await response.json();
             if (response.status == 200) {
-              storeData(json.token);
+              storeData(json.token,"AUTH");
+              storeData(json.id,"USER_ID");
               const token =  json.token;
               
               navigation.dispatch(
