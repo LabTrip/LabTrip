@@ -10,7 +10,6 @@ export default function CadastroUsuario() {
       <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarUsuario')}>
         <Image source={require('../../imgs/plus-circle.png')} />
       </TouchableOpacity>
-      <Text>cadastro de usuarios</Text>
 
       <DataTable>
         <DataTable.Header >
