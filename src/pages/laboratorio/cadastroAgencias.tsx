@@ -12,20 +12,28 @@ export default function CadastroAgencia() {
       </TouchableOpacity>
 
       <DataTable>
-        <DataTable.Header>
-          <DataTable.Title>Agência</DataTable.Title>
-          <DataTable.Title>Status</DataTable.Title>
+        <DataTable.Header style={styles.cabecalhoTabela}>
+          <DataTable.Title>
+            <Text style={styles.textoCabecalho}>Agência</Text>
+          </DataTable.Title>
+          <DataTable.Title>
+            <Text style={styles.textoCabecalho}>Status</Text>
+          </DataTable.Title>
         </DataTable.Header>
 
-        <DataTable.Row style={styles.corpoTabela}>
-          <DataTable.Cell>Azurro Travel</DataTable.Cell>
-          <DataTable.Cell>Ativo</DataTable.Cell>
-        </DataTable.Row>
+        <TouchableOpacity>
+          <DataTable.Row style={styles.corpoTabela}>
+            <DataTable.Cell>Azurro Travel</DataTable.Cell>
+            <DataTable.Cell>Ativo</DataTable.Cell>
+          </DataTable.Row>
+        </TouchableOpacity>
 
-        <DataTable.Row style={styles.corpoTabela}>
-          <DataTable.Cell>Tereza Pérez</DataTable.Cell>
-          <DataTable.Cell>Inativo</DataTable.Cell>
-        </DataTable.Row>
+        <TouchableOpacity>
+          <DataTable.Row style={styles.corpoTabela}>
+            <DataTable.Cell>Tereza Pérez</DataTable.Cell>
+            <DataTable.Cell>Inativo</DataTable.Cell>
+          </DataTable.Row>
+        </TouchableOpacity>
 
       </DataTable>
 
@@ -41,6 +49,14 @@ const styles = StyleSheet.create({
   },
   botaoMais: {
     margin: 20
+  },
+  cabecalhoTabela: {
+    backgroundColor: 'black',
+  },
+  textoCabecalho: {
+    color: 'white',
+    fontWeight: 'bold',
+    fontSize: 18
   },
   corpoTabela: {
     backgroundColor: '#EBEBEB'
