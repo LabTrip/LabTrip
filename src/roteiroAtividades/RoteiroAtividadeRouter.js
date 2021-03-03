@@ -24,7 +24,6 @@ export default function defineRoteiroAtividadeRouter(){
   router.route('/')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
-   .all((req, res, next) => roteiroAtividadeMiddleware.roteiroAtividadeExiste(req, res, next))  
    .get((req, res) => roteiroAtividadeController.buscaTodos(req, res))
    .post((req, res) => roteiroAtividadeController.salva(req, res));
 

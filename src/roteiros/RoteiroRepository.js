@@ -2,11 +2,26 @@ export default class RoteiroRepository{
     constructor(client){
       this.client = client;
     }
+
+    async buscaTodos(req){
+      switch(req.acesso.tipoAcesso){          
+        case 'Total': 
+         return await this.buscaTodos_AcessoTotal();
+         break;
+        case 'Gerencial':
+            return await this.buscaTodos_AcessoGerencial(req.token.agenciaId);
+          break;
+        case 'Parcial':
+          return await this.buscaTodos_AcessoParcial(req.token.id);
+          break;
+        default:
+          return undefined;
+      }
+  }
   
-    async buscaTodos(){
+    async buscaTodos_AcessoTotal(){
         return await this.client('roteiro');
     }
-
 
     async buscaTodos_AcessoGerencial(agenciaId){
       return await this.client('roteiro')
@@ -20,30 +35,31 @@ export default class RoteiroRepository{
       .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
       .where({'usuario_viagem.usuarioId': usuarioId.toString()});    
     }
-  
-    async salva(roteiro){
-       const [firstRow] = await this.client('roteiro')
-      .insert({
-        viagemId: roteiro.viagemId,
-        statusId: roteiro.statusId,
-        versao: roteiro.versao
-      })
-        .returning("*");  
-        return firstRow;
-      
-    } 
- 
 
-    async buscaPorId(id, versao){
+    async buscaPorId(req){
+      switch(req.acesso.tipoAcesso){          
+        case 'Total': 
+         return await this.buscaPorId_AcessoTotal(req.params.id, req.params.versao)
+        case 'Gerencial':
+            return await this.buscaPorId_AcessoGerencial(req.params.id, req.params.versao, req.token.agenciaId);
+          break;
+        case 'Parcial':
+          return await this.buscaPorId_AcessoParcial(req.params.id, req.params.versao, req.token.id);
+          break;
+        default:
+          return undefined;
+      }
+  
+    }
+
+    async buscaPorId_AcessoTotal(id, versao){
+      console.log(id)
+      console.log(versao)
       return await this.client('roteiro')
-        .Where({'id': id.toString()}).first()
+        .where({'id': id.toString()})
         .andWhere({'versao': versao.toString()}).first();
     }
 
-    async buscaPorId(viagemId){
-      return await this.client('roteiro')
-        .Where({'viagemId': viagemId.toString()}).first();
-    }
 
     async buscaPorId_AcessoGerencial(roteiroId, versao, agenciaId){
       return await this.client.select(['roteiro.*']).from('roteiro')
@@ -82,15 +98,24 @@ export default class RoteiroRepository{
         .where({'roteiro.viagemId': id.toString()})
         .andWhere({'usuario_viagem.usuarioId': usuarioId.toString()}).first();
     }  
-  
+
+    async salva(roteiro){
+      const [firstRow] = await this.client('roteiro')
+     .insert({
+       viagemId: roteiro.viagemId,
+       statusId: roteiro.statusId,
+       versao: roteiro.versao
+     })
+       .returning("*");  
+       return firstRow;     
+    }    
   
     async atualiza(roteiro){
       const [firstRow] = await this.client('roteiro')
-        .where({'id': roteiro.Id})
-        .andWhere({'viagemId': roteiro.viagemId})
-        .andWhere({'versao': roteiro.versao})
+        .where({'id': roteiro.id.toString()})
+        .andWhere({'versao': roteiro.versao.toString()})
         .update({
-          statusId: statusId    
+          statusId: roteiro.statusId   
         })
         .returning("*");
   
@@ -100,8 +125,7 @@ export default class RoteiroRepository{
     async deleta(roteiro){
       await this.client('roteiro')
         .where('id', roteiro.id)
-        .andWhere({'viagemId': roteiro.viagemId})
         .andWhere({'versao': roteiro.versao})
-        .del()
+        .delete()
     }
   }

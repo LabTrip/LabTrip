@@ -24,11 +24,10 @@ export default function defineRoteiroRouter(){
   router.route('/')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
-   .all((req, res, next) => roteiroMiddleware.roteiroExiste(req, res, next))  
    .get((req, res) => roteiroController.buscaTodos(req, res))
    .post((req, res) => roteiroController.salva(req, res));
 
-  router.route('/:viagemId/:versao')
+  router.route('/:id/:versao')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => roteiroMiddleware.roteiroExiste(req, res, next))  
