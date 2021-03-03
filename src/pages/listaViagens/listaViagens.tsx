@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import BarraPesquisa from '../../components/barraPesquisa';
 import CardViagem from '../../components/cardViagem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-const moment = require('moment');
 
 interface Viagem {
   id: string,
   descricao: string,
   dataInicio: Date,
   dataFim: Date,
-  status: string
+  statusId: number
 }
 
-
 export default function ListaViagens() {
+  const moment = require('moment');
   let token;
   const [viagens, setViagens] = useState<Viagem[]>([])
 
@@ -35,13 +34,11 @@ export default function ListaViagens() {
         const value = await AsyncStorage.getItem('AUTH');
         if (value != null) {
           token = JSON.parse(value)
-
-          console.log(token)
           const response = await getViagens();
           const json = await response.json();
-          console.log(response.status)
           if (response.status == 200) {
             setViagens(json);
+            console.log(json)
           }
         }
       }
@@ -50,7 +47,15 @@ export default function ListaViagens() {
       }
     }
     request()
-  }, [])
+  }, []);
+
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const onRefresh = React.useCallback(async () => {
+    setRefreshing(true);
+    setRefreshing(false)
+}, [refreshing]);
+
 
   return (
     <View style={styles.conteudo}>
@@ -59,10 +64,13 @@ export default function ListaViagens() {
         style={{ flexGrow: 1, flex: 1, flexDirection: 'column' }}
         contentContainerStyle={{ alignItems: 'center' }}
         data={viagens}
+        extraData={viagens}
         keyExtractor={(item) => item.id}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         renderItem={({ item }) => (
-          <CardViagem nome={item.descricao} dataInicio={moment(item.dataInicio).format('DD/MM/yyyy')} dataFim={moment(item.dataFim).format('DD/MM/yyyy')}
-            local={""} status={item.status} navigate={"MenuDetalhesViagem"} item={item} />
+          <CardViagem nome={item.descricao} dataInicio={moment(item.dataInicio).format('DD/MM/yyyy')}
+            dataFim={moment(item.dataFim).format('DD/MM/yyyy')}
+            local={""} status={item.statusId} navigate={"MenuDetalhesViagem"} item={item} />
         )}
       />
     </View>
