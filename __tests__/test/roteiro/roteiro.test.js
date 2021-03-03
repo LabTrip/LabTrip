@@ -1,4 +1,4 @@
-import Roteiro from '../../../src/roteiro/Roteiro';
+import Roteiro from '../../../src/roteiros/Roteiro';
 
 const roteiro = new Roteiro(1, 2, 3);
 
