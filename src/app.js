@@ -7,8 +7,9 @@ import defineAgenciaRouter from './agencias/AgenciaRouter'
 import defineLoginRouter from './login/LoginRouter'
 import definePerfilRouter from './perfis/PerfilRouter'
 import defineLocalRouter from './locais/LocalRouter'
+import defineRoteiroRouter from './roteiros/RoteiroRouter'
+import defineRoteiroAtividadeRouter from './roteiroAtividades/RoteiroAtividadeRouter'
 var helmet = require('helmet');
-
 
 export default function LabTrip() {
   const app = express();
@@ -22,6 +23,8 @@ export default function LabTrip() {
   app.use('/login', defineLoginRouter());
   app.use('/perfis', definePerfilRouter());
   app.use('/locais', defineLocalRouter());
+  app.use('/roteiros', defineRoteiroRouter());
+  app.use('/roteiroAtividades', defineRoteiroAtividadeRouter());
 
   app.get('/', function(req, res) {
     res.status(200).send('Olá  mundo!');
