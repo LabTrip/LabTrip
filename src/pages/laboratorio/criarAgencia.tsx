@@ -4,6 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import CardAgente from '../../components/cardAgente'
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BotaoLupa from '../../components/botaoLupa'
+
 
 interface Usuario {
   id: string,
@@ -16,7 +18,7 @@ export default function CriarAgencia() {
   let token;
   //const [nomeAgencia, onChangeTextnomeAgencia] = React.useState('');
   let nomeAgencia;
-  function onChangeTextnomeAgencia(text){
+  function onChangeTextnomeAgencia(text) {
     nomeAgencia = text;
   }
   const [idAgencia, setIdAgencia] = React.useState('');
@@ -79,17 +81,22 @@ export default function CriarAgencia() {
     {
       id: 'd4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35',
       nome: "Ednaldo Pereiro"
-    }
+    },
+    
+    
   ];
 
   return (
     <View style={styles.container}>
       <ScrollViewFlat>
-        <View style={{alignItems: 'center'}}>
-          <TextInput  placeholder='Nome da agencia' style={styles.input}
-            onChangeText={text => onChangeTextnomeAgencia(text.trim())} value={nomeAgencia} autoCapitalize={'none'}/>
-          <TextInput placeholder={"Adicionar Funcionarios"} style={styles.input} />
+        <View style={{ alignItems: 'center' }}>
+          <TextInput placeholder='Nome da agencia' style={styles.input}
+            onChangeText={text => onChangeTextnomeAgencia(text.trim())} value={nomeAgencia} autoCapitalize={'none'} />
+          <View style={styles.containerAddFuncionarios}>
+            <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario} />
 
+              <BotaoLupa />
+          </View>
           <View style={styles.containerFuncionarios}>
             <FlatList
               data={participantesData}
@@ -101,14 +108,14 @@ export default function CriarAgencia() {
           </View>
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
-            console.log({nome: nomeAgencia})
-            let response = await criaAgencia({nome: nomeAgencia});
+            console.log({ nome: nomeAgencia })
+            let response = await criaAgencia({ nome: nomeAgencia });
             let json = await response.json();
             if (response.status >= 200 && response.status <= 299) {
               alert('Agencia criada com sucesso!')
-            
-              const token =  json.token;
-              
+
+              const token = json.token;
+
               navigation.goBack();
             }
             else {
@@ -136,6 +143,22 @@ const styles = StyleSheet.create({
     borderRadius: 41,
     backgroundColor: '#EBEBEB',
     color: '#333333'
+  },
+  inputAddFuncionario: {
+    marginTop: '3%',
+    width: '80%',
+    height: 'auto',
+    padding: 15,
+    fontSize: 16,
+    borderRadius: 41,
+    backgroundColor: '#EBEBEB',
+    color: '#333333'
+  },
+  containerAddFuncionarios: {
+    width: '90%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   containerFuncionarios: {
     borderStyle: 'dotted',

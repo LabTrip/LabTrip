@@ -2,10 +2,10 @@ import React from 'react';
 import { TouchableOpacity, Image, StyleSheet } from 'react-native';
 
 
-export default function BotaoMais(props){
+export default function BotaoLupa(props){
     return(
         <TouchableOpacity style={styles.botaoMais} onPress={props.onPress}>
-              <Image source={require('../imgs/plus-circle.png')} />
+              <Image source={require('../imgs/search-icon.png')} />
         </TouchableOpacity>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const moment = require('moment');
@@ -24,7 +24,33 @@ export default function EditarPerfil() {
         });
     }
 
-    const buscaPreencheUsuario = () => useEffect(() => {
+    const buscaPreencheUsuario = async () => {
+        try {
+            const value = await AsyncStorage.getItem('AUTH');
+            const user = await AsyncStorage.getItem('USER_ID');
+            if (value !== null) {
+                token = JSON.parse(value)
+            }
+            console.log(user)
+            if (user !== null) {
+                userId = JSON.parse(user)
+            }
+            console.log(token)
+            const response = await getUsuario();
+            const json = await response.json();
+            if (response.status == 200) {
+                onChangeTextNome(json.nome);
+                onChangeTextEmail(json.email);
+                onChangeTextData(moment(json.dataNascimento).format('DD/MM/yyyy'));
+                onChangeTextTelefone(json.telefone);
+            }
+        }
+        catch (e) {
+            console.log(e)
+        }
+    }
+
+    useEffect(() => {
         const request = async () => {
             try {
                 const value = await AsyncStorage.getItem('AUTH');
@@ -55,11 +81,26 @@ export default function EditarPerfil() {
 
     }, [])
 
-    buscaPreencheUsuario();
+
+
+    const [refreshing, setRefreshing] = React.useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        buscaPreencheUsuario();
+        setRefreshing(false);
+    }, []);
 
     return (
         <View style={styles.container}>
-            <ScrollView>
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />
+                }
+            >
                 <View style={styles.conteudo}>
                     <TouchableOpacity>
                         <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
