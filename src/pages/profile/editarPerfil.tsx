@@ -56,11 +56,9 @@ export default function EditarPerfil() {
                 if (value !== null) {
                     token = JSON.parse(value)
                 }
-                console.log(user)
                 if (user !== null) {
                     userId = JSON.parse(user)
                 }
-                console.log(token)
                 const response = await getUsuario();
                 const json = await response.json();
                 if (response.status == 200) {
@@ -71,7 +69,7 @@ export default function EditarPerfil() {
                 }
             }
             catch (e) {
-                console.log(e)
+                alert(e)
             }
         }
 
