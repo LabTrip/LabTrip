@@ -21,6 +21,16 @@ export default class UsuarioMiddleware{
       next(); 
     }
 
+    async usuarioExisteEmail(req, res, next){
+      const usuario = await this.usuarioRepository.buscaPorEmailLike(req.params.email)
+      
+      if(!usuario){
+        return res.status(403).json({status: '403', mensagem: 'Usuário não encontrado ou sem permissão de acesso.'});
+      }
+      req.usuario = usuario;
+      next(); 
+    }
+
     async verificaUsuarioJaCadastrado(req, res, next){
       const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email)
       

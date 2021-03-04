@@ -42,6 +42,11 @@ export default function defineUsuarioRouter(){
     .put((req, res) => usuarioController.atualiza(req, res))
     .delete((req, res) => usuarioController.deleta(req, res));
 
+    router.route('/email/:email')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => usuarioMiddleware.usuarioExisteEmail(req, res, next))
+    .get((req, res) => usuarioController.mostra(req, res));
+
     router.route('/redefine-senha/:id')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
