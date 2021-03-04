@@ -6,12 +6,13 @@ import DetalhesParticipantes from '../../pages/listaViagens/detalhesParticipante
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function MenuDetalhesViagem() {
+export default function MenuDetalhesViagem({ route }) {
+  const { viagens } = route.params;
   return (
     <Tab.Navigator>
       <Tab.Screen name="Roteiro" component={DetalhesRoteiro} />
       <Tab.Screen name="Orçamento" component={MenuOrcamento} />
-      <Tab.Screen name="Participantes" component={DetalhesParticipantes} />
+      <Tab.Screen name="Participantes" initialParams={viagens} component={DetalhesParticipantes} />
     </Tab.Navigator>
   );
 }

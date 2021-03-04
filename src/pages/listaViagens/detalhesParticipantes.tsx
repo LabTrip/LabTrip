@@ -1,15 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, FlatList, RefreshControl, Alert } from 'react-native';
 import BotaoMais from '../../components/botaoMais';
 import CardParticipante from '../../components/cardParticipante';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+interface Viagem {
+    id: string,
+    descricao: string,
+    dataInicio: Date,
+    dataFim: Date,
+    statusId: number,
+    participantes : [
+        usuarioId: string,
+        permissaoViagemId: string
+    ]
+  }
 
 export default function DetalhesParticipantes() {
     const navigation = useNavigation();
-
+    let token;
     const [refreshing, setRefreshing] = React.useState(false);
+
 
     let participantesData = [
         {
@@ -39,6 +51,7 @@ export default function DetalhesParticipantes() {
     ];
 
     let [listData, setListData] = React.useState(participantesData);
+    const [participantes, setParticipantes] = React.useState<Viagem[]>([]);
     const [id, setId] = useState(4);
 
     let [addUser, setAddUser] = React.useState({
@@ -55,6 +68,38 @@ export default function DetalhesParticipantes() {
         setListData(participantesData.concat(addUser));
         setRefreshing(false)
     }, [refreshing]);
+
+    const getViagem = async () => {
+        return await fetch('https://labtrip-backend.herokuapp.com/viagens/', {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            'x-access-token': token
+          }
+        });
+      }
+    
+      useEffect(() => {
+        const request = async () => {
+          try {
+            const value = await AsyncStorage.getItem('AUTH');
+            if (value != null) {
+              token = JSON.parse(value)
+              const response = await getViagem();
+              const json = await response.json();
+              if (response.status == 200) {
+                setParticipantes(json);
+                console.log(json)
+              }
+            }
+          }
+          catch (e) {
+            console.log(e)
+          }
+        }
+        request()
+      }, []);
 
     return (
         <View style={styles.container}>
