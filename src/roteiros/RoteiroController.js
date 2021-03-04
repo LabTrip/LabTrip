@@ -17,14 +17,14 @@ const roteiroViewModel = (roteiro) => ({
     //GET /roteiros
     async buscaTodos(req, res) {
       try{
-        const roteiro = await this.roteiroRepository.buscaTodos();
+        const roteiro = await this.roteiroRepository.buscaTodos(req);
         res.status(200).json(roteiro.map(u => roteiroViewModel(u)));
       }  
       catch(e){
-         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
-        
+         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});        
       }
     }
+
 
   
     async salva(req, res){
@@ -36,8 +36,7 @@ const roteiroViewModel = (roteiro) => ({
       }
       catch(e){
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
-      }
-      
+      }      
     }
   
     mostra(req, res){
@@ -46,8 +45,7 @@ const roteiroViewModel = (roteiro) => ({
 
       }catch(e){
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
-      }
-     
+      }     
     }
   
     async atualiza(req,res){
@@ -58,8 +56,7 @@ const roteiroViewModel = (roteiro) => ({
         return res.status(200).json(roteiroViewModel(roteiroAtualizado));      
       }catch(e){
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
-      }    
-      
+      }      
     }    
 
     async deleta(req, res){
@@ -68,8 +65,7 @@ const roteiroViewModel = (roteiro) => ({
         return res.status(204).end();
       }catch(e){
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
-      }  
-    
+      }    
     }
   
   }
