@@ -7,11 +7,11 @@ import CardParticipante from '../../components/cardParticipante';
 export default function EditarViagem({route}) {
     const navigation = useNavigation();
 
-    const [apelidoViagem, onChangeTextApelidoViagem] = React.useState(route.params.item.nome);
-    const [dataInicio, onChangeTextDataInicio] = React.useState(route.params.item.dataInicio);
-    const [dataFim, onChangeTextDataFim] = React.useState(route.params.item.dataFim);
-    const [localViagem, onChangeTextLocalViagem] = React.useState(route.params.item.local);
-    const [nomeParticipante, onChangeTextNomeParticipante] = React.useState('Ednaldo Pereira');
+    const [apelidoViagem, onChangeTextApelidoViagem] = useState(route.params.viagem.nome);
+    const [dataInicio, onChangeTextDataInicio] = useState(route.params.viagem.dataInicio);
+    const [dataFim, onChangeTextDataFim] = useState(route.params.viagem.dataFim);
+    const [localViagem, onChangeTextLocalViagem] = useState(route.params.viagem.local);
+    const [nomeParticipante, onChangeTextNomeParticipante] = useState('Ednaldo Pereira');
 
     let participantesData = [
         {
