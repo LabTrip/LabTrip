@@ -38,12 +38,11 @@ export default function ListaViagens() {
           const json = await response.json();
           if (response.status == 200) {
             setViagens(json);
-            console.log(json)
           }
         }
       }
       catch (e) {
-        console.log(e)
+        alert(e)
       }
     }
     request()
