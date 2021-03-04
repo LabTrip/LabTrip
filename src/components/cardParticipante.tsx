@@ -31,7 +31,7 @@ export default function CardParticipante(props) {
                 </View>
             </View>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={props.onPress}>
             <MaterialCommunityIcons name={icon} color={color} size={30} />
             </TouchableOpacity>
         </View>

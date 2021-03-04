@@ -102,7 +102,7 @@ export default function CriarAgencia() {
               data={participantesData}
               keyExtractor={(item, index) => item.id}
               renderItem={({ item }) => (
-                <CardAgente nome={item.nome} />
+                <CardAgente nome={item.nome} onPress={() => alert('teste')} />
               )}
             />
           </View>
