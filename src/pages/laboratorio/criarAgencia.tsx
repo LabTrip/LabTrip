@@ -21,7 +21,12 @@ export default function CriarAgencia() {
   function onChangeTextnomeAgencia(text) {
     nomeAgencia = text;
   }
+  let email;
+  function onChangeTextEmail(text) {
+    email = text;
+  }
   const [idAgencia, setIdAgencia] = React.useState('');
+  const [participantes, setParticipantes] = React.useState<Usuario[]>([]);
   const criaAgencia = async (corpo) => {
     return await fetch('https://labtrip-backend.herokuapp.com/agencias', {
       method: 'POST',
@@ -34,13 +39,28 @@ export default function CriarAgencia() {
     });
   }
 
+  const removeParticipanteArray = (index) =>  {
+    let participantesAux = participantes;
+
+    setParticipantes(participantesAux.splice(index, 1));
+  }
+
+  const adicionaParticipanteArray = (usuarios) =>  {
+    let participantesAux = participantes;
+
+    usuarios.map(u => {
+      participantesAux.push(u)
+    });
+    
+    setParticipantes(participantesAux);
+  }
+
   useEffect(() => {
     const request = async () => {
       try {
         const value = await AsyncStorage.getItem('AUTH');
         if (value != null) {
           token = JSON.parse(value)
-          console.log(token)
         }
       }
       catch (e) {
@@ -51,12 +71,12 @@ export default function CriarAgencia() {
   }, []);
 
   const buscaUsuario = async (email) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/usuarios/' + email, {
-      method: 'POST',
+    return await fetch('https://labtrip-backend.herokuapp.com/usuarios/email/' + email, {
+      method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token
+        'x-access-token': token.toString()
       }
     });
   }
@@ -93,13 +113,27 @@ export default function CriarAgencia() {
           <TextInput placeholder='Nome da agencia' style={styles.input}
             onChangeText={text => onChangeTextnomeAgencia(text.trim())} value={nomeAgencia} autoCapitalize={'none'} />
           <View style={styles.containerAddFuncionarios}>
-            <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario} />
+            <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario}
+             onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
 
-              <BotaoLupa />
+            <BotaoLupa onPress={async () => {
+                const reponseUsuario = await buscaUsuario(email);
+                const jsonUsuario = await reponseUsuario.json();
+                if(reponseUsuario.status >= 200 && reponseUsuario.status <= 299){
+                  //console.log(jsonUsuario)
+                  adicionaParticipanteArray(jsonUsuario);
+                  //console.log(participantes)
+                }
+                else{
+                  //console.log(jsonUsuario)
+                  alert("Erro ao buscar usuário.")
+                }
+              
+            }} />
           </View>
           <View style={styles.containerFuncionarios}>
             <FlatList
-              data={participantesData}
+              data={participantes}
               keyExtractor={(item, index) => item.id}
               renderItem={({ item }) => (
                 <CardAgente nome={item.nome} onPress={() => alert('teste')} />
@@ -108,13 +142,22 @@ export default function CriarAgencia() {
           </View>
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
-            console.log({ nome: nomeAgencia })
             let response = await criaAgencia({ nome: nomeAgencia });
             let json = await response.json();
             if (response.status >= 200 && response.status <= 299) {
               alert('Agencia criada com sucesso!')
+              setIdAgencia(json.id)
+              if(participantes.length > 0){
+                let responseP = await convidaFuncionarios(participantes);
+                let jsonP = await responseP.json();
 
-              const token = json.token;
+                if (responseP.status >= 200 && response.status <= 299) {
+                  alert('Participantes adicionados com sucesso!')
+                }
+                else{
+                  alert('Erro ao adicionados participantes.')
+                }
+              }              
 
               navigation.goBack();
             }
