@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function CardRoteiro(props) {
     const navigation = useNavigation();
     return (
-        <TouchableOpacity style={styles.cardRoteiro} onPress={() => navigation.navigate('DetalhesAtividade', { atividade: props.item })}>
+        <TouchableOpacity style={styles.cardRoteiro} onPress={() => navigation.navigate('DetalhesAtividade', { atividade: props.item, data: props.data })}>
             <Text style={styles.textoTitulo}>{props.nome} </Text>
             <View style={styles.detalhes}>
                 <Text style={styles.textoDetalhes}>Local: {props.local}{"\n"}Horário: {props.horario}</Text>
