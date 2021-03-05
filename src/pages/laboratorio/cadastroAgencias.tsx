@@ -3,6 +3,7 @@ import { Text, StyleSheet, TouchableOpacity, View, Image, FlatList, RefreshContr
 import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Agencia {
   id: string,
@@ -44,20 +45,22 @@ export default function CadastroAgencia() {
       }
     }
     request()
-  }, []);
+  }, [refreshing]);
 
-  const onRefresh = React.useCallback(async () => {
+  const onRefresh = React.useCallback(() => {
       setRefreshing(true);
-      setRefreshing(false)
+      setTimeout(() =>{
+        setRefreshing(false)
+      }, 2000)
   }, [refreshing]);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} >
       <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarAgencia')}>
         <Image source={require('../../imgs/plus-circle.png')} />
       </TouchableOpacity>
 
-      <DataTable>
+      <DataTable >
         <DataTable.Header style={styles.cabecalhoTabela}>
           <DataTable.Title>
             <Text style={styles.textoCabecalho}>Agência</Text>
@@ -66,21 +69,27 @@ export default function CadastroAgencia() {
             <Text style={styles.textoCabecalho}>Status</Text>
           </DataTable.Title>
         </DataTable.Header>
-
+        
+        <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
         {
           agencias?.map((a) => {
             return <TouchableOpacity key={a.id}>
-              <DataTable.Row style={styles.corpoTabela}>
-                <DataTable.Cell>{a.nome}</DataTable.Cell>
-                <DataTable.Cell>Ativo</DataTable.Cell>
-              </DataTable.Row>
-            </TouchableOpacity>
+                <DataTable.Row style={styles.corpoTabela}>
+                  <DataTable.Cell>{a.nome}</DataTable.Cell>
+                  <DataTable.Cell>Ativo</DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
           })
         }
-
+        </ScrollView>
       </DataTable>
 
-    </View>
+    </View >
   );
 }
 

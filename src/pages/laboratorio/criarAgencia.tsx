@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CardAgente from '../../components/cardAgente'
@@ -14,6 +14,7 @@ interface Usuario {
 }
 
 export default function CriarAgencia() {
+  
   const navigation = useNavigation();
   let token;
   //const [nomeAgencia, onChangeTextnomeAgencia] = React.useState('');
@@ -26,7 +27,7 @@ export default function CriarAgencia() {
     email = text;
   }
   const [idAgencia, setIdAgencia] = React.useState('');
-  const [participantes, setParticipantes] = React.useState<Usuario[]>([]);
+  const [participantes, setParticipantes] = useState<Usuario[]>([]);
   const criaAgencia = async (corpo) => {
     return await fetch('https://labtrip-backend.herokuapp.com/agencias', {
       method: 'POST',
@@ -41,8 +42,8 @@ export default function CriarAgencia() {
 
   const removeParticipanteArray = (index) =>  {
     let participantesAux = participantes;
-
-    setParticipantes(participantesAux.splice(index, 1));
+    participantesAux.splice(index,1) 
+    setParticipantes(participantesAux);
   }
 
   const adicionaParticipanteArray = (usuarios) =>  {
@@ -119,9 +120,9 @@ export default function CriarAgencia() {
             <BotaoLupa onPress={async () => {
                 const reponseUsuario = await buscaUsuario(email);
                 const jsonUsuario = await reponseUsuario.json();
-                if(reponseUsuario.status >= 200 && reponseUsuario.status <= 299){
+                if(reponseUsuario.status >= 200 && reponseUsuario.status <= 304){
                   //console.log(jsonUsuario)
-                  adicionaParticipanteArray(jsonUsuario);
+                  setParticipantes(jsonUsuario);
                   //console.log(participantes)
                 }
                 else{
@@ -131,15 +132,18 @@ export default function CriarAgencia() {
               
             }} />
           </View>
-          <View style={styles.containerFuncionarios}>
-            <FlatList
+            <FlatList 
               data={participantes}
               keyExtractor={(item, index) => item.id}
-              renderItem={({ item }) => (
-                <CardAgente nome={item.nome} onPress={() => alert('teste')} />
+              renderItem={({ item, index }) => (
+                <CardAgente nome={item.nome} onPress={() => {
+                  let participantesAux = participantes;
+                  participantesAux.splice(index,1) 
+                  setParticipantes(participantesAux);
+                }} />
               )}
+              extraData={participantes}
             />
-          </View>
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
             let response = await criaAgencia({ nome: nomeAgencia });
@@ -165,7 +169,7 @@ export default function CriarAgencia() {
               alert(json.mensagem);
             }
           }}>
-            <Text style={styles.botaoSalvarTexto}>Criar viagem</Text>
+            <Text style={styles.botaoSalvarTexto}>Criar agencia</Text>
           </TouchableOpacity>
         </View>
       </ScrollViewFlat>
