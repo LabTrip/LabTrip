@@ -16,7 +16,6 @@ interface Usuario {
 export default function CriarAgencia() {
   const navigation = useNavigation();
   let token;
-  //const [nomeAgencia, onChangeTextnomeAgencia] = React.useState('');
   let nomeAgencia;
   function onChangeTextnomeAgencia(text) {
     nomeAgencia = text;
@@ -47,12 +46,8 @@ export default function CriarAgencia() {
 
   const adicionaParticipanteArray = (usuarios) =>  {
     let participantesAux = participantes;
-
-    usuarios.map(u => {
-      participantesAux.push(u)
-    });
     
-    setParticipantes(participantesAux);
+    setParticipantes(participantes.concat(participantesAux));
   }
 
   useEffect(() => {
