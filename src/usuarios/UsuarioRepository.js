@@ -27,7 +27,7 @@ export default class UsuarioRepository{
 
     async buscaPorEmailLike(email){
       return await this.client('usuario')
-        .where('email','like', '%'+ email +'%').first();
+        .where('email','like', '%'+ email +'%');
     }
   
     async atualiza(usuario){

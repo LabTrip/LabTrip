@@ -89,7 +89,9 @@ export default class UsuarioController {
   }
 
   mostra(req, res){
-    return res.status(200).json(usuarioViewModel(req.usuario)); 
+    console.log(req.usuario)
+    const usuarios  = req.usuario;
+    return res.status(200).json(usuarios.map(u => usuarioViewModel(u))); 
   }
 
   async atualiza(req,res){   
