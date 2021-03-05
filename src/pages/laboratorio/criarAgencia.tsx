@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   },
   inputAddFuncionario: {
     marginTop: '3%',
-    width: '80%',
+    width: '85%',
     height: 'auto',
     padding: 15,
     fontSize: 16,
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   containerAddFuncionarios: {
     width: '90%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
   containerFuncionarios: {

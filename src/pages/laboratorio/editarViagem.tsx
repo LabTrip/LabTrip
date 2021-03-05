@@ -3,15 +3,15 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'r
 import { useNavigation } from '@react-navigation/native';
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import CardParticipante from '../../components/cardParticipante';
+import BotaoLupa from '../../components/botaoLupa';
 
-export default function EditarViagem({route}) {
+export default function EditarViagem({ route }) {
     const navigation = useNavigation();
 
     const [apelidoViagem, onChangeTextApelidoViagem] = useState(route.params.viagem.nome);
     const [dataInicio, onChangeTextDataInicio] = useState(route.params.viagem.dataInicio);
     const [dataFim, onChangeTextDataFim] = useState(route.params.viagem.dataFim);
     const [localViagem, onChangeTextLocalViagem] = useState(route.params.viagem.local);
-    const [nomeParticipante, onChangeTextNomeParticipante] = useState('Ednaldo Pereira');
 
     let participantesData = [
         {
@@ -47,17 +47,19 @@ export default function EditarViagem({route}) {
                 </View>
                 <TextInput placeholder={"Local da viagem"} value={localViagem} style={styles.input}
                     onChangeText={text => onChangeTextLocalViagem(text)} />
-                <TextInput placeholder={"Adicionar participantes"} value={nomeParticipante} style={styles.input}
-                    onChangeText={text => onChangeTextNomeParticipante(text)} />
+
+                <View style={styles.containerAddFuncionarios}>
+                    <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario} />
+                    <BotaoLupa onPress={() => alert('clicou para adicionar')} />
+                </View>
 
                 <View style={styles.containerParticipantes}>
                     <FlatList
                         data={participantesData}
-                        keyExtractor={(item, index) => item.id}
+                        keyExtractor={(item) => item.id}
                         renderItem={({ item }) => (
                             <CardParticipante nome={item.nome} dono={item.dono} proprietario={item.proprietario} />
                         )}
-
                     />
                 </View>
 
@@ -67,7 +69,7 @@ export default function EditarViagem({route}) {
                 }}>
                     <Text style={styles.botaoCriarTexto}>Salvar viagem</Text>
                 </TouchableOpacity>
-        </View>
+            </View>
         </ScrollViewFlat>
     );
 }
@@ -80,6 +82,12 @@ const styles = StyleSheet.create({
     },
     containerData: {
         flexDirection: 'row',
+    },
+    containerAddFuncionarios: {
+        width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
     },
     input: {
         marginTop: '3%',
@@ -100,7 +108,16 @@ const styles = StyleSheet.create({
         color: '#333333',
         width: '45%'
     },
-
+    inputAddFuncionario: {
+        marginTop: '3%',
+        width: '85%',
+        height: 'auto',
+        padding: 15,
+        fontSize: 16,
+        borderRadius: 41,
+        backgroundColor: '#EBEBEB',
+        color: '#333333'
+    },
     containerParticipantes: {
         borderStyle: 'dotted',
         borderColor: '#333333',
