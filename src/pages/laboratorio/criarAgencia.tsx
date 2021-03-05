@@ -17,7 +17,6 @@ export default function CriarAgencia() {
   
   const navigation = useNavigation();
   let token;
-  //const [nomeAgencia, onChangeTextnomeAgencia] = React.useState('');
   let nomeAgencia;
   function onChangeTextnomeAgencia(text) {
     nomeAgencia = text;
@@ -48,12 +47,8 @@ export default function CriarAgencia() {
 
   const adicionaParticipanteArray = (usuarios) =>  {
     let participantesAux = participantes;
-
-    usuarios.map(u => {
-      participantesAux.push(u)
-    });
     
-    setParticipantes(participantesAux);
+    setParticipantes(participantes.concat(participantesAux));
   }
 
   useEffect(() => {
@@ -193,7 +188,7 @@ const styles = StyleSheet.create({
   },
   inputAddFuncionario: {
     marginTop: '3%',
-    width: '80%',
+    width: '85%',
     height: 'auto',
     padding: 15,
     fontSize: 16,
@@ -204,7 +199,7 @@ const styles = StyleSheet.create({
   containerAddFuncionarios: {
     width: '90%',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     alignItems: 'center',
   },
   containerFuncionarios: {

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'r
 import { useNavigation } from '@react-navigation/native';
 import CardParticipante from '../../components/cardParticipante';
 import ScrollViewFlat from '../../components/scrollViewFlat';
+import BotaoLupa from '../../components/botaoLupa';
 
 
 export default function CriarViagem() {
@@ -38,7 +39,10 @@ export default function CriarViagem() {
                     <TextInput keyboardType='numeric' placeholder={"Data fim"} style={styles.inputData} />
                 </View>
                 <TextInput placeholder={"Local da viagem"} style={styles.input} />
-                <TextInput placeholder={"Adicionar participantes"} style={styles.input} clearButtonMode={'always'} />
+                <View style={styles.containerAddFuncionarios}>
+                    <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario} />
+                    <BotaoLupa onPress={() => alert('clicou para adicionar')} />
+                </View>
                 <View style={styles.containerParticipantes}>
                     <FlatList
                         data={participantesData}
@@ -70,6 +74,12 @@ const styles = StyleSheet.create({
     containerData: {
         flexDirection: 'row',
     },
+    containerAddFuncionarios: {
+        width: '90%',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+    },
     input: {
         marginTop: '3%',
         width: '95%',
@@ -89,7 +99,16 @@ const styles = StyleSheet.create({
         color: '#333333',
         width: '45%'
     },
-
+    inputAddFuncionario: {
+        marginTop: '3%',
+        width: '85%',
+        height: 'auto',
+        padding: 15,
+        fontSize: 16,
+        borderRadius: 41,
+        backgroundColor: '#EBEBEB',
+        color: '#333333'
+    },
     containerParticipantes: {
         borderStyle: 'dotted',
         borderColor: '#333333',
@@ -98,7 +117,7 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: '90%',
         alignItems: 'center',
-        flexDirection: 'column',      
+        flexDirection: 'column',
     },
     botaoCriar: {
         backgroundColor: '#3385FF',
