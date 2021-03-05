@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+
 const moment = require('moment');
 
 
@@ -10,6 +12,8 @@ export default function EditarPerfil() {
     const [email, onChangeTextEmail] = useState("");
     const [data, onChangeTextData] = useState("");
     const [telefone, onChangeTextTelefone] = useState("");
+
+    const navigation = useNavigation();
 
     let token, userId;
 
@@ -107,9 +111,9 @@ export default function EditarPerfil() {
                         onChangeText={text => onChangeTextData(text)} />
                     <TextInput placeholder={"Telefone"} value={telefone} style={styles.input}
                         onChangeText={text => onChangeTextTelefone(text)} />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('AlterarSenha') }>
                         <Text style={styles.link}>
-                            Redefinir senha
+                            Alterar senha
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.botaoSalvar} >
