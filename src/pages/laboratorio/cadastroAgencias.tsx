@@ -1,10 +1,56 @@
-import React from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, StyleSheet, TouchableOpacity, View, Image, FlatList, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+interface Agencia {
+  id: string,
+  nome: string
+}
 
 export default function CadastroAgencia() {
   const navigation = useNavigation();
+  const [agencias, setAgencias] = useState<Agencia[]>();
+  const [refreshing, setRefreshing] = useState(false);
+  let token;
+
+  const getAgencias = async () => {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    });
+  }
+
+  useEffect(() => {
+    const request = async () => {
+      try {
+        const value = await AsyncStorage.getItem('AUTH');
+        if (value != null) {
+          token = JSON.parse(value)
+          const response = await getAgencias();
+          const json = await response.json();
+          if (response.status == 200) {
+            setAgencias(json);
+          }
+        }
+      }
+      catch (e) {
+        alert(e)
+      }
+    }
+    request()
+  }, []);
+
+  const onRefresh = React.useCallback(async () => {
+      setRefreshing(true);
+      setRefreshing(false)
+  }, [refreshing]);
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarAgencia')}>
@@ -21,19 +67,16 @@ export default function CadastroAgencia() {
           </DataTable.Title>
         </DataTable.Header>
 
-        <TouchableOpacity>
-          <DataTable.Row style={styles.corpoTabela}>
-            <DataTable.Cell>Azurro Travel</DataTable.Cell>
-            <DataTable.Cell>Ativo</DataTable.Cell>
-          </DataTable.Row>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <DataTable.Row style={styles.corpoTabela}>
-            <DataTable.Cell>Tereza Pérez</DataTable.Cell>
-            <DataTable.Cell>Inativo</DataTable.Cell>
-          </DataTable.Row>
-        </TouchableOpacity>
+        {
+          agencias?.map((a) => {
+            return <TouchableOpacity key={a.id}>
+              <DataTable.Row style={styles.corpoTabela}>
+                <DataTable.Cell>{a.nome}</DataTable.Cell>
+                <DataTable.Cell>Ativo</DataTable.Cell>
+              </DataTable.Row>
+            </TouchableOpacity>
+          })
+        }
 
       </DataTable>
 
