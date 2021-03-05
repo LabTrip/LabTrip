@@ -89,9 +89,14 @@ export default class UsuarioController {
   }
 
   mostra(req, res){
-    console.log(req.usuario)
     const usuarios  = req.usuario;
-    return res.status(200).json(usuarios.map(u => usuarioViewModel(u))); 
+    if(usuarios.length > 1){
+      return res.status(200).json(usuarios.map(u => usuarioViewModel(u))); 
+    }
+    else{
+      return res.status(200).json(usuarioViewModel(usuarios)); 
+    }
+    
   }
 
   async atualiza(req,res){   
