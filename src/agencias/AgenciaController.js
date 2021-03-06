@@ -49,7 +49,7 @@ export default class AgenciaController {
 
       const funcionarios = await this.agenciaRepository.buscaFuncionariosAgencia(agenciaId);
   
-      return res.status(200).json({funcionarios: [funcionarios]})  
+      return res.status(200).json({funcionarios: funcionarios})  
     }
     catch(e){
       console.log(e)
