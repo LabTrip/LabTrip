@@ -28,7 +28,9 @@ export default class AgenciaRepository{
     }
 
     async buscaFuncionariosAgencia(agenciaId){
-      return await this.client('funcionario')
+      return await this.client.select(['usuario.*','funcionario.*'])
+        .from('funcionario')
+        .innerJoin('usuario','usuario.id','funcionario.usuarioId')
         .where({'agenciaId': agenciaId.toString()});
     }
 

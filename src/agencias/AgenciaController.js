@@ -52,6 +52,7 @@ export default class AgenciaController {
       return res.status(200).json({funcionarios: [funcionarios]})  
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
