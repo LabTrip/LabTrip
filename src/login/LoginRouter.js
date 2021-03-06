@@ -16,7 +16,7 @@ export default function defineLoginRouter(){
    .post((req, res) => loginController.autentica(req, res));
 
    router.route('/verifica')
-   .post((req, res) => loginController.validaToken(req, res));
+   .post((req, res) => loginController.validaSessao(req, res));
 
   router.route('/redefine')
    .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))
