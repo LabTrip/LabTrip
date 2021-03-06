@@ -90,7 +90,7 @@ export default class UsuarioController {
 
   mostra(req, res){
     const usuarios  = req.usuario;
-    if(usuarios.length > 1){
+    if(usuarios.length > 0){
       return res.status(200).json(usuarios.map(u => usuarioViewModel(u))); 
     }
     else{
