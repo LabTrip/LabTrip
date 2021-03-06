@@ -9,7 +9,7 @@ interface Usuario {
   id: string,
   nome: string,
   email: string,
-  perfilId: string,
+  descricao: string,
 }
 
 export default function CadastroUsuario() {
@@ -91,7 +91,7 @@ export default function CadastroUsuario() {
                 <DataTable.Row style={styles.corpoTabela}>
                   <DataTable.Cell>{a.nome}</DataTable.Cell>
                   <DataTable.Cell>{a.email}</DataTable.Cell>
-                  <DataTable.Cell>{a.perfilId}</DataTable.Cell>
+                  <DataTable.Cell>{a.descricao}</DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>
           })
