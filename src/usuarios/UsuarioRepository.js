@@ -4,7 +4,9 @@ export default class UsuarioRepository{
     }
   
     async buscaTodos(){
-      return await this.client('usuario');
+      return await this.client.select(['usuario.*','perfil.descricao'])
+      .from('usuario')
+      .innerJoin('perfil','usuario.perfilId','perfil.id');
     }
   
     async salva(usuario){
@@ -16,18 +18,24 @@ export default class UsuarioRepository{
     }
   
     async buscaPorId(id){
-      return await this.client('usuario')
-        .where({'id': id.toString()}).first();
+      return await this.client.select(['usuario.*','perfil.descricao'])
+      .from('usuario')
+      .innerJoin('perfil','usuario.perfilId','perfil.id')
+      .where({'usuario.id': id.toString()}).first();
     }
 
     async buscaPorEmail(email){
-      return await this.client('usuario')
-        .where({'email': email.toString()}).first();
+      return await this.client.select(['usuario.*','perfil.descricao'])
+      .from('usuario')
+      .innerJoin('perfil','usuario.perfilId','perfil.id')
+      .where({'usuario.email': email.toString()}).first();
     }
 
     async buscaPorEmailLike(email){
-      return await this.client('usuario')
-        .where('email','like', '%'+ email +'%');
+      return await this.client.select(['usuario.*','perfil.descricao'])
+      .from('usuario')
+      .innerJoin('perfil','usuario.perfilId','perfil.id')
+      .where('usuario.email','like', '%'+ email +'%');
     }
   
     async atualiza(usuario){

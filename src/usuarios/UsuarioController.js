@@ -9,6 +9,7 @@ const usuarioViewModel = (usuario) => ({
   telefone: usuario.telefone,
   foto: usuario.foto,
   perfilId: usuario.perfilId,
+  descricao: usuario.descricao,
   dataNascimento: usuario.dataNascimento,
 });
 
