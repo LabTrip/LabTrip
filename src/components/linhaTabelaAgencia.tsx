@@ -8,7 +8,7 @@ export default function LinhaTabelaAgencia(props) {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity >
+        <TouchableOpacity onPress={() => navigation.navigate(props.navigate, {agencia: props.item})}>
             <DataTable.Row style={styles.corpoTabela}>
             <DataTable.Cell>{props.nome}</DataTable.Cell>
             <DataTable.Cell>Ativo</DataTable.Cell>

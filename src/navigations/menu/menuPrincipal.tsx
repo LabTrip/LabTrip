@@ -12,19 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default function MenuPrincipal({ route }) {
-  const { token } = route.params;
-  async () => {
-    console.log('entrou')
-    try {
-      const value = await AsyncStorage.getItem('AUTH')
-      if (value !== null) {
-        alert(value)
-      }
-    } catch (e) {
-      // error reading value
-    }
-  }
+export default function MenuPrincipal() {
   return (
     <>
       <Cabecalho />
@@ -57,7 +45,7 @@ export default function MenuPrincipal({ route }) {
             <MaterialCommunityIcons name="message" color={'#BABABA'} size={29} />
           )
         }} />
-        <Tab.Screen name="TelasProfile" initialParams={{ token: token }} component={TelasProfile} options={{
+        <Tab.Screen name="TelasProfile"  component={TelasProfile} options={{
           tabBarLabel: '',
           tabBarColor: '#fff',
           tabBarIcon: () => (

@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { ScrollView } from 'react-native-gesture-handler';
+import LinhaTabelaAgencia from '../../components/linhaTabelaAgencia';
 
 interface Agencia {
   id: string,
@@ -78,12 +79,7 @@ export default function CadastroAgencia() {
         }>
         {
           agencias?.map((a) => {
-            return <TouchableOpacity key={a.id}>
-                <DataTable.Row style={styles.corpoTabela}>
-                  <DataTable.Cell>{a.nome}</DataTable.Cell>
-                  <DataTable.Cell>Ativo</DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
+            return <LinhaTabelaAgencia key={a.id} nome={a.nome} navigate={"EditarAgencia"} item={a}/>
           })
         }
         </ScrollView>

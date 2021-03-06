@@ -13,11 +13,18 @@ interface Usuario {
   email: string
 }
 
-export default function CriarAgencia() {
+interface Funcionario {
+  usuarioId: string,
+  nome: string,
+  email: string
+}
+
+export default function EditarAgencia({route}) {
+  const {agencia} = route.params;
   
   const navigation = useNavigation();
   let token;
-  let nomeAgencia;
+  let nomeAgencia = agencia.nome;
   function onChangeTextnomeAgencia(text) {
     nomeAgencia = text;
   }
@@ -25,11 +32,13 @@ export default function CriarAgencia() {
   function onChangeTextEmail(text) {
     email = text;
   }
-  const [idAgencia, setIdAgencia] = React.useState('');
-  const [participantes, setParticipantes] = useState<Usuario[]>([]);
-  const criaAgencia = async (corpo) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/agencias', {
-      method: 'POST',
+  const [participantes, setParticipantes] = useState<Funcionario[]>([]);
+  const [participantesAdicionados, setParticipantesAdicionados] = useState<Usuario[]>([]);
+  const [participantesRemovidos, setParticipantesRemovidos] = useState<Usuario[]>([]);
+
+  const editaAgencia = async (corpo) => {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/'+agencia.id, {
+      method: 'PUT',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -57,6 +66,12 @@ export default function CriarAgencia() {
         const value = await AsyncStorage.getItem('AUTH');
         if (value != null) {
           token = JSON.parse(value)
+          const response = await buscaFuncionarios();
+          const json = await response.json();
+          if (response.status == 200) {
+            console.log(json.funcionarios)
+            setParticipantes(json.funcionarios);
+          }
         }
       }
       catch (e) {
@@ -78,8 +93,31 @@ export default function CriarAgencia() {
   }
 
   const convidaFuncionarios = async (corpo) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/agencias/convida-funcionarios/' + idAgencia, {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/convida-funcionarios/' + agencia.id, {
       method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      },
+      body: JSON.stringify(corpo)
+    });
+  }
+
+  const buscaFuncionarios = async () => {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/funcionarios/' + agencia.id, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    });
+  }
+
+  const deletaFuncionarios = async (corpo) => {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/convida-funcionarios/' + agencia.id, {
+      method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -104,8 +142,10 @@ export default function CriarAgencia() {
                 const jsonUsuario = await reponseUsuario.json();
                 if(reponseUsuario.status >= 200 && reponseUsuario.status <= 304){
                   //console.log(jsonUsuario)
-                  let participantesAux = participantes;    
-                  setParticipantes(participantes.concat(participantesAux));
+                  let participantesAux = participantes;
+                  setParticipantes(participantes.concat(jsonUsuario));
+                  let participantesAdicionadosAux = participantesAdicionados;
+                  setParticipantesAdicionados(participantesAdicionados.concat(jsonUsuario));
                   //console.log(participantes)
                 }
                 else{
@@ -117,7 +157,7 @@ export default function CriarAgencia() {
           </View>
             <FlatList 
               data={participantes}
-              keyExtractor={(item, index) => item.id}
+              keyExtractor={(item, index) => item.usuarioId}
               renderItem={({ item, index }) => (
                 <CardAgente nome={item.nome} onPress={() => {
                   let participantesAux = participantes;
@@ -129,22 +169,33 @@ export default function CriarAgencia() {
             />
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
-            let response = await criaAgencia({ nome: nomeAgencia });
+            let response = await editaAgencia({ nome: nomeAgencia });
             let json = await response.json();
             if (response.status >= 200 && response.status <= 299) {
-              alert('Agencia criada com sucesso!')
-              setIdAgencia(json.id)
-              if(participantes.length > 0){
+              alert('Agencia salva com sucesso!')
+              if(participantesAdicionados.length > 0){
                 let responseP = await convidaFuncionarios(participantes);
                 let jsonP = await responseP.json();
 
                 if (responseP.status >= 200 && response.status <= 299) {
                   alert('Participantes adicionados com sucesso!')
                 }
-                else{
+                 else{
                   alert('Erro ao adicionados participantes.')
                 }
-              }              
+              }
+              
+              if(participantesRemovidos.length > 0){
+                let responseP = await deletaFuncionarios(participantes);
+                let jsonP = await responseP.json();
+
+                if (responseP.status >= 200 && response.status <= 299) {
+                  alert('Participantes deletados com sucesso!')
+                }
+                 else{
+                  alert('Erro ao deletar participantes.')
+                }
+              }
 
               navigation.goBack();
             }
@@ -152,7 +203,7 @@ export default function CriarAgencia() {
               alert(json.mensagem);
             }
           }}>
-            <Text style={styles.botaoSalvarTexto}>Criar agencia</Text>
+            <Text style={styles.botaoSalvarTexto}>Salvar agencia</Text>
           </TouchableOpacity>
         </View>
       </ScrollViewFlat>
