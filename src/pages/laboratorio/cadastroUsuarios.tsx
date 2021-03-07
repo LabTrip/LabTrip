@@ -1,13 +1,64 @@
-import React from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, Image, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, StyleSheet, TouchableOpacity, View, Image, FlatList, ScrollView, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 import TabelaCadastroUsuario from '../../components/tabelaCadastroUsuario';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface Usuario {
+  id: string,
+  nome: string,
+  email: string,
+  descricao: string,
+}
 
 export default function CadastroUsuario() {
   const navigation = useNavigation();
+  const [usuarios, setUsuarios] = useState<Usuario[]>();
+  const [refreshing, setRefreshing] = useState(false);
+  let token
 
+
+
+  const getUsuarios = async () => {
+      return await fetch('https://labtrip-backend.herokuapp.com/usuarios/', {
+          method: 'GET',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              'x-access-token': token
+          }
+      });
+  }
+
+  useEffect(() => {
+    const request = async () => {
+      try {
+        const value = await AsyncStorage.getItem('AUTH');
+        if (value != null) {
+          token = JSON.parse(value)
+          const response = await getUsuarios();
+          const json = await response.json();
+          if (response.status == 200) {
+            setUsuarios(json);
+          }
+        }
+      }
+      catch (e) {
+        alert(e)
+      }
+    }
+    request()
+  }, [refreshing]);
+
+  const onRefresh = React.useCallback(() => {
+      setRefreshing(true);
+      setTimeout(() =>{
+        setRefreshing(false)
+      }, 2000)
+  }, [refreshing]);
+
+  
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarUsuario')}>
@@ -27,29 +78,25 @@ export default function CadastroUsuario() {
           </DataTable.Title>
         </DataTable.Header>
 
-        <TouchableOpacity>
-          <DataTable.Row style={styles.corpoTabela}>
-            <DataTable.Cell>Ednaldo Pereira</DataTable.Cell>
-            <DataTable.Cell>ednaldo.pereira@gmail.com</DataTable.Cell>
-            <DataTable.Cell>Proprietário</DataTable.Cell>
-          </DataTable.Row>
-        </TouchableOpacity>
 
-        <TouchableOpacity>
-          <DataTable.Row style={styles.corpoTabela}>
-            <DataTable.Cell>Ednaldo Agente</DataTable.Cell>
-            <DataTable.Cell>ednaldo.agente@gmail.com</DataTable.Cell>
-            <DataTable.Cell>Agente</DataTable.Cell>
-          </DataTable.Row>
-        </TouchableOpacity>
-
-        <TouchableOpacity>
-          <DataTable.Row style={styles.corpoTabela}>
-            <DataTable.Cell>Ednaldo Administrador</DataTable.Cell>
-            <DataTable.Cell>ednaldo.adm@gmail.com</DataTable.Cell>
-            <DataTable.Cell>Administrador</DataTable.Cell>
-          </DataTable.Row>
-        </TouchableOpacity>
+        <ScrollView refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }>
+        {
+          usuarios?.map((a) => {
+            return <TouchableOpacity key={a.id}>
+                <DataTable.Row style={styles.corpoTabela}>
+                  <DataTable.Cell>{a.nome}</DataTable.Cell>
+                  <DataTable.Cell>{a.email}</DataTable.Cell>
+                  <DataTable.Cell>{a.descricao}</DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
+          })
+        }
+        </ScrollView>
       </DataTable>
     </View>
   );
