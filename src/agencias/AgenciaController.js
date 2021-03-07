@@ -64,7 +64,7 @@ export default class AgenciaController {
       const agencia = req.agencia
 
       for(let funcionario of funcionarios){
-        let {usuario} = funcionario;
+        let usuario = funcionario;
 
         let token = jwt.sign(
           {
