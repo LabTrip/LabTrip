@@ -21,7 +21,7 @@ useEffect(()=>{
 });
 
 async function sendForm(){
-    let response = await fetch('https://labtrip-backend.herokuapp.com/alterarSenha/verifyPass',{
+    let response = await fetch('https://labtrip-backend.herokuapp.com/alterarSenha',{
         method: 'POST',
         body: JSON.stringify({
             id: idUser,
