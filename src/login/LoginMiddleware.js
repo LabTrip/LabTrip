@@ -21,6 +21,21 @@ export default class LoginMiddleware{
        
     }
 
+    async usuarioExisteAlterarSenha(req, res, next){
+      try{
+        const usuario = await this.usuarioRepository.buscaPorId(req.params.id);
+        if(!usuario){
+          return res.status(404).json({status: '404', mensagem: 'Usuário não encontrado.'});       
+        }
+        req.usuario = usuario;
+        next();
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+       
+    }
+
     async validaToken(req, res, next){
       const token = req.headers['x-access-token'];
       jwt.verify(token, process.env.SECRET, (err, decoded) => {

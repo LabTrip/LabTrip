@@ -8,6 +8,11 @@ export default class LoginRepository{
         .where({'email': email.toString()}).first();
     }
 
+    async buscaPorId(id){
+      return await this.client('usuario')
+        .where({'id': id.toString()}).first();
+    }
+
     async geraCodigo(email, codigoVerificacao){
       const [firstRow] = await this.client('usuario')
       .where({'email': email})
@@ -30,6 +35,16 @@ export default class LoginRepository{
         senha: senha,
         verificado: true,
         codigoVerificacao: novoCodigo
+      }).returning("*");
+
+      return firstRow;
+    }
+
+    async redefineSenhaPorId(id, senha){
+      const [firstRow] = await this.client('usuario')
+      .where({'id': id.toString()})
+      .update({
+        senha: senha
       }).returning("*");
 
       return firstRow;

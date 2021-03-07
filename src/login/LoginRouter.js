@@ -21,6 +21,11 @@ export default function defineLoginRouter(){
   router.route('/redefine')
    .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))
    .post((req, res) => loginController.redefine(req, res));
+
+   router.route('/alterarSenha/:id')
+   .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .all((req, res, next) => loginMiddleware.usuarioExisteAlterarSenha(req, res, next))
+   .post((req, res) => loginController.alterarSenha(req, res));
   
    router.route('/geracodigo')
    .all((req, res, next) => loginMiddleware.usuarioExiste(req, res, next))

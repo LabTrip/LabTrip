@@ -164,6 +164,25 @@ export default class LoginController {
         
   }
 
+  async alterarSenha(req, res){
+    try{
+      const usuario = req.usuario;
+      const {senhaAntiga, novaSenha} = req.body
+      
+      if(usuario.senha.toString() == sha256(senhaAntiga).toString()){
+        await this.loginRepository.redefineSenhaPorId(usuario.id, sha256(novaSenha).toString());
+        return res.status(200).json({codigo:"200", mensagem: "Senha redefinida com sucesso."});
+      }
+      else{
+        return res.status(403).json({codigo:"403", mensagem: "Senha atual não correspondente."});
+      }
+    }
+    catch(e){
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+        
+  }
+
   async enviaCodigoVerificacao(usuario){
     try{
       await transporter.sendMail({
