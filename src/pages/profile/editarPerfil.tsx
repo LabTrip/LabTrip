@@ -149,8 +149,6 @@ export default function EditarPerfil() {
                     <TextInput placeholder={"Telefone"} value={telefone} style={styles.input}
                         onChangeText={text => onChangeTextTelefone(text)} />
                     <TouchableOpacity onPress={() => {
-                        console.log('Userid editar perfil: ' + userId)
-                        console.log('token editar perfil: ' + token)
                         navigation.navigate('AlterarSenha', {userId: userId, token: token })
                         }
                     }>
