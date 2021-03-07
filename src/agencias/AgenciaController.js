@@ -97,9 +97,13 @@ export default class AgenciaController {
 
   async deletaFuncionariosAgencia(req, res){
     try{
-      const {usuarioId} = req.body;
+      const funcionarios = req.body;
 
-      await this.agenciaRepository.deletaFuncionariosAgencia(usuarioId, req.params.id);
+      for(let funcionario of funcionarios){
+        const {id} = funcionario;
+
+        await this.agenciaRepository.deletaFuncionariosAgencia(id, req.params.id);
+      }
   
       return res.status(201).json({status: '201', mensagem: 'Funcionário deletado com sucesso.'});  
     }
