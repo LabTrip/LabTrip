@@ -105,12 +105,12 @@ export default function EditarAgencia({route}) {
     let aux = participantesAux.splice(index,1)
     //participantesAux.splice(index,1)
     //participantesRemovidosAux = participantesRemovidosAux.concat(aux[0])
-    console.log('participantesaux: ' + participantesAux)
+    //console.log('participantesaux: ' + participantesAux)
     setParticipantes(participantesAux)
     setParticipantesRemovidos(participantesRemovidosAux.concat(aux[0]));
-    console.log('Participantes: ' + participantes)
-    console.log('Removidos auxiliar: ' + participantesRemovidosAux)
-    console.log('Removidos real: ' + participantesRemovidos)
+    //console.log('Participantes: ' + participantes)
+    //console.log('Removidos auxiliar: ' + participantesRemovidosAux)
+    //console.log('Removidos real: ' + participantesRemovidos)
   }
 
   useEffect(() => {
@@ -152,13 +152,13 @@ export default function EditarAgencia({route}) {
                   if(jsonUsuario.length > 0){
                     let participantesAux = participantes;
                     let participantesAdicionadosAux = participantesAdicionados;
-                    console.log(participantesAux)
+                    //console.log(participantesAux)
                     const usuario : usuario = jsonUsuario[0]
                     setParticipantes(participantesAux.concat(jsonUsuario[0]));
                     setParticipantesAdicionados(participantesAdicionadosAux.concat(usuario));
                   }
-                  console.log('Participantes: ' + participantes)
-                  console.log('Participantes add: ' + participantesAdicionados)
+                  //console.log('Participantes: ' + participantes)
+                  //console.log('Participantes add: ' + participantesAdicionados)
                 }
                 else{
                   //console.log(jsonUsuario)
