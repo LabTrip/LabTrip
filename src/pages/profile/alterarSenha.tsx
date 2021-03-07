@@ -1,50 +1,65 @@
 import React, { useEffect } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { useNavigation } from '@react-navigation/native';
 
-export default function AlterarSenha() {
+export default function AlterarSenha({route}) {
+    const navigation = useNavigation();
+    const {userId, token} = route.params;
 
-const [idUser, setIdUser] = React.useState(null);
-const [senhaAntiga, setSenhaAntiga] = React.useState(null);
-const [novaSenha, setNovaSenha] = React.useState(null);
-const [confNovaSenha, setConfNovaSenha] = React.useState(null);
-const [msg, setMsg] = React.useState(null);
+    const [idUser, setIdUser] = React.useState('');
+    const [senhaAntiga, setSenhaAntiga] = React.useState('');
+    const [novaSenha, setNovaSenha] = React.useState('');
+    const [confNovaSenha, setConfNovaSenha] = React.useState('');
+    const [msg, setMsg] = React.useState('');
 
-useEffect(()=>{
-    async function getIdUser(){
-        let response = await AsyncStorage.getItem('userData');
-        let json = JSON.parse(response);
-        setIdUser(json.id);
+    useEffect(()=>{
+        setIdUser(userId);
+    }, []);
+
+    const alteraSenha = async (body) => {
+        return await fetch('https://labtrip-backend.herokuapp.com/login/alterarSenha/' + idUser,{
+            method: 'POST',
+            headers:{
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': token
+            },            
+            body: JSON.stringify(body)
+        });
     }
-    getIdUser();
-});
 
-async function sendForm(){
-    let response = await fetch('https://labtrip-backend.herokuapp.com/alterarSenha',{
-        method: 'POST',
-        body: JSON.stringify({
-            id: idUser,
-            senhaAntiga: senhaAntiga,
-            novaSenha: novaSenha,
-            confNovaSenha: confNovaSenha
-        }),
-        headers:{
-            Accept: 'application/json',
-            'cContent-Type': 'application/json'
+    const verificaSenhas = async () => {
+        if(novaSenha != confNovaSenha){
+        alert("As senhas não conferem.");
+        return false;
         }
-    });
-    let json = await response.json();
-    setMsg(json);
-}
-
+        return true;
+    }
     return (
         <ScrollView
             contentContainerStyle={styles.container}>
-            <TextInput placeholder='Senha atual' secureTextEntry={true} style={styles.input} onChangeText={text => setSenhaAntiga(text)}/>
-            <TextInput placeholder='Nova senha' secureTextEntry={true} style={styles.input} onChangeText={text => setNovaSenha(text)}/>
-            <TextInput placeholder='Confirme a nova senha' secureTextEntry={true} style={styles.input} onChangeText={text => setConfNovaSenha(text)}/>
-            <TouchableOpacity style={styles.botaoSalvar}  onPress={()=> sendForm()}>
+            <TextInput placeholder='Senha atual' secureTextEntry={true} style={styles.input} value={senhaAntiga} onChangeText={text => setSenhaAntiga(text)}/>
+            <TextInput placeholder='Nova senha' secureTextEntry={true} style={styles.input} value={novaSenha} onChangeText={text => setNovaSenha(text)}/>
+            <TextInput placeholder='Confirme a nova senha' secureTextEntry={true} style={styles.input} value={confNovaSenha} onChangeText={text => setConfNovaSenha(text)}/>
+            <TouchableOpacity style={styles.botaoSalvar}  onPress={async ()=> {
+                    if(await verificaSenhas()){
+                        let response = await alteraSenha({
+                            senhaAntiga: senhaAntiga,
+                            novaSenha: novaSenha});
+                        let json = await response.json();
+                        
+                        if(response.status == 200){
+                            alert('Senha alterada com sucesso');
+                            navigation.goBack();
+                        }
+                        else{
+                            alert('Erro ao alterar senha.');
+                        }
+                    }
+                    
+                }
+            }>
                 <Text style={styles.botaoSalvarTexto}>Salvar</Text>
             </TouchableOpacity>
         </ScrollView>

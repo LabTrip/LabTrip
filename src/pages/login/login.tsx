@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
-import { NavigationActions } from 'react-navigation';
 import { NavigationRouteContext, useNavigation , StackActions} from '@react-navigation/native';
 import { i18n } from '../../translate/i18n';
 import { ScrollView } from 'react-native-gesture-handler';
