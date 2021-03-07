@@ -1,15 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 
 export default function AlterarSenha() {
+
+const [idUser, setIdUser] = React.useState(null);
+const [senhaAntiga, setSenhaAntiga] = React.useState(null);
+const [novaSenha, setNovaSenha] = React.useState(null);
+const [confNovaSenha, setConfNovaSenha] = React.useState(null);
+const [msg, setMsg] = React.useState(null);
+
+useEffect(()=>{
+    async function getIdUser(){
+        let response = await AsyncStorage.getItem('userData');
+        let json = JSON.parse(response);
+        setIdUser(json.id);
+    }
+    getIdUser();
+});
+
+async function sendForm(){
+    let response = await fetch('https://labtrip-backend.herokuapp.com/alterarSenha/verifyPass',{
+        method: 'POST',
+        body: JSON.stringify({
+            id: idUser,
+            senhaAntiga: senhaAntiga,
+            novaSenha: novaSenha,
+            confNovaSenha: confNovaSenha
+        }),
+        headers:{
+            Accept: 'application/json',
+            'cContent-Type': 'application/json'
+        }
+    });
+    let json = await response.json();
+    setMsg(json);
+}
+
     return (
         <ScrollView
             contentContainerStyle={styles.container}>
-            <TextInput placeholder='Senha atual' secureTextEntry={true} style={styles.input} />
-            <TextInput placeholder='Nova senha' secureTextEntry={true} style={styles.input} />
-            <TextInput placeholder='Confirme a nova senha' secureTextEntry={true} style={styles.input} />
-            <TouchableOpacity style={styles.botaoSalvar} >
+            <TextInput placeholder='Senha atual' secureTextEntry={true} style={styles.input} onChangeText={text => setSenhaAntiga(text)}/>
+            <TextInput placeholder='Nova senha' secureTextEntry={true} style={styles.input} onChangeText={text => setNovaSenha(text)}/>
+            <TextInput placeholder='Confirme a nova senha' secureTextEntry={true} style={styles.input} onChangeText={text => setConfNovaSenha(text)}/>
+            <TouchableOpacity style={styles.botaoSalvar}  onPress={()=> sendForm()}>
                 <Text style={styles.botaoSalvarTexto}>Salvar</Text>
             </TouchableOpacity>
         </ScrollView>
