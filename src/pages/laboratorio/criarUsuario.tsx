@@ -23,7 +23,7 @@ interface Perfil {
 export default function CriarUsuario() {
 
   const navigation = useNavigation(); 
-  const [perfil, setPerfis] = useState<Perfil[]>();
+  const [perfil, setPerfis] = useState<Perfil[]>([]);
   let token
   const [Token, setToken] = useState();
   const [selectedValue, setSelectedValue] = useState(2);
@@ -45,7 +45,8 @@ export default function CriarUsuario() {
           const response = await getPerfis();
           const json = await response.json();
           if (response.status == 200) {
-            setPerfis(json);
+            console.log(json.perfis)
+            setPerfis(json.perfis);
           }
         }
       }
@@ -136,11 +137,14 @@ export default function CriarUsuario() {
         onValueChange={(itemValue, value) => {
           setSelectedValue(itemValue)
         }}>
-
-        <Picker.Item label="Gerente" value={2} />
-        <Picker.Item label="Agente" value={3} />
-        <Picker.Item label="Viajante" value={4} />
-
+        
+        {
+          perfil.map(p => {
+            return (
+              <Picker.Item key={p.id} label={p.descricao} value={p.id} />
+            )
+          })
+        }
 
         
       </Picker>

@@ -14,6 +14,7 @@ export default function AlterarSenha({route}) {
     const [msg, setMsg] = React.useState('');
 
     useEffect(()=>{
+        console.log(userId)
         setIdUser(userId);
     }, []);
 

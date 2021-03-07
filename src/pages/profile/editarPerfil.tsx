@@ -12,6 +12,8 @@ export default function EditarPerfil() {
     const [email, onChangeTextEmail] = useState("");
     const [data, onChangeTextData] = useState("");
     const [telefone, onChangeTextTelefone] = useState("");
+    const [idUsuario, setIdUsuario] = useState("");
+    const [tokenUsuario, setTokenUsuario] = useState("");
 
     const navigation = useNavigation();
 
@@ -36,8 +38,10 @@ export default function EditarPerfil() {
                 token = JSON.parse(value)
             }
             if (user !== null) {
+                
                 userId = JSON.parse(user)
             }
+            console.log(user)
             const response = await getUsuario();
             const json = await response.json();
             if (response.status == 200) {
@@ -69,10 +73,13 @@ export default function EditarPerfil() {
                 const user = await AsyncStorage.getItem('USER_ID');
                 if (value !== null) {
                     token = JSON.parse(value)
+                    setTokenUsuario(JSON.parse(value))
                 }
                 if (user !== null) {
                     userId = JSON.parse(user)
+                    setIdUsuario(JSON.parse(user))
                 }
+                console.log(userId)
                 const response = await getUsuario();
                 const json = await response.json();
                 if (response.status == 200) {
@@ -149,7 +156,7 @@ export default function EditarPerfil() {
                     <TextInput placeholder={"Telefone"} value={telefone} style={styles.input}
                         onChangeText={text => onChangeTextTelefone(text)} />
                     <TouchableOpacity onPress={() => {
-                        navigation.navigate('AlterarSenha', {userId: userId, token: token })
+                        navigation.navigate('AlterarSenha', {userId: idUsuario, token: tokenUsuario })
                         }
                     }>
                         <Text style={styles.link}>
