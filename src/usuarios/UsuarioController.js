@@ -21,52 +21,52 @@ export default class UsuarioController {
 
   //GET /usuarios
   async buscaTodos(req, res) {
-    try{
+    try {
       console.log("Busca todos")
       const usuarios = await this.usuarioRepository.buscaTodos();
       res.status(200).json(usuarios.map(u => usuarioViewModel(u)));
     }
-    catch(e){
-      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
   }
 
-  async salva(req, res){
-    try{
+  async salva(req, res) {
+    try {
 
-      const {nome, email, telefone, foto, perfilId, dataNascimento} = req.body;
+      const { nome, email, telefone, foto, perfilId, dataNascimento } = req.body;
       const perfis = await this.verificaPermissaoCriarUsuario(req);
 
       let acesso = false;
 
-      if(perfis){
-        for(let perfil of perfis){
-          if(perfil.id == perfilId){
+      if (perfis) {
+        for (let perfil of perfis) {
+          if (perfil.id == perfilId) {
             acesso = true;
           }
         }
       }
 
-      if(!acesso){
-        return res.status(403).json({status: '403', mensagem: 'Perfil de usuário inexistente ou sem permissão de acesso.'});
+      if (!acesso) {
+        return res.status(403).json({ status: '403', mensagem: 'Perfil de usuário inexistente ou sem permissão de acesso.' });
       }
 
-      const senhaProvisoria = cryptoRandomString({length: 15, type: 'distinguishable'});
-      const codigoVerificacao = cryptoRandomString({length: 6, type: 'distinguishable'});
-      const usuario = new Usuario(nome, email,telefone, foto, perfilId, dataNascimento, codigoVerificacao, senhaProvisoria, undefined);
+      const senhaProvisoria = cryptoRandomString({ length: 15, type: 'distinguishable' });
+      const codigoVerificacao = cryptoRandomString({ length: 6, type: 'distinguishable' });
+      const usuario = new Usuario(nome, email, telefone, foto, perfilId, dataNascimento, codigoVerificacao, senhaProvisoria, undefined);
 
       await this.usuarioRepository.salva(usuario);
 
       res.status(201).json(usuarioViewModel(usuario));
     }
-    catch(e){
-      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
   }
 
-  async verificaPermissaoCriarUsuario(req){
-    try{
+  async verificaPermissaoCriarUsuario(req) {
+    try {
       let perfis = undefined;
       // Buscando perfis disponíveis para o usuario solicitatne
       await api.get("perfis/", {
@@ -74,115 +74,133 @@ export default class UsuarioController {
           'x-access-token': req.headers['x-access-token']
         }
       })
-      .then((response) => {
-        //console.log('Response ' + response.data.perfis)
-        perfis = response.data.perfis;
-      })
-      .catch((err) => {
-        console.error("ops! ocorreu um erro" + err);
-      });
+        .then((response) => {
+          //console.log('Response ' + response.data.perfis)
+          perfis = response.data.perfis;
+        })
+        .catch((err) => {
+          console.error("ops! ocorreu um erro" + err);
+        });
 
       return perfis;
     }
-    catch(e){
-      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
   }
 
-  mostra(req, res){
-    const usuarios  = req.usuario;
-    if(usuarios.length > 0){
-      return res.status(200).json(usuarios.map(u => usuarioViewModel(u))); 
+  mostra(req, res) {
+    const usuarios = req.usuario;
+    if (usuarios.length > 0) {
+      return res.status(200).json(usuarios.map(u => usuarioViewModel(u)));
     }
-    else{
-      return res.status(200).json(usuarioViewModel(usuarios)); 
+    else {
+      return res.status(200).json(usuarioViewModel(usuarios));
     }
-    
+
   }
 
-  async atualiza(req,res){   
-    try{
+  async atualiza(req, res) {
+    try {
 
       const acesso = this.podeRealizarOperacaoPorId(req.acesso.tipoAcesso, req.usuario.id, req.token.id)
-    
-      if(acesso){
-        const{nome, email, telefone, foto, perfilId, dataNascimento} = req.body;
+
+      if (acesso) {
+        const { nome, email, telefone, foto, perfilId, dataNascimento } = req.body;
 
         const usuario = new Usuario(nome, email, telefone, foto, perfilId, dataNascimento, null, null, req.usuario.id);
 
         const usuarioAtualizado = await this.usuarioRepository.atualiza(usuario);
 
-        return res.status(200).json(usuarioViewModel(usuarioAtualizado));    
+        return res.status(200).json(usuarioViewModel(usuarioAtualizado));
       }
-      else{
-        return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});    
+      else {
+        return res.status(403).json({ status: '403', mensagem: 'Sem permissão de acesso.' });
       }
-    
+
     }
-    catch(e){
-      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
   }
 
-  async atualizaSenha(req, res){
+  async atualizaSenha(req, res) {
 
-    try{
+    try {
 
       const acesso = this.podeRealizarOperacaoPorId(req.acesso.tipoAcesso, req.usuario.id, req.token.id);
 
-      if(acesso){
+      if (acesso) {
         const usuario = new Usuario(req.usuario.nome, req.usuario.email, req.usuario.telefone, req.usuario.foto, req.usuario.perfilId, req.usuario.dataNascimento, req.usuario.codigoVerificacao, req.body.senha, req.usuario.id);
 
         await this.usuarioRepository.atualizaSenha(usuario);
 
-        return res.status(200).json({codigo:"200", message: "Senha atualizada com sucesso."});
+        return res.status(200).json({ codigo: "200", message: "Senha atualizada com sucesso." });
       }
-      else{
-        return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});    
+      else {
+        return res.status(403).json({ status: '403', mensagem: 'Sem permissão de acesso.' });
       }
-      
+
     }
-    catch(e){
-      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
   }
 
-  async deleta(req, res){
-    
-    try{
+  async deleta(req, res) {
+
+    try {
       await this.usuarioRepository.deleta(req.usuario);
       return res.status(204).end();
     }
-    catch(e){
-      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
   }
 
-  podeRealizarOperacaoPorId(tipoAcesso, id, usuarioId){
-    try{
+  podeRealizarOperacaoPorId(tipoAcesso, id, usuarioId) {
+    try {
 
       let acesso = false;
-      switch(tipoAcesso){
+      switch (tipoAcesso) {
         case 'Total':
-            acesso = true;
+          acesso = true;
           break;
         case 'Parcial':
-          if(id == usuarioId){
+          if (id == usuarioId) {
             acesso = true;
           }
           break;
       }
 
       return acesso;
-    
+
     }
-    catch(e){
-      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
   }
 
+  async verificaSenha(req, res) {
+    let response = await user.findOne({
+      where: {
+        id: req.body.id, password: body.senhaAntiga
+      }
+    });
+    if (response === null) {
+      res.send(JSON.stringify('Senha antiga não confere.'));
+    } else {
+      if (req.body.novaSenha === req.body.confNovaSenha) {
+        response.password = req.body.novaSenha;
+        response.save();
+        res.send(JSON.stringify('Senha atualizada com sucesso!'));
+      } else {
+        res.send(JSON.stringify('Nova senha e confirmação não conferem.'));
+      }
+    }
+  }
 }
