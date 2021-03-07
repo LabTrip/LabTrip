@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { NavigationActions } from 'react-navigation';
@@ -13,6 +13,7 @@ export default function Login() {
   const navigation = useNavigation();
   const [email, onChangeTextEmail] = React.useState('');
   const [senha, onChangeTextSenha] = React.useState('');
+  const [token, setToken] = React.useState('');
   const auth = async () => {
     return await fetch('https://labtrip-backend.herokuapp.com/login', {
       method: 'POST',
@@ -35,6 +36,43 @@ export default function Login() {
       // saving error
     }
   }
+
+  const validaSessao = async (token) => {
+    return await fetch('https://labtrip-backend.herokuapp.com/login/verifica', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    });
+  }
+
+  useEffect(() => {
+    const request = async () => {
+      try {
+        const value = await AsyncStorage.getItem('AUTH');
+        if (value != null) {
+          await setToken(JSON.parse(value));
+          const response = await validaSessao(JSON.parse(value));
+          if(response.status == 200){
+            navigation.dispatch(
+              StackActions.replace('MenuPrincipal', {
+                token: token,
+              })
+            )
+          }
+        }
+        else{
+          console.log(value)
+        }
+      }
+      catch (e) {
+        alert(e)
+      }
+    }
+    request()
+  }, []);
 
   let descErro = null;
   return (

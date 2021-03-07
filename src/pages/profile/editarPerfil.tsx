@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
 
 const moment = require('moment');
 
@@ -52,6 +52,16 @@ export default function EditarPerfil() {
         }
     }
 
+    const storeData = async (value, key) => {
+        try {
+          await AsyncStorage.setItem(key, value)
+          return "ok";
+        } catch (e) {
+          // saving error
+          return e
+        }
+      }
+
     useEffect(() => {
         const request = async () => {
             try {
@@ -89,6 +99,33 @@ export default function EditarPerfil() {
         setRefreshing(false);
     }, []);
 
+    const confirmaLogout = async () => {
+        Alert.alert(
+            'Encerrar sessão',
+            'Deseja mesmo sair de sua conta?',
+            [
+                {
+                    text: 'sim',
+                    onPress: async () => {
+                        const response = await storeData('', 'AUTH')
+                        if(response == 'ok'){
+                            navigation.dispatch(
+                                StackActions.replace('Login', {
+                                })
+                            )
+                        }
+                    }
+                },
+                {
+                    text: 'não',
+                    onPress: () => {
+
+                    }
+                }
+            ]
+        )
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -118,6 +155,13 @@ export default function EditarPerfil() {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.botaoSalvar} >
                         <Text style={styles.botaoSalvarTexto}>Salvar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.botaoSair} onPress={async () => {
+
+                        await confirmaLogout();
+                        
+                    }} >
+                        <Text style={styles.botaoSalvarTexto}>Sair da conta</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -154,6 +198,16 @@ const styles = StyleSheet.create({
         backgroundColor: '#3385FF',
         width: 144,
         height: 50,
+        padding: 10,
+        borderRadius: 40,
+        marginTop: 30,
+        flexDirection: 'column',
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
+    botaoSair: {
+        backgroundColor: '#FB0105',
+        flex: 1,
         padding: 10,
         borderRadius: 40,
         marginTop: 30,
