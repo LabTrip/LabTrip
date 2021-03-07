@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CardAgente from '../../components/cardAgente'
 import ScrollViewFlat from '../../components/scrollViewFlat';
@@ -17,14 +17,9 @@ export default function CriarAgencia() {
   
   const navigation = useNavigation();
   let token;
-  let nomeAgencia;
-  function onChangeTextnomeAgencia(text) {
-    nomeAgencia = text;
-  }
-  let email;
-  function onChangeTextEmail(text) {
-    email = text;
-  }
+  const [tokken, setTokken] = useState('');
+  const [nomeAgencia, onChangeTextnomeAgencia] = useState('');
+  const [email, onChangeTextEmail] = useState('');
   const [idAgencia, setIdAgencia] = React.useState('');
   const [participantes, setParticipantes] = useState<Usuario[]>([]);
   const criaAgencia = async (corpo) => {
@@ -56,6 +51,7 @@ export default function CriarAgencia() {
       try {
         const value = await AsyncStorage.getItem('AUTH');
         if (value != null) {
+          setTokken(JSON.parse(value))
           token = JSON.parse(value)
         }
       }
@@ -72,7 +68,7 @@ export default function CriarAgencia() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token.toString()
+        'x-access-token': tokken
       }
     });
   }
@@ -91,22 +87,23 @@ export default function CriarAgencia() {
 
   return (
     <View style={styles.container}>
-      <ScrollViewFlat>
+      <ScrollView>
         <View style={{ alignItems: 'center' }}>
-          <TextInput placeholder='Nome da agencia' style={styles.input}
-            onChangeText={text => onChangeTextnomeAgencia(text.trim())} value={nomeAgencia} autoCapitalize={'none'} />
+          <TextInput placeholder='Nome da agencia' style={styles.input} value={nomeAgencia}
+            onChangeText={text => onChangeTextnomeAgencia(text.trim())}  autoCapitalize={'none'} />
           <View style={styles.containerAddFuncionarios}>
             <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario}
-             onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
+             onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} />
 
             <BotaoLupa onPress={async () => {
                 const reponseUsuario = await buscaUsuario(email);
                 const jsonUsuario = await reponseUsuario.json();
                 if(reponseUsuario.status >= 200 && reponseUsuario.status <= 304){
                   //console.log(jsonUsuario)
-                  let participantesAux = participantes;    
-                  setParticipantes(participantes.concat(participantesAux));
-                  //console.log(participantes)
+                  if(jsonUsuario.length > 0){
+                    let participantesAux = participantes;                    
+                    setParticipantes(participantesAux.concat(jsonUsuario));
+                  }
                 }
                 else{
                   //console.log(jsonUsuario)
@@ -119,7 +116,7 @@ export default function CriarAgencia() {
               data={participantes}
               keyExtractor={(item, index) => item.id}
               renderItem={({ item, index }) => (
-                <CardAgente nome={item.nome} onPress={() => {
+                <CardAgente key={item.id} nome={item.nome} onPress={() => {
                   let participantesAux = participantes;
                   participantesAux.splice(index,1) 
                   setParticipantes(participantesAux);
@@ -155,7 +152,7 @@ export default function CriarAgencia() {
             <Text style={styles.botaoSalvarTexto}>Criar agencia</Text>
           </TouchableOpacity>
         </View>
-      </ScrollViewFlat>
+      </ScrollView>
     </View>
   );
 }
