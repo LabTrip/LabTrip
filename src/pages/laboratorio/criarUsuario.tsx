@@ -1,38 +1,185 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, RefreshControlComponent, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DatePicker from 'react-native-datepicker'
+
+interface Usuario {
+  nome: string,
+  email: string,
+  dataNascimento: string,
+  senha: string;
+  perfilId: string;
+  telefone: string;
+}
+
+interface Perfil {
+  descricao: string,
+  id: string
+}
+
 
 export default function CriarUsuario() {
-  const navigation = useNavigation();
-  const [selectedValue, setSelectedValue] = useState();
-  return (
-    <View style={styles.container}>
-      <TextInput placeholder={"Nome"} style={styles.input} />
-      <TextInput placeholder={"E-mail"} style={styles.input} />
 
-      <View style={styles.containerDataCelular}>
-        <TextInput placeholder={"Data Nascimento"} style={styles.inputDataCelular} />
-        <TextInput placeholder={"Celular"} style={styles.inputDataCelular} />
+  const navigation = useNavigation(); 
+  const [perfil, setPerfis] = useState<Perfil[]>();
+  let token
+  const [Token, setToken] = useState();
+  const [selectedValue, setSelectedValue] = useState(2);
+  const [nomeUsuario, onChangeTextnomeUsuario] = React.useState('');
+  const [email, onChangeTextEmail] = React.useState('');
+  const [dataNascimento, onChangeTextDataNascimento] = React.useState('');
+  const [telefone, onChangeTextTelefone] = React.useState('');
+
+  const [dataNasc, setDataNasc] = useState(new Date())
+
+  useEffect(() => {
+    const request = async () => {
+      try {
+        const value = await AsyncStorage.getItem('AUTH');
+        if (value != null) {          
+          token = JSON.parse(value)
+          console.log(token)
+          setToken(token)
+          const response = await getPerfis();
+          const json = await response.json();
+          if (response.status == 200) {
+            setPerfis(json);
+          }
+        }
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+    request()
+
+  }, []);
+
+
+
+  const criaUsuario = async (corpo, Token ) => {
+    return await fetch('https://labtrip-backend.herokuapp.com/usuarios', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': Token
+      },
+      body: JSON.stringify(corpo)
+    });
+  }
+
+  const buscaUsuario = async (email, Token) => {
+    return await fetch('https://labtrip-backend.herokuapp.com/usuarios/' + email, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': Token
+      }
+    });
+  }
+
+  const getPerfis = async () => {
+    return await fetch('https://labtrip-backend.herokuapp.com/perfis/', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    });
+  }
+
+  async function verificaCamposPrenchidos(){
+    if(nomeUsuario=='' || email=='' ||  telefone=='' ||
+       nomeUsuario==undefined || email==undefined || dataNasc==undefined || telefone==undefined){
+      alert("Preencha todos os campos para prosseguir com o cadastro")
+      return false;
+    }else
+      return true
+  }
+
+
+
+  return (
+    <View style={styles.container}> 
+      <TextInput placeholder={"Nome"} style={styles.input}
+        autoCompleteType={'name'} 
+        onChangeText={text => onChangeTextnomeUsuario(text.trim())} value={nomeUsuario} autoCapitalize={'none'} />
+      <TextInput placeholder={"E-mail"} style={styles.input} 
+        keyboardType = "email-address"
+        onChangeText={text => onChangeTextEmail(text.trim())} value={email}  autoCapitalize={'none'}/>
+
+      <View style={styles.containerDataCelular}> 
+
+        <DatePicker 
+        placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
+        date={dataNasc}
+        format="DD-MM-YYYY"
+        minDate="01-01-1900"
+        onDateChange={setDataNasc}/>     
+
+
+        <TextInput placeholder={"Celular"} style={styles.inputDataCelular}
+          keyboardType='numeric'  
+          onChangeText={text => onChangeTextTelefone(text.trim())} value={telefone} />
       </View>
     <Text style={styles.label}>Tipo de usuário:</Text>
       <Picker style={styles.pickerComponente}
         prompt="Tipo de usuário"
-        mode="dropdown"
+        mode="dropdown"        
         
         selectedValue={selectedValue}
-        onValueChange={(itemValue, itemIndex) => {
+        onValueChange={(itemValue, value) => {
           setSelectedValue(itemValue)
         }}>
 
-        <Picker.Item label="Gerente" value="gerente" />
-        <Picker.Item label="Agente" value="agente" />
-        <Picker.Item label="Viajante" value="viajante" />
+        <Picker.Item label="Gerente" value={2} />
+        <Picker.Item label="Agente" value={3} />
+        <Picker.Item label="Viajante" value={4} />
+
+
+        
       </Picker>
 
-      <TouchableOpacity style={styles.botaoCadastrar} onPress={() => {
-        alert('Clicou em criar usuario!')
-        navigation.goBack();
+      <TouchableOpacity style={styles.botaoCadastrar} onPress={async () => {
+        console.log(nomeUsuario)
+        console.log(email)
+        console.log(dataNasc)
+        console.log(telefone)
+        console.log(Token)
+        console.log(selectedValue)
+
+
+        let prosseguir = await verificaCamposPrenchidos();
+
+        if(prosseguir){
+          let responseConsultaEmail = await buscaUsuario(email, Token);
+  
+          if(responseConsultaEmail.status == 200){
+            alert('Já existe um usuário cadastrado com esses dados!')
+             
+          }else{
+            let response = await criaUsuario({
+               nome: nomeUsuario,
+               email: email,
+               dataNascimento: dataNasc,
+               telefone: telefone,
+               perfilId:selectedValue
+              }, Token);
+
+            let json = await response.json();
+            if (response.status >= 200 && response.status <= 299) {
+              alert('Usuário cadastrado com sucesso!')
+              navigation.goBack();
+            }else{
+              alert(json.mensagem);
+            }
+          }
+        }
       }}>
         <Text style={styles.botaoCadastrarTexto}>Cadastrar</Text>
       </TouchableOpacity>
