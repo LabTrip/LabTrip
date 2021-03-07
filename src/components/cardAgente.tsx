@@ -11,7 +11,7 @@ export default function CardAgente(props) {
                 <Text style={styles.textoParticipante}> {props.nome}</Text>
             </View>
 
-            <TouchableOpacity onPress={props.onPress}>
+            <TouchableOpacity >
                 <MaterialCommunityIcons name={icon} color={color} size={30} />
             </TouchableOpacity>
         </View>

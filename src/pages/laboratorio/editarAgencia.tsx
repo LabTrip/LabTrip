@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import CardAgente from '../../components/cardAgente'
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BotaoLupa from '../../components/botaoLupa'
-
+import { ScrollView } from 'react-native-gesture-handler';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface Usuario {
   id: string,
@@ -14,27 +16,28 @@ interface Usuario {
 }
 
 interface Funcionario {
-  usuarioId: string,
+  id: string,
   nome: string,
   email: string
+}
+
+interface usuario {
+    id: string,
+    nome: string,
+    email: string
 }
 
 export default function EditarAgencia({route}) {
   const {agencia} = route.params;
   
   const navigation = useNavigation();
+  const [tokken, setTokken] = useState('');
+  const [nomeAgencia, setNomeAgencia] = useState(agencia.nome);
   let token;
-  let nomeAgencia = agencia.nome;
-  function onChangeTextnomeAgencia(text) {
-    nomeAgencia = text;
-  }
-  let email;
-  function onChangeTextEmail(text) {
-    email = text;
-  }
+  const [email, onChangeTextEmail] = useState('');
   const [participantes, setParticipantes] = useState<Funcionario[]>([]);
-  const [participantesAdicionados, setParticipantesAdicionados] = useState<Usuario[]>([]);
-  const [participantesRemovidos, setParticipantesRemovidos] = useState<Usuario[]>([]);
+  const [participantesAdicionados, setParticipantesAdicionados] = useState<usuario[]>([]);
+  const [participantesRemovidos, setParticipantesRemovidos] = useState<Funcionario[]>([]);
 
   const editaAgencia = async (corpo) => {
     return await fetch('https://labtrip-backend.herokuapp.com/agencias/'+agencia.id, {
@@ -42,44 +45,11 @@ export default function EditarAgencia({route}) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token
+        'x-access-token': tokken
       },
       body: JSON.stringify(corpo)
     });
   }
-
-  const removeParticipanteArray = (index) =>  {
-    let participantesAux = participantes;
-    participantesAux.splice(index,1) 
-    setParticipantes(participantesAux);
-  }
-
-  const adicionaParticipanteArray = (usuarios) =>  {
-    let participantesAux = participantes;
-    
-    setParticipantes(participantes.concat(participantesAux));
-  }
-
-  useEffect(() => {
-    const request = async () => {
-      try {
-        const value = await AsyncStorage.getItem('AUTH');
-        if (value != null) {
-          token = JSON.parse(value)
-          const response = await buscaFuncionarios();
-          const json = await response.json();
-          if (response.status == 200) {
-            console.log(json.funcionarios)
-            setParticipantes(json.funcionarios);
-          }
-        }
-      }
-      catch (e) {
-        console.log(e)
-      }
-    }
-    request()
-  }, []);
 
   const buscaUsuario = async (email) => {
     return await fetch('https://labtrip-backend.herokuapp.com/usuarios/email/' + email, {
@@ -87,7 +57,7 @@ export default function EditarAgencia({route}) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token.toString()
+        'x-access-token': tokken.toString()
       }
     });
   }
@@ -98,7 +68,7 @@ export default function EditarAgencia({route}) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token
+        'x-access-token': tokken
       },
       body: JSON.stringify(corpo)
     });
@@ -116,37 +86,79 @@ export default function EditarAgencia({route}) {
   }
 
   const deletaFuncionarios = async (corpo) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/agencias/convida-funcionarios/' + agencia.id, {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/funcionarios/' + agencia.id, {
       method: 'DELETE',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token
+        'x-access-token': tokken
       },
       body: JSON.stringify(corpo)
     });
   }
 
+  const icon = 'close-thick', color = 'red';
+
+  const handleRemoveItem = async (index) => {
+    var participantesAux = participantes;
+    let participantesRemovidosAux = participantesRemovidos;
+    let aux = participantesAux.splice(index,1)
+    //participantesAux.splice(index,1)
+    //participantesRemovidosAux = participantesRemovidosAux.concat(aux[0])
+    console.log('participantesaux: ' + participantesAux)
+    setParticipantes(participantesAux)
+    setParticipantesRemovidos(participantesRemovidosAux.concat(aux[0]));
+    console.log('Participantes: ' + participantes)
+    console.log('Removidos auxiliar: ' + participantesRemovidosAux)
+    console.log('Removidos real: ' + participantesRemovidos)
+  }
+
+  useEffect(() => {
+    const request = async () => {
+      try {
+        const value = await AsyncStorage.getItem('AUTH');
+        if (value != null) {
+          setTokken(JSON.parse(value))
+          token = JSON.parse(value)
+          const response = await buscaFuncionarios();
+          const json = await response.json();
+          if (response.status == 200) {
+            setParticipantes(json.funcionarios);
+          }
+        }
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+    request()
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <ScrollViewFlat>
+    <SafeAreaView style={styles.container}>
+      <ScrollView>
         <View style={{ alignItems: 'center' }}>
-          <TextInput placeholder='Nome da agencia' style={styles.input}
-            onChangeText={text => onChangeTextnomeAgencia(text.trim())} value={nomeAgencia} autoCapitalize={'none'} />
+          <TextInput placeholder='Nome da agencia' style={styles.input} 
+            onChangeText={texto => setNomeAgencia(texto)} value={nomeAgencia}/>
           <View style={styles.containerAddFuncionarios}>
             <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario}
-             onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
+             onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} />
 
             <BotaoLupa onPress={async () => {
                 const reponseUsuario = await buscaUsuario(email);
                 const jsonUsuario = await reponseUsuario.json();
                 if(reponseUsuario.status >= 200 && reponseUsuario.status <= 304){
                   //console.log(jsonUsuario)
-                  let participantesAux = participantes;
-                  setParticipantes(participantes.concat(jsonUsuario));
-                  let participantesAdicionadosAux = participantesAdicionados;
-                  setParticipantesAdicionados(participantesAdicionados.concat(jsonUsuario));
-                  //console.log(participantes)
+                  if(jsonUsuario.length > 0){
+                    let participantesAux = participantes;
+                    let participantesAdicionadosAux = participantesAdicionados;
+                    console.log(participantesAux)
+                    const usuario : usuario = jsonUsuario[0]
+                    setParticipantes(participantesAux.concat(jsonUsuario[0]));
+                    setParticipantesAdicionados(participantesAdicionadosAux.concat(usuario));
+                  }
+                  console.log('Participantes: ' + participantes)
+                  console.log('Participantes add: ' + participantesAdicionados)
                 }
                 else{
                   //console.log(jsonUsuario)
@@ -155,28 +167,35 @@ export default function EditarAgencia({route}) {
               
             }} />
           </View>
-            <FlatList 
-              data={participantes}
-              keyExtractor={(item, index) => item.usuarioId}
-              renderItem={({ item, index }) => (
-                <CardAgente nome={item.nome} onPress={() => {
-                  let participantesAux = participantes;
-                  participantesAux.splice(index,1) 
-                  setParticipantes(participantesAux);
-                }} />
-              )}
-              extraData={participantes}
-            />
+            
+          <ScrollView>
+            {
+              participantes.map((p, index) => {
+                return <View style={styles.cardParticipante} key={p.id}>
+                    <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
+                    <View style={styles.headerCardParticipante}>
+                        <Text style={styles.textoParticipante}> {p.nome}</Text>
+                    </View>
+        
+                    <TouchableOpacity onPress={() => {
+                      handleRemoveItem(index) 
+                    }}>
+                      <MaterialCommunityIcons name={icon} color={color} size={30} />
+                    </TouchableOpacity>
+                  </View>
+              })
+            }
+          </ScrollView>
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
             let response = await editaAgencia({ nome: nomeAgencia });
             let json = await response.json();
             if (response.status >= 200 && response.status <= 299) {
-              alert('Agencia salva com sucesso!')
+              //console.log('Agencia salva com sucesso!')
               if(participantesAdicionados.length > 0){
-                let responseP = await convidaFuncionarios(participantes);
+                let responseP = await convidaFuncionarios(participantesAdicionados);
                 let jsonP = await responseP.json();
-
+                //console.log(participantesAdicionados)
                 if (responseP.status >= 200 && response.status <= 299) {
                   alert('Participantes adicionados com sucesso!')
                 }
@@ -184,9 +203,10 @@ export default function EditarAgencia({route}) {
                   alert('Erro ao adicionados participantes.')
                 }
               }
-              
+              //console.log(participantesRemovidos)
               if(participantesRemovidos.length > 0){
-                let responseP = await deletaFuncionarios(participantes);
+
+                let responseP = await deletaFuncionarios(participantesRemovidos);
                 let jsonP = await responseP.json();
 
                 if (responseP.status >= 200 && response.status <= 299) {
@@ -206,8 +226,8 @@ export default function EditarAgencia({route}) {
             <Text style={styles.botaoSalvarTexto}>Salvar agencia</Text>
           </TouchableOpacity>
         </View>
-      </ScrollViewFlat>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
@@ -254,8 +274,7 @@ const styles = StyleSheet.create({
   },
   botaoSalvar: {
     backgroundColor: '#3385FF',
-    width: 180,
-    height: 50,
+    flex: 1,
     padding: 10,
     borderRadius: 40,
     marginTop: '5%',
@@ -267,5 +286,36 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFFFF',
     fontSize: 24
+  },
+  cardParticipante: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: '3%',
+    width: '95%',
+    borderStyle: 'solid',
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 26,
+    marginTop: '3%',
+    marginBottom: '3%',
+  },
+  textoParticipante: {
+      color: 'black',
+      fontSize: 18,
+      width: '60%',
+      maxWidth: '60%',
+      flexWrap: 'wrap',
+      textAlign: 'center'
+  },
+  headerCardParticipante: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+  },
+  fotoPerfil: {
+      borderRadius: 50,
+      width: 60,
+      height: 60
   }
 });
