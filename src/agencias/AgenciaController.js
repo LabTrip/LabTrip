@@ -18,10 +18,25 @@ export default class AgenciaController {
   //GET /agencias
   async buscaTodos(req, res) {
     try{
-      const agencias = await this.agenciaRepository.buscaTodos();
+      let agencias = []
+      switch(req.acesso.tipoAcesso){
+        case 'Total':
+          agencias = await this.agenciaRepository.buscaTodos();
+          break;
+        case 'Gerencial':
+          agencias.push(await this.agenciaRepository.buscaPorId_AcessoParcial(req.token.id, req.token.agenciaId));
+          break;
+        case 'Parcial':
+          agencias.push(await this.agenciaRepository.buscaPorId_AcessoParcial(req.token.id, req.token.agenciaId));
+          break;
+        default:
+          return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});
+      }
+      
       res.status(200).json(agencias.map(u => agenciaViewModel(u)));  
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     

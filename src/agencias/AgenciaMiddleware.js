@@ -19,6 +19,12 @@ export default class AgenciaMiddleware{
         case 'Total':
           next();
           break;
+        case 'Gerencial':
+          next();
+          break;
+        case 'Parcial':
+          next();
+          break;
         default:
           return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});
       }

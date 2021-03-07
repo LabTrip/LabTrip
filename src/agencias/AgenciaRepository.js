@@ -49,7 +49,7 @@ export default class AgenciaRepository{
     async buscaPorId_AcessoParcial(id, agenciaId){
       return await this.client('agencia')
         .where({'id': id.toString()})
-        .andWhere({'id': agenciaId.toString()}).first();
+        .orWhere({'id': agenciaId.toString()}).first();
     }
   
     async atualiza(agencia){
