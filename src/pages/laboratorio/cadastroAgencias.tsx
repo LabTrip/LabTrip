@@ -46,7 +46,7 @@ export default function CadastroAgencia() {
       }
     }
     request()
-  }, [refreshing]);
+  }, [refreshing,navigation]);
 
   const onRefresh = React.useCallback(() => {
       setRefreshing(true);

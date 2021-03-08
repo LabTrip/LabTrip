@@ -51,6 +51,17 @@ export default function EditarAgencia({route}) {
     });
   }
 
+  const buscaAgencia = async () => {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/'+agencia.id, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    });
+  }
+
   const buscaUsuario = async (email) => {
     return await fetch('https://labtrip-backend.herokuapp.com/usuarios/email/' + email, {
       method: 'GET',
@@ -120,6 +131,11 @@ export default function EditarAgencia({route}) {
         if (value != null) {
           setTokken(JSON.parse(value))
           token = JSON.parse(value)
+          const responseAgencia = await buscaAgencia();
+          const jsonAgencia = await responseAgencia.json();
+          if (responseAgencia.status == 200) {
+            setNomeAgencia(jsonAgencia.nome);
+          }
           const response = await buscaFuncionarios();
           const json = await response.json();
           if (response.status == 200) {
