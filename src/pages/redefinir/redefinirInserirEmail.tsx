@@ -27,7 +27,7 @@ export default function RedefinirInserirEmail() {
           <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
           <Text style={styles.texto}>Insira o e-mail cadastrado.</Text>
           <TextInput placeholder={"seuemail@email.com"} style={styles.input}
-            onChangeText={text => onChangeTextEmail(text.trim())} value={email} />
+            onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} autoCompleteType={'email'}/>
           <TouchableOpacity style={styles.botaoConfirmar} onPress={async () => {
             let response = await geraCodigo();
             let json = await response.json();

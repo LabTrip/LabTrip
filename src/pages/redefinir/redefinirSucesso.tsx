@@ -58,11 +58,10 @@ const styles = StyleSheet.create({
   },
   botaoRedefinir: {
     backgroundColor: '#0FD06F',
-    flex: 1,
     padding: 10,
     borderRadius: 40,
     marginTop: 30,
-
+    height: 50,
     flexDirection: 'column',
     alignContent: 'center',
     justifyContent: 'center',
@@ -70,7 +69,6 @@ const styles = StyleSheet.create({
   botaoRedefinirTexto: {
     textAlign: 'center',
     color: '#FFFFFF',
-    flex: 1,
     fontSize: 24,
   },
   link: {

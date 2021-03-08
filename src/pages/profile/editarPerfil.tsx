@@ -103,7 +103,7 @@ export default function EditarPerfil() {
                 if (response.status == 200) {
                     onChangeTextNome(json.nome);
                     onChangeTextEmail(json.email);
-                    onChangeTextData(moment(json.dataNascimento).format('DD/MM/yyyy'));
+                    onChangeTextData(moment(json.dataNascimento).add(1,'days').format('DD/MM/yyyy'));
                     onChangeTextTelefone(json.telefone);
                 }
             }

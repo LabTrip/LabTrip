@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import RNPasswordStrengthMeter, { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
 
 export default function AlterarSenha({route}) {
     const navigation = useNavigation();
@@ -12,6 +13,7 @@ export default function AlterarSenha({route}) {
     const [novaSenha, setNovaSenha] = React.useState('');
     const [confNovaSenha, setConfNovaSenha] = React.useState('');
     const [msg, setMsg] = React.useState('');
+    const [senhaForte, setSenhaForte] = React.useState(false);
 
     useEffect(()=>{
         console.log(userId)
@@ -37,26 +39,55 @@ export default function AlterarSenha({route}) {
         }
         return true;
     }
+
+    const validaForcaSenha = async () => {
+        var regex = /\d/g;
+        if(novaSenha.length >= 7 && regex.test(novaSenha) ){
+            console.log('tem força')
+            await setSenhaForte(true);
+        }
+        else{
+            await setSenhaForte(false);
+        }
+    }
+
+    const onChange = () => {
+        console.log(BarPasswordStrengthDisplay.barColor);
+    }
+
     return (
         <ScrollView
             contentContainerStyle={styles.container}>
-            <TextInput placeholder='Senha atual' secureTextEntry={true} style={styles.input} value={senhaAntiga} onChangeText={text => setSenhaAntiga(text)}/>
-            <TextInput placeholder='Nova senha' secureTextEntry={true} style={styles.input} value={novaSenha} onChangeText={text => setNovaSenha(text)}/>
+            <TextInput placeholder='Senha atual' secureTextEntry={true} style={styles.input} value={senhaAntiga} onChangeText={text => setSenhaAntiga(text)}/>          
+            
+            <TextInput placeholder='Nova senha' secureTextEntry={true} style={styles.input} value={novaSenha} onChangeText={text => {setNovaSenha(text); validaForcaSenha()}}/>
+            {
+                senhaForte 
+                ? <View style={styles.passwordContainerValid} ></View> 
+                : <View style={styles.passwordContainer}></View>
+            }
+            
+            
             <TextInput placeholder='Confirme a nova senha' secureTextEntry={true} style={styles.input} value={confNovaSenha} onChangeText={text => setConfNovaSenha(text)}/>
             <TouchableOpacity style={styles.botaoSalvar}  onPress={async ()=> {
-                    if(await verificaSenhas()){
-                        let response = await alteraSenha({
-                            senhaAntiga: senhaAntiga,
-                            novaSenha: novaSenha});
-                        let json = await response.json();
-                        
-                        if(response.status == 200){
-                            alert('Senha alterada com sucesso');
-                            navigation.goBack();
+                    if(senhaForte){
+                        if(await verificaSenhas()){
+                            let response = await alteraSenha({
+                                senhaAntiga: senhaAntiga,
+                                novaSenha: novaSenha});
+                            let json = await response.json();
+                            
+                            if(response.status == 200){
+                                alert('Senha alterada com sucesso');
+                                navigation.goBack();
+                            }
+                            else{
+                                alert(json.mensagem);
+                            }
                         }
-                        else{
-                            alert('Erro ao alterar senha.');
-                        }
+                    }
+                    else{
+                        alert('A senha deve conter ao menos sete caracteres e um número.')
                     }
                     
                 }
@@ -101,4 +132,20 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 24,
     },
+    passwordContainer: {
+        marginTop: 5,
+        width: '89%',
+        height: 3,
+        borderRadius: 41,
+        backgroundColor: '#EBEBEB',
+        color: '#333333',
+    },
+    passwordContainerValid: {
+        marginTop: 5,
+        width: '89%',
+        height: 3,
+        borderRadius: 41,
+        backgroundColor: '#23FD02',
+        color: '#333333',
+    }
 })

@@ -33,6 +33,7 @@
     "react-native-elements": "^3.1.0",
     "react-native-gesture-handler": "~1.8.0",
     "react-native-paper": "^4.7.2",
+    "react-native-password-strength-meter": "0.0.5",
     "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "^3.1.9",
     "react-native-screens": "~2.15.2",
