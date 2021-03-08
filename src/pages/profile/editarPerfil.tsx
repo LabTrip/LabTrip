@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshCont
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions, useNavigation } from '@react-navigation/native';
+import DatePicker from 'react-native-datepicker'
 
 const moment = require('moment');
 
@@ -30,6 +31,23 @@ export default function EditarPerfil() {
         });
     }
 
+    const editaUsuario = async () => {
+        return await fetch('https://labtrip-backend.herokuapp.com/usuarios/' + idUsuario, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenUsuario
+            },
+            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                telefone: telefone,
+                dataNascimento: moment(data, "DD/MM/YYYY").format("YYYY-MM-DD")
+            })
+        });
+    }
+
     const buscaPreencheUsuario = async () => {
         try {
             const value = await AsyncStorage.getItem('AUTH');
@@ -47,7 +65,7 @@ export default function EditarPerfil() {
             if (response.status == 200) {
                 onChangeTextNome(json.nome);
                 onChangeTextEmail(json.email);
-                onChangeTextData(moment(json.dataNascimento).format('DD/MM/yyyy'));
+                onChangeTextData(moment(json.dataNascimento).format('DD-MM-yyyy'));
                 onChangeTextTelefone(json.telefone);
             }
         }
@@ -152,8 +170,13 @@ export default function EditarPerfil() {
                         onChangeText={text => onChangeTextNome(text)} />
                     <TextInput placeholder={"Email"} value={email} style={styles.input}
                         onChangeText={text => onChangeTextEmail(text)} />
-                    <TextInput placeholder={"Data de nascimento"} value={data} style={styles.input}
-                        onChangeText={text => onChangeTextData(text)} />
+                    <DatePicker 
+                        placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
+                        date={data}
+                        format="DD/MM/yyyy"
+                        minDate="01/01/1900"
+                        onDateChange={data => onChangeTextData(data)}
+                    /> 
                     <TextInput placeholder={"Telefone"} value={telefone} style={styles.input}
                         onChangeText={text => onChangeTextTelefone(text)} />
                     <TouchableOpacity onPress={() => {
@@ -164,7 +187,13 @@ export default function EditarPerfil() {
                             Alterar senha
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.botaoSalvar} >
+                    <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
+                        let response = await editaUsuario();
+                        if(response.status == 200){
+                            alert('Dados alterados com sucesso.')
+                        }
+                        console.log(moment(data, "DD/MM/YYYY").format("YYYY-MM-DD"))
+                    }}>
                         <Text style={styles.botaoSalvarTexto}>Salvar</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.botaoSair} onPress={async () => {
@@ -235,5 +264,22 @@ const styles = StyleSheet.create({
         marginTop: 30,
         textDecorationLine: 'underline',
         fontSize: 20,
+    },
+    containerDataCelular: {
+      flexDirection: 'row',
+    },
+    inputDataCelular: {
+        marginTop: 25,
+        width: 266,
+        height: 50,
+        backgroundColor: '#fff',
+        textAlign: 'center',
+        justifyContent: 'space-around',
+        fontWeight: 'bold',
+        borderRadius: 32,
+        borderColor: 'black',
+        borderWidth: 1,
+        padding: 10,
+        fontSize: 16,
     }
 });
