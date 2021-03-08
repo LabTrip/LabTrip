@@ -70,15 +70,12 @@ export default function Login() {
           const response = await validaSessao(JSON.parse(value));
           if (response.status == 200) {
             const responseUser = await getUsuario(JSON.parse(value), JSON.parse(user));
-            console.log(responseUser)
             const json = await responseUser.json();
             if (json.perfilId == 4) {
-              alert('caiu no if == 4')
               navigation.dispatch(
                 StackActions.replace('MenuPrincipalCliente')
               )
             } else {
-              alert('caiu no else')
               navigation.dispatch(
                 StackActions.replace('MenuPrincipal')
               )
