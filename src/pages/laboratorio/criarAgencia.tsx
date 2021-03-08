@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CardAgente from '../../components/cardAgente'
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BotaoLupa from '../../components/botaoLupa'
-
+import { DataTable } from 'react-native-paper';
+import LinhaOpcaoUsuario from '../../components/linhaOpcaoUsuario';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 interface Usuario {
   id: string,
@@ -22,28 +24,17 @@ export default function CriarAgencia() {
   const [email, onChangeTextEmail] = useState('');
   const [idAgencia, setIdAgencia] = React.useState('');
   const [participantes, setParticipantes] = useState<Usuario[]>([]);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const criaAgencia = async (corpo) => {
     return await fetch('https://labtrip-backend.herokuapp.com/agencias', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token
+        'x-access-token': tokken
       },
       body: JSON.stringify(corpo)
     });
-  }
-
-  const removeParticipanteArray = (index) =>  {
-    let participantesAux = participantes;
-    participantesAux.splice(index,1) 
-    setParticipantes(participantesAux);
-  }
-
-  const adicionaParticipanteArray = (usuarios) =>  {
-    let participantesAux = participantes;
-    
-    setParticipantes(participantes.concat(participantesAux));
   }
 
   useEffect(() => {
@@ -51,7 +42,7 @@ export default function CriarAgencia() {
       try {
         const value = await AsyncStorage.getItem('AUTH');
         if (value != null) {
-          setTokken(JSON.parse(value))
+          await setTokken(JSON.parse(value))
           token = JSON.parse(value)
         }
       }
@@ -73,24 +64,38 @@ export default function CriarAgencia() {
     });
   }
 
-  const convidaFuncionarios = async (corpo) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/agencias/convida-funcionarios/' + idAgencia, {
+  const convidaFuncionarios = async (corpo, agenciaId) => {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/convida-funcionarios/' + agenciaId, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': token
+        'x-access-token': tokken
       },
       body: JSON.stringify(corpo)
     });
   }
+
+  const handleRemoveItem = async (index) => {
+    var participantesAux = participantes;
+    let aux = participantesAux.splice(index,1)
+    if(participantesAux.length == 0){
+      setParticipantes([])
+    } else{
+      await setParticipantes([])
+      await setParticipantes(participantesAux)
+    }
+    
+  }
+
+  const icon = 'close-thick', color = 'red';
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={{ alignItems: 'center' }}>
           <TextInput placeholder='Nome da agencia' style={styles.input} value={nomeAgencia}
-            onChangeText={text => onChangeTextnomeAgencia(text.trim())}  autoCapitalize={'none'} />
+            onChangeText={text => onChangeTextnomeAgencia(text)}   />
           <View style={styles.containerAddFuncionarios}>
             <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario}
              onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} />
@@ -101,8 +106,7 @@ export default function CriarAgencia() {
                 if(reponseUsuario.status >= 200 && reponseUsuario.status <= 304){
                   //console.log(jsonUsuario)
                   if(jsonUsuario.length > 0){
-                    let participantesAux = participantes;                    
-                    setParticipantes(participantesAux.concat(jsonUsuario));
+                    await setUsuarios(jsonUsuario);
                   }
                 }
                 else{
@@ -112,27 +116,69 @@ export default function CriarAgencia() {
               
             }} />
           </View>
-            <FlatList 
-              data={participantes}
-              keyExtractor={(item, index) => item.id}
-              renderItem={({ item, index }) => (
-                <CardAgente key={item.id} nome={item.nome} onPress={() => {
-                  let participantesAux = participantes;
-                  participantesAux.splice(index,1) 
-                  setParticipantes(participantesAux);
-                }} />
-              )}
-              extraData={participantes}
-            />
+
+          <DataTable >          
+          <ScrollView>
+          {
+
+            usuarios.map((p, index) => {
+              return (
+                <LinhaOpcaoUsuario 
+                  key={p.id} 
+                  nome={p.nome} 
+                  navigate={"EditarAgencia"} item={p}
+                  onPress={() => {
+                    let adicionar = true;
+                    participantes.map(participante => {
+                      if(p.id == participante.id){
+                        adicionar = false;
+                      }
+                    })
+                    if(adicionar){
+                      let participantesAux = participantes;
+                      setParticipantes(participantesAux.concat(p));
+                    }
+                    else{
+                      alert("Este usuário já foi inserido.")
+                    }
+                    
+                    setUsuarios([])
+                  }}
+                />
+              )
+            })
+          }
+          </ScrollView>
+        </DataTable>
+
+            <ScrollView>
+            {
+              participantes.map((p, index) => {
+                return (<View style={styles.cardParticipante} key={p.id}>
+                    <Image source={require('../../imgs/perfil.png')} style={styles.fotoPerfil} />
+                    <View style={styles.headerCardParticipante}>
+                        <Text style={styles.textoParticipante}> {p.nome}</Text>
+                    </View>
+        
+                    <TouchableOpacity onPress={() => {
+                      handleRemoveItem(index) 
+                    }}>
+                      <MaterialCommunityIcons name={icon} color={color} size={30} />
+                    </TouchableOpacity>
+                  </View>
+                )
+              })
+            }
+          </ScrollView>
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
             let response = await criaAgencia({ nome: nomeAgencia });
             let json = await response.json();
             if (response.status >= 200 && response.status <= 299) {
               alert('Agencia criada com sucesso!')
-              setIdAgencia(json.id)
+              await setIdAgencia(json.id)
               if(participantes.length > 0){
-                let responseP = await convidaFuncionarios(participantes);
+                let responseP = await convidaFuncionarios(participantes,json.id);
                 let jsonP = await responseP.json();
 
                 if (responseP.status >= 200 && response.status <= 299) {
@@ -213,5 +259,36 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFFFF',
     fontSize: 24
+  },
+  cardParticipante: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: '3%',
+    width: '95%',
+    borderStyle: 'solid',
+    borderColor: 'black',
+    borderWidth: 1,
+    borderRadius: 26,
+    marginTop: '3%',
+    marginBottom: '3%',
+  },
+  textoParticipante: {
+      color: 'black',
+      fontSize: 18,
+      width: '60%',
+      maxWidth: '60%',
+      flexWrap: 'wrap',
+      textAlign: 'center'
+  },
+  headerCardParticipante: {
+      flexDirection: 'row',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+  },
+  fotoPerfil: {
+      borderRadius: 50,
+      width: 60,
+      height: 60
   }
 });
