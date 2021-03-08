@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 import TabelaCadastroUsuario from '../../components/tabelaCadastroUsuario';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LinhaTabelaUsuario from '../../components/linhaTabelaUsuario';
 
 interface Usuario {
   id: string,
@@ -87,13 +88,7 @@ export default function CadastroUsuario() {
         }>
         {
           usuarios?.map((a) => {
-            return <TouchableOpacity key={a.id}>
-                <DataTable.Row style={styles.corpoTabela}>
-                  <DataTable.Cell>{a.nome}</DataTable.Cell>
-                  <DataTable.Cell>{a.email}</DataTable.Cell>
-                  <DataTable.Cell>{a.descricao}</DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
+            return <LinhaTabelaUsuario key={a.id} nome={a.nome} email={a.email} descricao={a.descricao} navigate={"EditarUsuario"} item={a}/>
           })
         }
         </ScrollView>
