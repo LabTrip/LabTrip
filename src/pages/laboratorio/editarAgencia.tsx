@@ -8,6 +8,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BotaoLupa from '../../components/botaoLupa'
 import { ScrollView } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import SearchableDropdown from 'react-native-searchable-dropdown';
+import { DataTable } from 'react-native-paper';
+import LinhaOpcaoUsuario from '../../components/linhaOpcaoUsuario';
 
 interface Usuario {
   id: string,
@@ -33,6 +36,7 @@ export default function EditarAgencia({route}) {
   const navigation = useNavigation();
   const [tokken, setTokken] = useState('');
   const [nomeAgencia, setNomeAgencia] = useState(agencia.nome);
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   let token;
   const [email, onChangeTextEmail] = useState('');
   const [participantes, setParticipantes] = useState<Funcionario[]>([]);
@@ -48,6 +52,17 @@ export default function EditarAgencia({route}) {
         'x-access-token': tokken
       },
       body: JSON.stringify(corpo)
+    });
+  }
+
+  const buscaAgencia = async () => {
+    return await fetch('https://labtrip-backend.herokuapp.com/agencias/'+agencia.id, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
     });
   }
 
@@ -102,15 +117,19 @@ export default function EditarAgencia({route}) {
   const handleRemoveItem = async (index) => {
     var participantesAux = participantes;
     let participantesRemovidosAux = participantesRemovidos;
+    let participantesAdicionadosAux = participantesAdicionados;
     let aux = participantesAux.splice(index,1)
-    //participantesAux.splice(index,1)
-    //participantesRemovidosAux = participantesRemovidosAux.concat(aux[0])
-    //console.log('participantesaux: ' + participantesAux)
     setParticipantes(participantesAux)
     setParticipantesRemovidos(participantesRemovidosAux.concat(aux[0]));
-    //console.log('Participantes: ' + participantes)
-    //console.log('Removidos auxiliar: ' + participantesRemovidosAux)
-    //console.log('Removidos real: ' + participantesRemovidos)
+    participantesAdicionados.map((p, indexP) =>{
+      if(p.id == aux[0].id){
+        participantesAdicionadosAux.splice(indexP,1)
+      }
+    })
+    setParticipantesAdicionados(participantesAdicionadosAux)
+    setTimeout(() => {
+      console.log(participantesAdicionados)
+    },5000)
   }
 
   useEffect(() => {
@@ -120,6 +139,11 @@ export default function EditarAgencia({route}) {
         if (value != null) {
           setTokken(JSON.parse(value))
           token = JSON.parse(value)
+          const responseAgencia = await buscaAgencia();
+          const jsonAgencia = await responseAgencia.json();
+          if (responseAgencia.status == 200) {
+            setNomeAgencia(jsonAgencia.nome);
+          }
           const response = await buscaFuncionarios();
           const json = await response.json();
           if (response.status == 200) {
@@ -145,20 +169,17 @@ export default function EditarAgencia({route}) {
              onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} />
 
             <BotaoLupa onPress={async () => {
+                await setUsuarios([])
                 const reponseUsuario = await buscaUsuario(email);
                 const jsonUsuario = await reponseUsuario.json();
                 if(reponseUsuario.status >= 200 && reponseUsuario.status <= 304){
                   //console.log(jsonUsuario)
                   if(jsonUsuario.length > 0){
-                    let participantesAux = participantes;
-                    let participantesAdicionadosAux = participantesAdicionados;
-                    //console.log(participantesAux)
-                    const usuario : usuario = jsonUsuario[0]
-                    setParticipantes(participantesAux.concat(jsonUsuario[0]));
-                    setParticipantesAdicionados(participantesAdicionadosAux.concat(usuario));
+                    await setUsuarios(jsonUsuario);
                   }
                   //console.log('Participantes: ' + participantes)
                   //console.log('Participantes add: ' + participantesAdicionados)
+                  console.log('usuarios: ' + usuarios)
                 }
                 else{
                   //console.log(jsonUsuario)
@@ -167,6 +188,45 @@ export default function EditarAgencia({route}) {
               
             }} />
           </View>
+          
+          <DataTable >          
+          <ScrollView>
+          {
+
+            usuarios.map((p, index) => {
+              return (
+                <LinhaOpcaoUsuario 
+                  key={p.id} 
+                  nome={p.nome} 
+                  navigate={"EditarAgencia"} item={p}
+                  onPress={() => {
+                    let adicionar = true;
+                    participantes.map(participante => {
+                      if(p.id == participante.id){
+                        adicionar = false;
+                      }
+                    })
+                    if(adicionar){
+                      let participantesAux = participantes;
+                      let participantesAdicionadosAux = participantesAdicionados;
+                      let usuarioAux = usuarios;
+                      //console.log(participantesAux)
+                      const usuario : usuario = p
+                      setParticipantes(participantesAux.concat(p));
+                      setParticipantesAdicionados(participantesAdicionadosAux.concat(usuario));
+                    }
+                    else{
+                      alert("Este usuário já foi inserido.")
+                    }
+                    
+                    setUsuarios([])
+                  }}
+                />
+              )
+            })
+          }
+          </ScrollView>
+        </DataTable>
             
           <ScrollView>
             {
@@ -196,12 +256,7 @@ export default function EditarAgencia({route}) {
                 let responseP = await convidaFuncionarios(participantesAdicionados);
                 let jsonP = await responseP.json();
                 //console.log(participantesAdicionados)
-                if (responseP.status >= 200 && response.status <= 299) {
-                  alert('Participantes adicionados com sucesso!')
-                }
-                 else{
-                  alert('Erro ao adicionados participantes.')
-                }
+                
               }
               //console.log(participantesRemovidos)
               if(participantesRemovidos.length > 0){
@@ -209,12 +264,6 @@ export default function EditarAgencia({route}) {
                 let responseP = await deletaFuncionarios(participantesRemovidos);
                 let jsonP = await responseP.json();
 
-                if (responseP.status >= 200 && response.status <= 299) {
-                  alert('Participantes deletados com sucesso!')
-                }
-                 else{
-                  alert('Erro ao deletar participantes.')
-                }
               }
 
               navigation.goBack();
@@ -303,6 +352,29 @@ const styles = StyleSheet.create({
   textoParticipante: {
       color: 'black',
       fontSize: 18,
+      width: '60%',
+      maxWidth: '60%',
+      flexWrap: 'wrap',
+      textAlign: 'center'
+  },
+  cardUsuario: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    padding: '3%',
+    width: '80%',
+    borderStyle: 'solid',
+    borderColor: 'gray',
+    borderWidth: 1,
+  },
+  listaOpcoes: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'space-around',
+  },
+  textoUsuario: {
+      color: 'black',
+      fontSize: 12,
       width: '60%',
       maxWidth: '60%',
       flexWrap: 'wrap',

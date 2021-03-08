@@ -9,6 +9,8 @@ export default function RedefinirInserirSenha({route}) {
   const navigation = useNavigation();
   const [senha, onChangeSenha] = React.useState('');
   const [confirmSenha, onChangeConfirmSenha] = React.useState('');
+  const [senhaForte, setSenhaForte] = React.useState(false);
+
   const redefine = async () => {
     return fetch('https://labtrip-backend.herokuapp.com/login/redefine',{
       method:'POST',
@@ -33,20 +35,38 @@ export default function RedefinirInserirSenha({route}) {
     }
     return true;
   }
+
+  const validaForcaSenha = async () => {
+      var regex = /\d/g;
+      if(senha.length >= 7 && regex.test(senha) ){
+          await setSenhaForte(true);
+      }
+      else{
+          await setSenhaForte(false);
+      }
+  }
+
+
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', }}>
         <View style={styles.scrollContainer}>
       <Image source={require('../../imgs/logo.png')} style={styles.logo} />
       <Text style={styles.titulo}>Vamos redefinir sua senha.</Text>
       <Text style={styles.texto}>Insira sua nova senha e a comfirmação.</Text>
       <TextInput placeholder={"Digite a nova senha"} secureTextEntry={true} style={styles.input} 
-      onChangeText={text => onChangeSenha(text)} value={senha}/>
+      onChangeText={text => {onChangeSenha(text); validaForcaSenha()}} value={senha}/>
+      {
+                senhaForte 
+                ? <View style={styles.passwordContainerValid} ></View> 
+                : <View style={styles.passwordContainer}></View>
+      }
       <TextInput placeholder={"Confirme a nova senha"} secureTextEntry={true} style={styles.input} 
       onChangeText={text => onChangeConfirmSenha(text)} value={confirmSenha}/>
       <TouchableOpacity style={styles.botaoRedefinir} onPress={async () => {
         if(verificaSenhas()){
-          let response = await redefine();
+          if(senhaForte){
+            let response = await redefine();
             let json = await response.json();
             if (response.status >= 200 && response.status <= 299) {
               navigation.navigate('RedefinirSucesso')
@@ -54,6 +74,11 @@ export default function RedefinirInserirSenha({route}) {
             else {
               alert(json.mensagem);
             }
+          }
+          else{
+            alert('A senha deve conter ao menos sete caracteres e um número.')
+          }
+          
         }
         }}>
         <Text style={styles.botaoRedefinirTexto}>Redefinir</Text>
@@ -61,7 +86,7 @@ export default function RedefinirInserirSenha({route}) {
       </View>
       </ScrollView>
       <StatusBar/>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -127,5 +152,21 @@ const styles = StyleSheet.create({
     marginTop: 30,
     textDecorationLine: 'underline',
     color: '#fff'
+  },
+  passwordContainer: {
+      marginTop: 5,
+      width: '89%',
+      height: 3,
+      borderRadius: 41,
+      backgroundColor: '#EBEBEB',
+      color: '#333333',
+  },
+  passwordContainerValid: {
+      marginTop: 5,
+      width: '89%',
+      height: 3,
+      borderRadius: 41,
+      backgroundColor: '#23FD02',
+      color: '#333333',
   }
 });

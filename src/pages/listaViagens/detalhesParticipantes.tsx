@@ -32,19 +32,13 @@ export default function DetalhesParticipantes() {
         },
         {
             id: '2',
-            nome: "Ednaldo Pereiro",
+            nome: "Fabiana Andrade",
             dono: false,
             proprietario: true
         },
         {
             id: '3',
-            nome: "Ednalda Pereira",
-            dono: false,
-            proprietario: false
-        },
-        {
-            id: '50',
-            nome: "Ednalda Pereira50mano",
+            nome: "Edson Fernandes",
             dono: false,
             proprietario: false
         }
@@ -104,14 +98,7 @@ export default function DetalhesParticipantes() {
     return (
         <View style={styles.container}>
             <BotaoMais onPress={() => {
-                setId(id + 1);
-                setAddUser({
-                    id: id.toString(),
-                    nome: "Participante extra n" + id.toString(),
-                    dono: true,
-                    proprietario: true,
-                })
-                console.log(addUser)
+               navigation.navigate('ConvidarParticipantes');
             }} />
             <FlatList
                 contentContainerStyle={{ alignItems: 'center' }}

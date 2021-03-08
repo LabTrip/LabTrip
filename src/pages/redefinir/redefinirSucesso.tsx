@@ -58,13 +58,10 @@ const styles = StyleSheet.create({
   },
   botaoRedefinir: {
     backgroundColor: '#0FD06F',
-    width: 144,
-    height: 50,
-
     padding: 10,
     borderRadius: 40,
     marginTop: 30,
-
+    height: 50,
     flexDirection: 'column',
     alignContent: 'center',
     justifyContent: 'center',

@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 50
   },
   input: {
-    marginTop: 50,
+    marginTop: 20,
     padding: 10,
     width: 300,
     backgroundColor: '#fff',

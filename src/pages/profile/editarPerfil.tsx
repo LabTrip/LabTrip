@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl } from 'react-native';
+import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { StackActions, useNavigation } from '@react-navigation/native';
+import DatePicker from 'react-native-datepicker'
 
 const moment = require('moment');
 
@@ -10,8 +11,10 @@ const moment = require('moment');
 export default function EditarPerfil() {
     const [nome, onChangeTextNome] = useState("");
     const [email, onChangeTextEmail] = useState("");
-    const [data, onChangeTextData] = useState("");
+    const [data, onChangeTextData] = useState(moment());
     const [telefone, onChangeTextTelefone] = useState("");
+    const [idUsuario, setIdUsuario] = useState("");
+    const [tokenUsuario, setTokenUsuario] = useState("");
 
     const navigation = useNavigation();
 
@@ -28,6 +31,23 @@ export default function EditarPerfil() {
         });
     }
 
+    const editaUsuario = async () => {
+        return await fetch('https://labtrip-backend.herokuapp.com/usuarios/' + idUsuario, {
+            method: 'PUT',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'x-access-token': tokenUsuario
+            },
+            body: JSON.stringify({
+                nome: nome,
+                email: email,
+                telefone: telefone,
+                dataNascimento: moment(data, "DD/MM/YYYY").format("YYYY-MM-DD")
+            })
+        });
+    }
+
     const buscaPreencheUsuario = async () => {
         try {
             const value = await AsyncStorage.getItem('AUTH');
@@ -36,14 +56,16 @@ export default function EditarPerfil() {
                 token = JSON.parse(value)
             }
             if (user !== null) {
+                
                 userId = JSON.parse(user)
             }
+            console.log(user)
             const response = await getUsuario();
             const json = await response.json();
             if (response.status == 200) {
                 onChangeTextNome(json.nome);
                 onChangeTextEmail(json.email);
-                onChangeTextData(moment(json.dataNascimento).format('DD/MM/yyyy'));
+                onChangeTextData(moment(json.dataNascimento).add(1,'days').format('DD/MM/yyyy'));
                 onChangeTextTelefone(json.telefone);
             }
         }
@@ -52,6 +74,16 @@ export default function EditarPerfil() {
         }
     }
 
+    const storeData = async (value, key) => {
+        try {
+          await AsyncStorage.setItem(key, value)
+          return "ok";
+        } catch (e) {
+          // saving error
+          return e
+        }
+      }
+
     useEffect(() => {
         const request = async () => {
             try {
@@ -59,16 +91,19 @@ export default function EditarPerfil() {
                 const user = await AsyncStorage.getItem('USER_ID');
                 if (value !== null) {
                     token = JSON.parse(value)
+                    setTokenUsuario(JSON.parse(value))
                 }
                 if (user !== null) {
                     userId = JSON.parse(user)
+                    setIdUsuario(JSON.parse(user))
                 }
+                console.log(userId)
                 const response = await getUsuario();
                 const json = await response.json();
                 if (response.status == 200) {
                     onChangeTextNome(json.nome);
                     onChangeTextEmail(json.email);
-                    onChangeTextData(moment(json.dataNascimento).format('DD/MM/yyyy'));
+                    onChangeTextData(moment(json.dataNascimento).add(1,'days').format('DD/MM/yyyy'));
                     onChangeTextTelefone(json.telefone);
                 }
             }
@@ -89,6 +124,34 @@ export default function EditarPerfil() {
         setRefreshing(false);
     }, []);
 
+    const confirmaLogout = async () => {
+        Alert.alert(
+            'Encerrar sessão',
+            'Deseja mesmo sair de sua conta?',
+            [
+                {
+                    text: 'sim',
+                    onPress: async () => {
+                        const responseAuth = await storeData('', 'AUTH')
+                        const responseUserId = await storeData('', 'USER_ID')
+                        if(responseAuth == 'ok' && responseUserId == 'ok'){
+                            navigation.dispatch(
+                                StackActions.replace('Login', {
+                                })
+                            )
+                        }
+                    }
+                },
+                {
+                    text: 'não',
+                    onPress: () => {
+
+                    }
+                }
+            ]
+        )
+    }
+
     return (
         <View style={styles.container}>
             <ScrollView
@@ -107,17 +170,38 @@ export default function EditarPerfil() {
                         onChangeText={text => onChangeTextNome(text)} />
                     <TextInput placeholder={"Email"} value={email} style={styles.input}
                         onChangeText={text => onChangeTextEmail(text)} />
-                    <TextInput placeholder={"Data de nascimento"} value={data} style={styles.input}
-                        onChangeText={text => onChangeTextData(text)} />
+                    <DatePicker 
+                        placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
+                        date={moment(data, 'DD/MM/YYYY')}
+                        format="DD/MM/yyyy"
+                        minDate="01/01/1900"
+                        onDateChange={data => onChangeTextData(data)}
+                    /> 
                     <TextInput placeholder={"Telefone"} value={telefone} style={styles.input}
                         onChangeText={text => onChangeTextTelefone(text)} />
-                    <TouchableOpacity onPress={() => navigation.navigate('AlterarSenha') }>
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('AlterarSenha', {userId: idUsuario, token: tokenUsuario })
+                        }
+                    }>
                         <Text style={styles.link}>
                             Alterar senha
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.botaoSalvar} >
+                    <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
+                        let response = await editaUsuario();
+                        if(response.status == 200){
+                            alert('Dados alterados com sucesso.')
+                        }
+                        console.log(moment(data, "DD/MM/YYYY").format("YYYY-MM-DD"))
+                    }}>
                         <Text style={styles.botaoSalvarTexto}>Salvar</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.botaoSair} onPress={async () => {
+
+                        await confirmaLogout();
+                        
+                    }} >
+                        <Text style={styles.botaoSalvarTexto}>Sair da conta</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>
@@ -161,6 +245,16 @@ const styles = StyleSheet.create({
         alignContent: 'center',
         justifyContent: 'center',
     },
+    botaoSair: {
+        backgroundColor: '#FB0105',
+        flex: 1,
+        padding: 10,
+        borderRadius: 40,
+        marginTop: 30,
+        flexDirection: 'column',
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
     botaoSalvarTexto: {
         textAlign: 'center',
         color: '#FFFFFF',
@@ -170,5 +264,22 @@ const styles = StyleSheet.create({
         marginTop: 30,
         textDecorationLine: 'underline',
         fontSize: 20,
+    },
+    containerDataCelular: {
+      flexDirection: 'row',
+    },
+    inputDataCelular: {
+        marginTop: 25,
+        width: 266,
+        height: 50,
+        backgroundColor: '#fff',
+        textAlign: 'center',
+        justifyContent: 'space-around',
+        fontWeight: 'bold',
+        borderRadius: 32,
+        borderColor: 'black',
+        borderWidth: 1,
+        padding: 10,
+        fontSize: 16,
     }
 });
