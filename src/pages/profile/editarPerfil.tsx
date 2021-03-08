@@ -11,7 +11,7 @@ const moment = require('moment');
 export default function EditarPerfil() {
     const [nome, onChangeTextNome] = useState("");
     const [email, onChangeTextEmail] = useState("");
-    const [data, onChangeTextData] = useState("");
+    const [data, onChangeTextData] = useState(moment());
     const [telefone, onChangeTextTelefone] = useState("");
     const [idUsuario, setIdUsuario] = useState("");
     const [tokenUsuario, setTokenUsuario] = useState("");
@@ -65,7 +65,7 @@ export default function EditarPerfil() {
             if (response.status == 200) {
                 onChangeTextNome(json.nome);
                 onChangeTextEmail(json.email);
-                onChangeTextData(moment(json.dataNascimento).format('DD-MM-yyyy'));
+                onChangeTextData(moment(json.dataNascimento).add(1,'days').format('DD/MM/yyyy'));
                 onChangeTextTelefone(json.telefone);
             }
         }
@@ -172,7 +172,7 @@ export default function EditarPerfil() {
                         onChangeText={text => onChangeTextEmail(text)} />
                     <DatePicker 
                         placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
-                        date={data}
+                        date={moment(data, 'DD/MM/YYYY')}
                         format="DD/MM/yyyy"
                         minDate="01/01/1900"
                         onDateChange={data => onChangeTextData(data)}
