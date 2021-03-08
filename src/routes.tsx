@@ -12,6 +12,7 @@ import RedefinirInserirSenha from './pages/redefinir/redefinirInserirSenha';
 import RedefinirSucesso from './pages/redefinir/redefinirSucesso';
 import ListaViagens from './pages/listaViagens/listaViagens';
 import MenuPrincipal from './navigations/menu/menuPrincipal';
+import MenuPrincipalCliente from './navigations/menu/menuPrincipalCliente';
 
 export default function Routes() {
     return (
@@ -24,6 +25,7 @@ export default function Routes() {
                 <Screen name="RedefinirInserirSenha" component={RedefinirInserirSenha} />
                 <Screen name="RedefinirSucesso" component={RedefinirSucesso} />
                 <Screen name="MenuPrincipal" component={MenuPrincipal} />
+                <Screen name="MenuPrincipalCliente" component={MenuPrincipalCliente} />
             </Navigator>
         </NavigationContainer>
     );

@@ -114,8 +114,9 @@ export default function EditarPerfil() {
                 {
                     text: 'sim',
                     onPress: async () => {
-                        const response = await storeData('', 'AUTH')
-                        if(response == 'ok'){
+                        const responseAuth = await storeData('', 'AUTH')
+                        const responseUserId = await storeData('', 'USER_ID')
+                        if(responseAuth == 'ok' && responseUserId == 'ok'){
                             navigation.dispatch(
                                 StackActions.replace('Login', {
                                 })
