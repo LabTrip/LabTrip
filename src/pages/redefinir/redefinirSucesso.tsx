@@ -58,9 +58,7 @@ const styles = StyleSheet.create({
   },
   botaoRedefinir: {
     backgroundColor: '#0FD06F',
-    width: 144,
-    height: 50,
-
+    flex: 1,
     padding: 10,
     borderRadius: 40,
     marginTop: 30,
@@ -72,6 +70,7 @@ const styles = StyleSheet.create({
   botaoRedefinirTexto: {
     textAlign: 'center',
     color: '#FFFFFF',
+    flex: 1,
     fontSize: 24,
   },
   link: {
