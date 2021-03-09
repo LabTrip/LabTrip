@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CardParticipante from '../../components/cardParticipante';
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import BotaoLupa from '../../components/botaoLupa';
+import DatePicker from 'react-native-datepicker'
+
+const moment = require('moment');
 
 
 export default function CriarViagem() {
     const navigation = useNavigation();
+    const [dataInicio, onChangeTextDataInicio] = useState(moment());
+    const [dataFim, onChangeTextDataFim] = useState(moment());
 
     let participantesData = [
         {
@@ -16,52 +21,59 @@ export default function CriarViagem() {
             dono: true,
             proprietario: true
         },
-        {
-            id: 'd4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35',
-            nome: "Ednaldo Pereiro",
-            dono: false,
-            proprietario: true
-        },
-        {
-            id: '4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce',
-            nome: "Ednalda Pereira",
-            dono: false,
-            proprietario: false
-        },
     ];
 
     return (
-        <ScrollViewFlat>
-            <View style={styles.container}>
-                <TextInput placeholder={"Apelido da viagem"} style={styles.input} />
-                <View style={styles.containerData}>
-                    <TextInput placeholder={"Data início"} style={styles.inputData} />
-                    <TextInput keyboardType='numeric' placeholder={"Data fim"} style={styles.inputData} />
-                </View>
-                <TextInput placeholder={"Local da viagem"} style={styles.input} />
-                <View style={styles.containerAddFuncionarios}>
-                    <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario} />
-                    <BotaoLupa onPress={() => alert('clicou para adicionar')} />
-                </View>
-                <View style={styles.containerParticipantes}>
-                    <FlatList
-                        data={participantesData}
-                        keyExtractor={(item, index) => item.id}
-                        renderItem={({ item }) => (
-                            <CardParticipante nome={item.nome} dono={item.dono} proprietario={item.proprietario} />
-                        )}
+            <ScrollViewFlat>
+                <View style={styles.container}>
+                    <TextInput placeholder={"Apelido da viagem"} style={styles.input} />
 
-                    />
-                </View>
+                    <View style={styles.containerData}>
+                        <DatePicker
+                            style={styles.inputDataCelular}
+                            placeholder={"Data início"}
+                            date={moment(dataInicio, 'DD/MM/YYYY')}
+                            format="DD/MM/yyyy"
+                            minDate="01/01/1900"
+                            onDateChange={data => onChangeTextDataInicio(data)}
+                        />
+                        <DatePicker
+                            style={styles.inputDataCelular}
+                            placeholder={"Data fim"}
+                            date={moment(dataFim, 'DD/MM/YYYY')}
+                            format="DD/MM/yyyy"
+                            minDate="01/01/1900"
+                            onDateChange={data => onChangeTextDataFim(data)}
+                        />
+                    </View>
+                    <TextInput placeholder={"Local da viagem"} style={styles.input} />
+                    <View style={styles.containerAddFuncionarios}>
+                        <TextInput placeholder={"Adicionar Dono"} style={styles.inputAddFuncionario} />
+                        <BotaoLupa onPress={() => alert('clicou para adicionar')} />
+                    </View>
+                    <View style={styles.containerAddFuncionarios}>
+                        <TextInput placeholder={"Adicionar Participantes"} style={styles.inputAddFuncionario} />
+                        <BotaoLupa onPress={() => alert('clicou para adicionar')} />
+                    </View>
+                    <View style={styles.containerParticipantes}>
+                        <FlatList
+                            data={participantesData}
+                            keyExtractor={(item) => item.id}
+                            renderItem={({ item }) => (
+                                <CardParticipante nome={item.nome} dono={item.dono} proprietario={item.proprietario} />
+                            )}
 
-                <TouchableOpacity style={styles.botaoCriar} onPress={() => {
-                    alert('Clicou em criar viagem!')
-                    navigation.goBack();
-                }}>
-                    <Text style={styles.botaoCriarTexto}>Criar viagem</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollViewFlat>
+                        />
+                    </View>
+
+                    <TouchableOpacity style={styles.botaoCriar} onPress={() => {
+                        alert('Clicou em criar viagem!')
+                        navigation.goBack();
+                    }}>
+                        <Text style={styles.botaoCriarTexto}>Criar viagem</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollViewFlat>
     );
 }
 
@@ -140,5 +152,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'center',
     },
+    inputDataCelular: {
+        marginTop: 25,
+        width: '45%',
+        marginHorizontal: '2%',
+        height: 50,
+        backgroundColor: '#fff',
+        textAlign: 'center',
+        justifyContent: 'space-around',
+        fontWeight: 'bold',
+        borderRadius: 32,
+        borderColor: 'black',
+        borderWidth: 1,
+        padding: 10,
+        fontSize: 16,
+    }
 
 });

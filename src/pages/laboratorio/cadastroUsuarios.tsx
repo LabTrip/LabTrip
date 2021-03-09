@@ -17,7 +17,7 @@ export default function CadastroUsuario() {
   const navigation = useNavigation();
   const [usuarios, setUsuarios] = useState<Usuario[]>();
   const [refreshing, setRefreshing] = useState(false);
-  let token
+  let token;
 
   const getUsuarios = async () => {
     return await fetch('https://labtrip-backend.herokuapp.com/usuarios/', {
@@ -76,8 +76,6 @@ export default function CadastroUsuario() {
             <Text style={styles.textoCabecalho}>Perfil</Text>
           </DataTable.Title>
         </DataTable.Header>
-
-
         <ScrollView refreshControl={
           <RefreshControl
             refreshing={refreshing}

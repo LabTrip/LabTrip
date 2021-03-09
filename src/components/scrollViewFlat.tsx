@@ -5,7 +5,7 @@ import {FlatList} from 'react-native';
 export default function ScrollViewFlat(props: any) {
     return (
         <FlatList
-            style={{flex: 1, flexGrow: 1}}
+            style={{flex: 1, flexGrow: 1, backgroundColor: '#fff'}}
             data={[]}
             ListEmptyComponent={null}
             keyExtractor={() => "dummy"}
