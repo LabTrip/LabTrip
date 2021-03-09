@@ -19,17 +19,15 @@ export default function CadastroUsuario() {
   const [refreshing, setRefreshing] = useState(false);
   let token
 
-
-
   const getUsuarios = async () => {
-      return await fetch('https://labtrip-backend.herokuapp.com/usuarios/', {
-          method: 'GET',
-          headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-              'x-access-token': token
-          }
-      });
+    return await fetch('https://labtrip-backend.herokuapp.com/usuarios/', {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    });
   }
 
   useEffect(() => {
@@ -53,20 +51,20 @@ export default function CadastroUsuario() {
   }, [refreshing]);
 
   const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      setTimeout(() =>{
-        setRefreshing(false)
-      }, 2000)
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 2000)
   }, [refreshing]);
 
-  
+
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarUsuario')}>
         <Image source={require('../../imgs/plus-circle.png')} />
       </TouchableOpacity>
 
-      <DataTable>
+      <DataTable style={{ flex: 1 }}>
         <DataTable.Header style={styles.cabecalhoTabela}>
           <DataTable.Title>
             <Text style={styles.textoCabecalho}>Nome</Text>
@@ -86,11 +84,11 @@ export default function CadastroUsuario() {
             onRefresh={onRefresh}
           />
         }>
-        {
-          usuarios?.map((a) => {
-            return <LinhaTabelaUsuario key={a.id} nome={a.nome} email={a.email} descricao={a.descricao} navigate={"EditarUsuario"} item={a}/>
-          })
-        }
+          {
+            usuarios?.map((a) => {
+              return <LinhaTabelaUsuario key={a.id} nome={a.nome} email={a.email} descricao={a.descricao} navigate={"EditarUsuario"} item={a} />
+            })
+          }
         </ScrollView>
       </DataTable>
     </View>

@@ -63,7 +63,6 @@ export default function ListaViagens() {
         style={{ flexGrow: 1, flex: 1, flexDirection: 'column' }}
         contentContainerStyle={{ alignItems: 'center' }}
         data={viagens}
-        extraData={viagens}
         keyExtractor={(item) => item.id}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
         renderItem={({ item }) => (

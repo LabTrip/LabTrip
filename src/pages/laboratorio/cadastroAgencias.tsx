@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Text, StyleSheet, TouchableOpacity, View, Image, FlatList, RefreshControl } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity, View, Image, RefreshControl, ScrollView, FlatList } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { DataTable } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ScrollView } from 'react-native-gesture-handler';
 import LinhaTabelaAgencia from '../../components/linhaTabelaAgencia';
 
 interface Agencia {
@@ -46,13 +45,13 @@ export default function CadastroAgencia() {
       }
     }
     request()
-  }, [refreshing,navigation]);
+  }, [refreshing, navigation]);
 
   const onRefresh = React.useCallback(() => {
-      setRefreshing(true);
-      setTimeout(() =>{
-        setRefreshing(false)
-      }, 2000)
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false)
+    }, 2000)
   }, [refreshing]);
 
   return (
@@ -60,8 +59,7 @@ export default function CadastroAgencia() {
       <TouchableOpacity style={styles.botaoMais} onPress={() => navigation.navigate('CriarAgencia')}>
         <Image source={require('../../imgs/plus-circle.png')} />
       </TouchableOpacity>
-
-      <DataTable >
+      <DataTable style={{ flex: 1 }} >
         <DataTable.Header style={styles.cabecalhoTabela}>
           <DataTable.Title>
             <Text style={styles.textoCabecalho}>Agência</Text>
@@ -70,18 +68,20 @@ export default function CadastroAgencia() {
             <Text style={styles.textoCabecalho}>Status</Text>
           </DataTable.Title>
         </DataTable.Header>
-        
-        <ScrollView refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }>
-        {
-          agencias?.map((a) => {
-            return <LinhaTabelaAgencia key={a.id} nome={a.nome} navigate={"EditarAgencia"} item={a}/>
-          })
-        }
+
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+            />
+          }>
+          {
+            agencias?.map((a) => {
+              return <LinhaTabelaAgencia key={a.id} nome={a.nome} navigate={"EditarAgencia"} item={a} />
+            })
+          }
         </ScrollView>
       </DataTable>
 
@@ -108,5 +108,9 @@ const styles = StyleSheet.create({
   },
   corpoTabela: {
     backgroundColor: '#EBEBEB'
+  },
+  scroll: {
+    flexGrow: 1,
+    flexDirection: 'column',
   }
 })
