@@ -182,8 +182,6 @@ export default class UsuarioController {
             acesso = true;
           }
           else if(request){
-            console.log('entrou')
-            console.log('token id: ' + request.token.id)
             acesso = await this.podeAlterarUsuario(tipoAcesso, id, usuarioId, request)
           }
           break;
@@ -212,7 +210,7 @@ export default class UsuarioController {
           //console.log('Response ' + response.data.perfis)
           perfis = response.data.perfis;
           perfis.map(p => {
-            if(p.id == req.body.perfilId){
+            if(p.id == req.body.perfilId && p.id == req.usuario.perfilId){
                 acesso = true
             }
           })
