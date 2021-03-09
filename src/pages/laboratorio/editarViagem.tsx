@@ -4,6 +4,9 @@ import { useNavigation } from '@react-navigation/native';
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import CardParticipante from '../../components/cardParticipante';
 import BotaoLupa from '../../components/botaoLupa';
+import DatePicker from 'react-native-datepicker'
+
+const moment = require('moment');
 
 export default function EditarViagem({ route }) {
     const navigation = useNavigation();
@@ -22,15 +25,9 @@ export default function EditarViagem({ route }) {
         },
         {
             id: 'd4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35',
-            nome: "Ednaldo Pereiro",
+            nome: "Edneia Silva",
             dono: false,
             proprietario: true
-        },
-        {
-            id: '4e07408562bedb8b60ce05c1decfe3ad16b72230967de01f640b7e4729b49fce',
-            nome: "Ednalda Pereira",
-            dono: false,
-            proprietario: false
         },
     ];
 
@@ -40,10 +37,26 @@ export default function EditarViagem({ route }) {
                 <TextInput placeholder={"Apelido da viagem"} value={apelidoViagem} style={styles.input}
                     onChangeText={text => onChangeTextApelidoViagem(text)} />
                 <View style={styles.containerData}>
-                    <TextInput placeholder={"Data início"} value={dataInicio} style={styles.inputData}
-                        onChangeText={text => onChangeTextDataInicio(text)} />
-                    <TextInput placeholder={"Data fim"} value={dataFim} style={styles.inputData}
-                        onChangeText={text => onChangeTextDataFim(text)} />
+                    <Text style={styles.labelData}>Data Inicio</Text>
+                    <Text style={styles.labelData}>Data Fim</Text>
+                </View>
+                <View style={styles.containerData}>
+                    <DatePicker
+                        style={styles.inputDataCelular}
+                        placeholder={"Data início"}
+                        date={moment(dataInicio, 'DD/MM/YYYY')}
+                        format="DD/MM/yyyy"
+                        minDate="01/01/1900"
+                        onDateChange={data => onChangeTextDataInicio(data)}
+                    />
+                    <DatePicker
+                        style={styles.inputDataCelular}
+                        placeholder={"Data fim"}
+                        date={moment(dataFim, 'DD/MM/YYYY')}
+                        format="DD/MM/yyyy"
+                        minDate="01/01/1900"
+                        onDateChange={data => onChangeTextDataFim(data)}
+                    />
                 </View>
                 <TextInput placeholder={"Local da viagem"} value={localViagem} style={styles.input}
                     onChangeText={text => onChangeTextLocalViagem(text)} />
@@ -148,5 +161,30 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-around',
         alignItems: 'center',
+    },
+    inputDataCelular: {
+        marginTop: '1%',
+        width: '45%',
+        marginHorizontal: '2%',
+        height: 50,
+        backgroundColor: '#fff',
+        textAlign: 'center',
+        justifyContent: 'space-around',
+        fontWeight: 'bold',
+        borderRadius: 32,
+        borderColor: 'black',
+        borderWidth: 1,
+        padding: 10,
+        fontSize: 16,
+    },
+    labelData: {
+        marginTop: '3%',
+        marginHorizontal: '2%',
+        textAlign: 'center',
+        fontSize: 16,
+        borderRadius: 41,
+        backgroundColor: '#EBEBEB',
+        color: '#333333',
+        width: '45%'
     },
 });
