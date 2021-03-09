@@ -168,6 +168,10 @@ export default class LoginController {
     try{
       const usuario = req.usuario;
       const {senhaAntiga, novaSenha} = req.body
+
+      if(req.token.id != usuario.id){
+        return res.status(403).json({codigo:"403", mensagem: "Você não pode alterar a senha de outro usuário."});
+      }
       
       if(usuario.senha.toString() == sha256(senhaAntiga).toString()){
         await this.loginRepository.redefineSenhaPorId(usuario.id, sha256(novaSenha).toString());

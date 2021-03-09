@@ -103,7 +103,7 @@ export default class UsuarioController {
   async atualiza(req, res) {
     try {
 
-      const acesso = this.podeRealizarOperacaoPorId(req.acesso.tipoAcesso, req.usuario.id, req.token.id)
+      const acesso = await this.podeRealizarOperacaoPorId(req.acesso.tipoAcesso, req.usuario.id, req.token.id, req)
 
       if (acesso) {
         const { nome, email, telefone, foto, perfilId, dataNascimento } = req.body;
@@ -120,7 +120,7 @@ export default class UsuarioController {
 
     }
     catch (e) {
-      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas. ' + e});
     }
 
   }
@@ -129,7 +129,7 @@ export default class UsuarioController {
 
     try {
 
-      const acesso = this.podeRealizarOperacaoPorId(req.acesso.tipoAcesso, req.usuario.id, req.token.id);
+      const acesso = await this.podeRealizarOperacaoPorId(req.acesso.tipoAcesso, req.usuario.id, req.token.id);
 
       if (acesso) {
         const usuario = new Usuario(req.usuario.nome, req.usuario.email, req.usuario.telefone, req.usuario.foto, req.usuario.perfilId, req.usuario.dataNascimento, req.usuario.codigoVerificacao, req.body.senha, req.usuario.id);
@@ -161,7 +161,7 @@ export default class UsuarioController {
 
   }
 
-  podeRealizarOperacaoPorId(tipoAcesso, id, usuarioId) {
+  async podeRealizarOperacaoPorId(tipoAcesso, id, usuarioId, request = undefined) {
     try {
 
       let acesso = false;
@@ -169,9 +169,21 @@ export default class UsuarioController {
         case 'Total':
           acesso = true;
           break;
+        case 'Gerencial':
+          if (id == usuarioId) {
+            acesso = true;
+          }
+          else if(request){
+            acesso = await this.podeAlterarUsuario(tipoAcesso, id, usuarioId, request)
+          }
+          break;
         case 'Parcial':
           if (id == usuarioId) {
             acesso = true;
+          }
+          else if(request){
+            console.log('entrou')
+            acesso = await this.podeAlterarUsuario(tipoAcesso, id, usuarioId, request)
           }
           break;
       }
@@ -180,7 +192,41 @@ export default class UsuarioController {
 
     }
     catch (e) {
-      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
+      console.log(e)
+    }
+
+  }
+
+  async podeAlterarUsuario(tipoAcesso, id, usuarioId, req) {
+    try {
+      let perfis = [];
+      let acesso = false;
+      // Buscando perfis disponíveis para o usuario solicitatne
+      await api.get("perfis/", {
+        headers: {
+          'x-access-token': req.headers['x-access-token']
+        }
+      })
+        .then((response) => {
+          //console.log('Response ' + response.data.perfis)
+          perfis = response.data.perfis;
+          perfis.map(p => {
+            if(p.id == req.body.perfilId){
+                acesso = true
+            }
+          })
+        })
+        .catch((err) => {
+          console.error("ops! ocorreu um erro" + err);
+        });
+      
+      
+
+      return acesso;
+
+    }
+    catch (e) {
+      console.log(e)
     }
 
   }
