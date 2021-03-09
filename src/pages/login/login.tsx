@@ -95,7 +95,7 @@ export default function Login() {
 
   let descErro = null;
   return (
-    <View style={styles.container} >
+    <SafeAreaView style={styles.container} >
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', }}>
         <View style={styles.scrollContainer}>
           <Image source={require('../../imgs/logo.png')} style={styles.logo} />
@@ -141,7 +141,7 @@ export default function Login() {
         </View>
       </ScrollView>
       <StatusBar />
-    </View >
+    </SafeAreaView >
   );
 }
 
