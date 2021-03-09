@@ -24,56 +24,59 @@ export default function CriarViagem() {
     ];
 
     return (
-            <ScrollViewFlat>
-                <View style={styles.container}>
-                    <TextInput placeholder={"Apelido da viagem"} style={styles.input} />
-
-                    <View style={styles.containerData}>
-                        <DatePicker
-                            style={styles.inputDataCelular}
-                            placeholder={"Data início"}
-                            date={moment(dataInicio, 'DD/MM/YYYY')}
-                            format="DD/MM/yyyy"
-                            minDate="01/01/1900"
-                            onDateChange={data => onChangeTextDataInicio(data)}
-                        />
-                        <DatePicker
-                            style={styles.inputDataCelular}
-                            placeholder={"Data fim"}
-                            date={moment(dataFim, 'DD/MM/YYYY')}
-                            format="DD/MM/yyyy"
-                            minDate="01/01/1900"
-                            onDateChange={data => onChangeTextDataFim(data)}
-                        />
-                    </View>
-                    <TextInput placeholder={"Local da viagem"} style={styles.input} />
-                    <View style={styles.containerAddFuncionarios}>
-                        <TextInput placeholder={"Adicionar Dono"} style={styles.inputAddFuncionario} />
-                        <BotaoLupa onPress={() => alert('clicou para adicionar')} />
-                    </View>
-                    <View style={styles.containerAddFuncionarios}>
-                        <TextInput placeholder={"Adicionar Participantes"} style={styles.inputAddFuncionario} />
-                        <BotaoLupa onPress={() => alert('clicou para adicionar')} />
-                    </View>
-                    <View style={styles.containerParticipantes}>
-                        <FlatList
-                            data={participantesData}
-                            keyExtractor={(item) => item.id}
-                            renderItem={({ item }) => (
-                                <CardParticipante nome={item.nome} dono={item.dono} proprietario={item.proprietario} />
-                            )}
-
-                        />
-                    </View>
-
-                    <TouchableOpacity style={styles.botaoCriar} onPress={() => {
-                        alert('Clicou em criar viagem!')
-                        navigation.goBack();
-                    }}>
-                        <Text style={styles.botaoCriarTexto}>Criar viagem</Text>
-                    </TouchableOpacity>
+        <ScrollViewFlat>
+            <View style={styles.container}>
+                <TextInput placeholder={"Apelido da viagem"} style={styles.input} />
+                <View style={styles.containerData}>
+                    <Text style={styles.labelData}>Data Inicio</Text>
+                    <Text style={styles.labelData}>Data Fim</Text>
                 </View>
-            </ScrollViewFlat>
+                <View style={styles.containerData}>
+                    <DatePicker
+                        style={styles.inputDataCelular}
+                        placeholder={"Data início"}
+                        date={moment(dataInicio, 'DD/MM/YYYY')}
+                        format="DD/MM/yyyy"
+                        minDate="01/01/1900"
+                        onDateChange={data => onChangeTextDataInicio(data)}
+                    />
+                    <DatePicker
+                        style={styles.inputDataCelular}
+                        placeholder={"Data fim"}
+                        date={moment(dataFim, 'DD/MM/YYYY')}
+                        format="DD/MM/yyyy"
+                        minDate="01/01/1900"
+                        onDateChange={data => onChangeTextDataFim(data)}
+                    />
+                </View>
+                <TextInput placeholder={"Local da viagem"} style={styles.input} />
+                <View style={styles.containerAddFuncionarios}>
+                    <TextInput placeholder={"Adicionar Dono"} style={styles.inputAddFuncionario} />
+                    <BotaoLupa onPress={() => alert('clicou para adicionar')} />
+                </View>
+                <View style={styles.containerAddFuncionarios}>
+                    <TextInput placeholder={"Adicionar Participantes"} style={styles.inputAddFuncionario} />
+                    <BotaoLupa onPress={() => alert('clicou para adicionar')} />
+                </View>
+                <View style={styles.containerParticipantes}>
+                    <FlatList
+                        data={participantesData}
+                        keyExtractor={(item) => item.id}
+                        renderItem={({ item }) => (
+                            <CardParticipante nome={item.nome} dono={item.dono} proprietario={item.proprietario} />
+                        )}
+
+                    />
+                </View>
+
+                <TouchableOpacity style={styles.botaoCriar} onPress={() => {
+                    alert('Clicou em criar viagem!')
+                    navigation.goBack();
+                }}>
+                    <Text style={styles.botaoCriarTexto}>Criar viagem</Text>
+                </TouchableOpacity>
+            </View>
+        </ScrollViewFlat>
     );
 }
 
@@ -101,10 +104,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#EBEBEB',
         color: '#333333',
     },
-    inputData: {
+    labelData: {
         marginTop: '3%',
         marginHorizontal: '2%',
-        padding: 15,
+        textAlign: 'center',
         fontSize: 16,
         borderRadius: 41,
         backgroundColor: '#EBEBEB',
@@ -153,7 +156,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     inputDataCelular: {
-        marginTop: 25,
+        marginTop: '1%',
         width: '45%',
         marginHorizontal: '2%',
         height: 50,
