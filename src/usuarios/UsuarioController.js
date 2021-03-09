@@ -183,7 +183,7 @@ export default class UsuarioController {
           }
           else if(request){
             console.log('entrou')
-            console.log('token id: ' + req.token.id)
+            console.log('token id: ' + request.token.id)
             acesso = await this.podeAlterarUsuario(tipoAcesso, id, usuarioId, request)
           }
           break;
