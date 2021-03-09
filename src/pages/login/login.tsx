@@ -134,6 +134,9 @@ export default function Login() {
             <Text style={styles.link} >
               Esqueceu sua senha?
             </Text>
+            <Text style={styles.link} >
+              Primeiro acesso?
+            </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -193,6 +196,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 30,
     textDecorationLine: 'underline',
-    color: '#fff'
+    color: '#fff',
+    textAlign: 'center'
   }
 });
