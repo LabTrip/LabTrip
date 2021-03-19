@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Text, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+import { Modal, ActivityIndicator, Text, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import RNPasswordStrengthMeter, { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter';
@@ -14,6 +14,7 @@ export default function AlterarSenha({route}) {
     const [confNovaSenha, setConfNovaSenha] = React.useState('');
     const [msg, setMsg] = React.useState('');
     const [senhaForte, setSenhaForte] = React.useState(false);
+    const [showLoader, setShowLoader] = React.useState(false);
 
     useEffect(()=>{
         console.log(userId)
@@ -58,6 +59,24 @@ export default function AlterarSenha({route}) {
     return (
         <ScrollView
             contentContainerStyle={styles.container}>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={showLoader}
+                onRequestClose={() => {
+                setShowLoader(!showLoader)
+                }}
+            >
+                <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
+                    <Text style={styles.textStyle}>
+                    Aguarde...
+                    </Text>
+                </View>
+                </View>
+                
+            </Modal>
             <TextInput placeholder='Senha atual' secureTextEntry={true} style={styles.input} value={senhaAntiga} onChangeText={text => setSenhaAntiga(text)}/>          
             
             <TextInput placeholder='Nova senha' secureTextEntry={true} style={styles.input} value={novaSenha} onChangeText={text => {setNovaSenha(text); validaForcaSenha()}}/>
@@ -72,18 +91,27 @@ export default function AlterarSenha({route}) {
             <TouchableOpacity style={styles.botaoSalvar}  onPress={async ()=> {
                     if(senhaForte){
                         if(await verificaSenhas()){
-                            let response = await alteraSenha({
-                                senhaAntiga: senhaAntiga,
-                                novaSenha: novaSenha});
-                            let json = await response.json();
-                            
-                            if(response.status == 200){
-                                alert('Senha alterada com sucesso');
-                                navigation.goBack();
+                            try{
+                                setShowLoader(true);
+                                let response = await alteraSenha({
+                                    senhaAntiga: senhaAntiga,
+                                    novaSenha: novaSenha});
+                                let json = await response.json();
+                                
+                                if(response.status == 200){
+                                    alert('Senha alterada com sucesso');
+                                    navigation.goBack();
+                                }
+                                else{
+                                    alert(json.mensagem);
+                                }
                             }
-                            else{
-                                alert(json.mensagem);
+                            catch(e){
+                                alert('Erro ao alterar senha.');
                             }
+                            finally{
+                                setShowLoader(false);
+                            }                            
                         }
                     }
                     else{
@@ -147,5 +175,37 @@ const styles = StyleSheet.create({
         borderRadius: 41,
         backgroundColor: '#23FD02',
         color: '#333333',
+    },
+    loader: {
+      flexDirection: 'column',
+      alignContent: 'center',
+      justifyContent: 'center',
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      opacity: 0.9,
+      borderRadius: 20,
+      padding: '20%',
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    textStyle: {
+      color: "black",
+      fontWeight: "bold",
+      textAlign: "center"
     }
 })

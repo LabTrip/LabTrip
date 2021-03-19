@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
+import { Modal, ActivityIndicator, StyleSheet, Text, View, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useNavigation, StackActions } from '@react-navigation/native';
 import { i18n } from '../../translate/i18n';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -14,6 +14,7 @@ export default function Login() {
   const [senha, onChangeTextSenha] = React.useState('');
   const [token, setToken] = React.useState('');
   const [userId, setUserId] = React.useState('');
+  const [showLoader, setShowLoader] = React.useState(false);
   const auth = async () => {
     return await fetch('https://labtrip-backend.herokuapp.com/login', {
       method: 'POST',
@@ -69,6 +70,7 @@ export default function Login() {
           await setUserId(JSON.parse(user));
           const response = await validaSessao(JSON.parse(value));
           if (response.status == 200) {
+            setShowLoader(true)
             const responseUser = await getUsuario(JSON.parse(value), JSON.parse(user));
             const json = await responseUser.json();
             if (json.perfilId == 4) {
@@ -81,6 +83,7 @@ export default function Login() {
               )
             }
           }
+          setShowLoader(false)
         }
         else {
           console.log(value)
@@ -96,6 +99,25 @@ export default function Login() {
   let descErro = null;
   return (
     <SafeAreaView style={styles.container} >
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showLoader}
+        onRequestClose={() => {
+          setShowLoader(!showLoader)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
+            <Text style={styles.textStyle}>
+              Aguarde...
+            </Text>
+          </View>
+        </View>
+          
+      </Modal>
+      
       <ScrollView contentContainerStyle={{ flexGrow: 1, justifyContent: 'center', alignItems: 'center', }}>
         <View style={styles.scrollContainer}>
           <Image source={require('../../imgs/logo.png')} style={styles.logo} />
@@ -109,6 +131,7 @@ export default function Login() {
             onChangeText={text => onChangeTextSenha(text)} value={senha} autoCompleteType={'password'}
           />
           <TouchableOpacity style={styles.botaoLogin} onPress={async () => {
+            setShowLoader(true)
             let response = await auth();
             let json = await response.json();
             if (response.status == 200) {
@@ -123,8 +146,10 @@ export default function Login() {
                   StackActions.replace('MenuPrincipal')
                 )
               }
+              setShowLoader(false)
             }
             else {
+              setShowLoader(false)
               alert(json.mensagem);
             }
           }}>
@@ -198,5 +223,42 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     color: '#fff',
     textAlign: 'center'
+  },
+  modal: {
+    opacity: 0.5,
+    width: 80,
+    height: 80
+  },
+  loader: {
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    opacity: 0.9,
+    borderRadius: 20,
+    padding: '20%',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center"
   }
 });

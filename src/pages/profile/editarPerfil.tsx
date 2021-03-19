@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { Modal, ActivityIndicator,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -15,6 +15,7 @@ export default function EditarPerfil() {
     const [telefone, onChangeTextTelefone] = useState("");
     const [idUsuario, setIdUsuario] = useState("");
     const [tokenUsuario, setTokenUsuario] = useState("");
+    const [showLoader, setShowLoader] = React.useState(false);
 
     const navigation = useNavigation();
 
@@ -87,6 +88,7 @@ export default function EditarPerfil() {
     useEffect(() => {
         const request = async () => {
             try {
+                setShowLoader(true);
                 const value = await AsyncStorage.getItem('AUTH');
                 const user = await AsyncStorage.getItem('USER_ID');
                 if (value !== null) {
@@ -109,6 +111,9 @@ export default function EditarPerfil() {
             }
             catch (e) {
                 alert(e)
+            }
+            finally{
+                setShowLoader(false);
             }
         }
 
@@ -154,6 +159,24 @@ export default function EditarPerfil() {
 
     return (
         <View style={styles.container}>
+            <Modal
+                animationType="fade"
+                transparent={true}
+                visible={showLoader}
+                onRequestClose={() => {
+                setShowLoader(!showLoader)
+                }}
+            >
+                <View style={styles.centeredView}>
+                <View style={styles.modalView}>
+                    <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
+                    <Text style={styles.textStyle}>
+                    Aguarde...
+                    </Text>
+                </View>
+                </View>
+                
+            </Modal>
             <ScrollView
                 refreshControl={
                     <RefreshControl
@@ -188,9 +211,15 @@ export default function EditarPerfil() {
                         </Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
+                        setShowLoader(true);
                         let response = await editaUsuario();
                         if(response.status == 200){
+                            setShowLoader(false);
                             alert('Dados alterados com sucesso.')
+                        }
+                        else{
+                            setShowLoader(false);
+                            alert('Erro ao alterar dados.')
                         }
                         console.log(moment(data, "DD/MM/YYYY").format("YYYY-MM-DD"))
                     }}>
@@ -281,5 +310,37 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 10,
         fontSize: 16,
+    },
+    loader: {
+      flexDirection: 'column',
+      alignContent: 'center',
+      justifyContent: 'center',
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      opacity: 0.9,
+      borderRadius: 20,
+      padding: '20%',
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    textStyle: {
+      color: "black",
+      fontWeight: "bold",
+      textAlign: "center"
     }
 });
