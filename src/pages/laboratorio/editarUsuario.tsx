@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
+import { Modal, ActivityIndicator, Text, View, StyleSheet, TextInput, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CardAgente from '../../components/cardAgente'
@@ -10,6 +10,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import DatePicker from 'react-native-datepicker'
+const moment = require('moment');
 
 interface Usuario {
   id: string,
@@ -35,21 +36,16 @@ interface usuario {
 }
 
 export default function EditarUsuario({route}) {
-  const {usuario} = route.params;
-  console.log(route.params)
-  
+  const {usuario} = route.params;  
   const navigation = useNavigation();
   const [tokken, setTokken] = useState('');
   const [nomeUsuario, setNomeUsuario] = useState(usuario.nome);
   let token;
-  const [participantes, setParticipantes] = useState<Funcionario[]>([]);
-  const [participantesAdicionados, setParticipantesAdicionados] = useState<usuario[]>([]);
-  const [participantesRemovidos, setParticipantesRemovidos] = useState<Funcionario[]>([]);
   const [perfil, setPerfis] = useState<Perfil[]>([]);
   const [selectedValue, setSelectedValue] = useState(usuario.perfilId);
   const [email, onChangeTextEmail] = useState(usuario.email);
   const [telefone, onChangeTextTelefone] = useState(usuario.telefone);
-
+  const [showLoader, setShowLoader] = React.useState(false);
   const [dataNasc, setDataNasc] = useState(usuario.dataNascimento)
 
   const editaUsuario = async (corpo) => {
@@ -70,7 +66,7 @@ export default function EditarUsuario({route}) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'x-access-token': tokken.toString()
+        'x-access-token': token.toString()
       }
     });
   }
@@ -130,6 +126,7 @@ export default function EditarUsuario({route}) {
   useEffect(() => {
     const request = async () => {
       try {
+        setShowLoader(true);
         const value = await AsyncStorage.getItem('AUTH');
         if (value != null) {
           setTokken(JSON.parse(value))
@@ -137,14 +134,25 @@ export default function EditarUsuario({route}) {
           const response = await getPerfis();
           const json = await response.json();
           if (response.status == 200) {
-            console.log(json.perfis)
             setPerfis(json.perfis);
           }
 
         }
+        const response = await buscaUsuario(usuario.email)
+        const json = await response.json();
+        if (response.status == 200) {
+          console.log(json)
+          setNomeUsuario(json[0].nome);
+          onChangeTextEmail(json[0].email);
+          setDataNasc(moment(json[0].dataNascimento).add(1,'days').format('DD/MM/yyyy'));
+          onChangeTextTelefone(json[0].telefone);
+        }
       }
       catch (e) {
         console.log(e)
+      }
+      finally{
+        setShowLoader(false);
       }
     }
     request()
@@ -152,6 +160,24 @@ export default function EditarUsuario({route}) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showLoader}
+        onRequestClose={() => {
+          setShowLoader(!showLoader)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
+            <Text style={styles.textStyle}>
+              Aguarde...
+            </Text>
+          </View>
+        </View>
+          
+      </Modal>
       <ScrollView>
         <View style={{ alignItems: 'center' }}>
           <TextInput placeholder='Nome do usuário' style={styles.input} 
@@ -164,10 +190,10 @@ export default function EditarUsuario({route}) {
 
         <DatePicker 
         placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
-        date={dataNasc}
-        format="YYYY-MM-DD"
-        minDate="01-01-1900"
-        onDateChange={setDataNasc} />
+        date={moment(dataNasc, 'DD/MM/YYYY')}
+        format="DD/MM/YYYY"
+        minDate="01/01/1900"
+        onDateChange={data => setDataNasc(moment(data,'DD/MM/YYYY'))} />
 
         <TextInput placeholder={"Celular"} style={styles.inputDataCelular}
           keyboardType='numeric'  
@@ -194,20 +220,29 @@ export default function EditarUsuario({route}) {
       </Picker>         
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
-            let response = await editaUsuario({ 
-               nome: nomeUsuario,
-               email: email,
-               dataNascimento: dataNasc,
-               telefone: telefone,
-               perfilId:selectedValue 
-            });
-            let json = await response.json();
-            if (response.status >= 200 && response.status <= 299) {
-              alert('Dados do usuário alterados com sucesso!')
-              navigation.goBack();
+            try{
+              setShowLoader(true);
+              let response = await editaUsuario({ 
+                nome: nomeUsuario,
+                email: email,
+                dataNascimento: moment(dataNasc,'DD/MM/YYYY').format("YYYY-MM-DD"),
+                telefone: telefone,
+                perfilId:selectedValue 
+              });
+              let json = await response.json();
+              if (response.status >= 200 && response.status <= 299) {
+                alert('Dados do usuário alterados com sucesso!')
+                navigation.goBack();
+              }
+              else {
+                alert(json.mensagem);
+              }
             }
-            else {
-              alert(json.mensagem);
+            catch(e){
+              alert("Erro ao editar usuário.");
+            }
+            finally{
+              setShowLoader(false);
             }
           }}>
             <Text style={styles.botaoSalvarTexto}>Salvar Usuário</Text>
@@ -349,4 +384,36 @@ const styles = StyleSheet.create({
   containerDataCelular: {
     flexDirection: 'row',
   },
+  loader: {
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    opacity: 0.9,
+    borderRadius: 20,
+    padding: '20%',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center"
+  }
 });

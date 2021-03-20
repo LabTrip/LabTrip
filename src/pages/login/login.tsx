@@ -63,6 +63,7 @@ export default function Login() {
   useEffect(() => {
     const request = async () => {
       try {
+        setShowLoader(true)
         const value = await AsyncStorage.getItem('AUTH');
         const user = await AsyncStorage.getItem('USER_ID');
         if (value != null && user != null) {
@@ -70,7 +71,6 @@ export default function Login() {
           await setUserId(JSON.parse(user));
           const response = await validaSessao(JSON.parse(value));
           if (response.status == 200) {
-            setShowLoader(true)
             const responseUser = await getUsuario(JSON.parse(value), JSON.parse(user));
             const json = await responseUser.json();
             if (json.perfilId == 4) {

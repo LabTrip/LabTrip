@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native';
+import { Modal, ActivityIndicator, Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList, ScrollView, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import CardAgente from '../../components/cardAgente'
 import ScrollViewFlat from '../../components/scrollViewFlat';
@@ -8,6 +8,7 @@ import BotaoLupa from '../../components/botaoLupa'
 import { DataTable } from 'react-native-paper';
 import LinhaOpcaoUsuario from '../../components/linhaOpcaoUsuario';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { setStatusBarBackgroundColor } from 'expo-status-bar';
 
 interface Usuario {
   id: string,
@@ -25,6 +26,8 @@ export default function CriarAgencia() {
   const [idAgencia, setIdAgencia] = React.useState('');
   const [participantes, setParticipantes] = useState<Usuario[]>([]);
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [showLoader, setShowLoader] = React.useState(false);
+
   const criaAgencia = async (corpo) => {
     return await fetch('https://labtrip-backend.herokuapp.com/agencias', {
       method: 'POST',
@@ -92,6 +95,24 @@ export default function CriarAgencia() {
 
   return (
     <View style={styles.container}>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showLoader}
+        onRequestClose={() => {
+          setShowLoader(!showLoader)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
+            <Text style={styles.textStyle}>
+              Aguarde...
+            </Text>
+          </View>
+        </View>
+          
+      </Modal>
       <ScrollView>
         <View style={{ alignItems: 'center' }}>
           <TextInput placeholder='Nome da agencia' style={styles.input} value={nomeAgencia}
@@ -101,6 +122,8 @@ export default function CriarAgencia() {
              onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} />
 
             <BotaoLupa onPress={async () => {
+              try{
+                setShowLoader(true);
                 const reponseUsuario = await buscaUsuario(email);
                 const jsonUsuario = await reponseUsuario.json();
                 if(reponseUsuario.status >= 200 && reponseUsuario.status <= 304){
@@ -113,6 +136,13 @@ export default function CriarAgencia() {
                   //console.log(jsonUsuario)
                   alert("Erro ao buscar usuário.")
                 }
+              }
+              catch(e){
+                alert("Erro ao buscar usuário.")
+              }
+              finally{
+                setShowLoader(false);
+              }
               
             }} />
           </View>
@@ -172,28 +202,38 @@ export default function CriarAgencia() {
           </ScrollView>
 
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
-            let response = await criaAgencia({ nome: nomeAgencia });
-            let json = await response.json();
-            if (response.status >= 200 && response.status <= 299) {
-              alert('Agencia criada com sucesso!')
-              await setIdAgencia(json.id)
-              if(participantes.length > 0){
-                let responseP = await convidaFuncionarios(participantes,json.id);
-                let jsonP = await responseP.json();
+            try{
+              setShowLoader(true);
+              let response = await criaAgencia({ nome: nomeAgencia });
+              let json = await response.json();
+              if (response.status >= 200 && response.status <= 299) {
+                alert('Agencia criada com sucesso!')
+                await setIdAgencia(json.id)
+                if(participantes.length > 0){
+                  let responseP = await convidaFuncionarios(participantes,json.id);
+                  let jsonP = await responseP.json();
 
-                if (responseP.status >= 200 && response.status <= 299) {
-                  alert('Participantes adicionados com sucesso!')
-                }
-                else{
-                  alert('Erro ao adicionados participantes.')
-                }
-              }              
+                  if (responseP.status >= 200 && response.status <= 299) {
+                    alert('Participantes adicionados com sucesso!')
+                  }
+                  else{
+                    alert('Erro ao adicionados participantes.')
+                  }
+                }              
 
-              navigation.goBack();
+                navigation.goBack();
+              }
+              else {
+                alert(json.mensagem);
+              }
             }
-            else {
-              alert(json.mensagem);
+            catch(e){
+              alert('Erro ao salvar agência.');
             }
+            finally{
+              setShowLoader(false);
+            }
+            
           }}>
             <Text style={styles.botaoSalvarTexto}>Criar agencia</Text>
           </TouchableOpacity>
@@ -290,5 +330,38 @@ const styles = StyleSheet.create({
       borderRadius: 50,
       width: 60,
       height: 60
-  }
+  },
+    loader: {
+      flexDirection: 'column',
+      alignContent: 'center',
+      justifyContent: 'center',
+    },
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
+    },
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      opacity: 0.9,
+      borderRadius: 20,
+      padding: '20%',
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
+    },
+    textStyle: {
+      color: "black",
+      fontWeight: "bold",
+      textAlign: "center"
+    }
+  
 });

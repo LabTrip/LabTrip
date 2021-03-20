@@ -17,7 +17,6 @@ export default function AlterarSenha({route}) {
     const [showLoader, setShowLoader] = React.useState(false);
 
     useEffect(()=>{
-        console.log(userId)
         setIdUser(userId);
     }, []);
 
@@ -44,16 +43,11 @@ export default function AlterarSenha({route}) {
     const validaForcaSenha = async () => {
         var regex = /\d/g;
         if(novaSenha.length >= 7 && regex.test(novaSenha) ){
-            console.log('tem força')
             await setSenhaForte(true);
         }
         else{
             await setSenhaForte(false);
         }
-    }
-
-    const onChange = () => {
-        console.log(BarPasswordStrengthDisplay.barColor);
     }
 
     return (

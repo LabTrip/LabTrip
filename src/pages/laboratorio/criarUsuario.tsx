@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableOpacity, RefreshControlComponent, RefreshControl } from 'react-native';
+import { Modal, ActivityIndicator, Text, View, StyleSheet, TextInput, TouchableOpacity, RefreshControlComponent, RefreshControl } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DatePicker from 'react-native-datepicker'
+const moment = require('moment');
 
 interface Usuario {
   nome: string,
@@ -31,12 +32,13 @@ export default function CriarUsuario() {
   const [email, onChangeTextEmail] = React.useState('');
   const [dataNascimento, onChangeTextDataNascimento] = React.useState('');
   const [telefone, onChangeTextTelefone] = React.useState('');
-
+  const [showLoader, setShowLoader] = React.useState(false);
   const [dataNasc, setDataNasc] = useState(new Date())
 
   useEffect(() => {
     const request = async () => {
       try {
+        setShowLoader(true);
         const value = await AsyncStorage.getItem('AUTH');
         if (value != null) {          
           token = JSON.parse(value)
@@ -52,6 +54,9 @@ export default function CriarUsuario() {
       }
       catch (e) {
         console.log(e)
+      }
+      finally{
+        setShowLoader(false);
       }
     }
     request()
@@ -107,6 +112,24 @@ export default function CriarUsuario() {
 
   return (
     <View style={styles.container}> 
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showLoader}
+        onRequestClose={() => {
+          setShowLoader(!showLoader)
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
+            <Text style={styles.textStyle}>
+              Aguarde...
+            </Text>
+          </View>
+        </View>
+          
+      </Modal>
       <TextInput placeholder={"Nome"} style={styles.input}
         autoCompleteType={'name'} 
         onChangeText={text => onChangeTextnomeUsuario(text.trim())} value={nomeUsuario} autoCapitalize={'none'} />
@@ -119,8 +142,8 @@ export default function CriarUsuario() {
         <DatePicker 
         placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
         date={dataNasc}
-        format="DD-MM-YYYY"
-        minDate="01-01-1900"
+        format="DD/MM/YYYY"
+        minDate="01/01/1900"
         onDateChange={setDataNasc}/>     
 
 
@@ -150,40 +173,42 @@ export default function CriarUsuario() {
       </Picker>
 
       <TouchableOpacity style={styles.botaoCadastrar} onPress={async () => {
-        console.log(nomeUsuario)
-        console.log(email)
-        console.log(dataNasc)
-        console.log(telefone)
-        console.log(Token)
-        console.log(selectedValue)
+        try{
+          setShowLoader(true);
+          let prosseguir = await verificaCamposPrenchidos();
 
-
-        let prosseguir = await verificaCamposPrenchidos();
-
-        if(prosseguir){
-          let responseConsultaEmail = await buscaUsuario(email, Token);
-  
-          if(responseConsultaEmail.status == 200){
-            alert('Já existe um usuário cadastrado com esses dados!')
-             
-          }else{
-            let response = await criaUsuario({
-               nome: nomeUsuario,
-               email: email,
-               dataNascimento: dataNasc,
-               telefone: telefone,
-               perfilId:selectedValue
-              }, Token);
-
-            let json = await response.json();
-            if (response.status >= 200 && response.status <= 299) {
-              alert('Usuário cadastrado com sucesso!')
-              navigation.goBack();
+          if(prosseguir){
+            let responseConsultaEmail = await buscaUsuario(email, Token);
+    
+            if(responseConsultaEmail.status == 200){
+              alert('Já existe um usuário cadastrado com esses dados!')
+              
             }else{
-              alert(json.mensagem);
+              let response = await criaUsuario({
+                nome: nomeUsuario,
+                email: email,
+                dataNascimento: moment(dataNasc,'DD/MM/YYYY').format("YYYY-MM-DD"),
+                telefone: telefone,
+                perfilId:selectedValue
+                }, Token);
+
+              let json = await response.json();
+              if (response.status >= 200 && response.status <= 299) {
+                alert('Usuário cadastrado com sucesso!')
+                navigation.goBack();
+              }else{
+                alert(json.mensagem);
+              }
             }
           }
         }
+        catch(e){
+          alert('Erro ao salvar usuário.')
+        }
+        finally{
+          setShowLoader(false);
+        }
+        
       }}>
         <Text style={styles.botaoCadastrarTexto}>Cadastrar</Text>
       </TouchableOpacity>
@@ -248,5 +273,37 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFFFF',
     fontSize: 24
+  },
+  loader: {
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    opacity: 0.9,
+    borderRadius: 20,
+    padding: '20%',
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  textStyle: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "center"
   }
 });
