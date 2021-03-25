@@ -83,7 +83,6 @@ export default function Login() {
               )
             }
           }
-          setShowLoader(false)
         }
         else {
           console.log(value)
@@ -91,6 +90,9 @@ export default function Login() {
       }
       catch (e) {
         alert(e)
+      }
+      finally{
+        setShowLoader(false)
       }
     }
     request()
