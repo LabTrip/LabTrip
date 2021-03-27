@@ -28,8 +28,8 @@ export default function CriarViagem() {
             <View style={styles.container}>
                 <TextInput placeholder={"Apelido da viagem"} style={styles.input} />
                 <View style={styles.containerData}>
-                    <Text style={styles.labelData}>Data Inicio</Text>
-                    <Text style={styles.labelData}>Data Fim</Text>
+                    <Text style={styles.labelData}>Data de Inicio</Text>
+                    <Text style={styles.labelData}>Data de Fim</Text>
                 </View>
                 <View style={styles.containerData}>
                     <DatePicker
@@ -108,10 +108,8 @@ const styles = StyleSheet.create({
         marginTop: '3%',
         marginHorizontal: '2%',
         textAlign: 'center',
-        fontSize: 16,
-        borderRadius: 41,
-        backgroundColor: '#EBEBEB',
-        color: '#333333',
+        fontSize: 18,
+        color: '#999999',
         width: '45%'
     },
     inputAddFuncionario: {
@@ -157,6 +155,7 @@ const styles = StyleSheet.create({
     },
     inputDataCelular: {
         marginTop: '1%',
+        marginBottom: '3%',
         width: '45%',
         marginHorizontal: '2%',
         height: 50,

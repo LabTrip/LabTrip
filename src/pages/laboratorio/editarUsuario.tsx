@@ -30,13 +30,13 @@ interface Perfil {
 }
 
 interface usuario {
-    id: string,
-    nome: string,
-    email: string
+  id: string,
+  nome: string,
+  email: string
 }
 
-export default function EditarUsuario({route}) {
-  const {usuario} = route.params;  
+export default function EditarUsuario({ route }) {
+  const { usuario } = route.params;
   const navigation = useNavigation();
   const [tokken, setTokken] = useState('');
   const [nomeUsuario, setNomeUsuario] = useState(usuario.nome);
@@ -49,7 +49,7 @@ export default function EditarUsuario({route}) {
   const [dataNasc, setDataNasc] = useState(usuario.dataNascimento)
 
   const editaUsuario = async (corpo) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/usuarios/'+usuario.id, {
+    return await fetch('https://labtrip-backend.herokuapp.com/usuarios/' + usuario.id, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',
@@ -71,40 +71,6 @@ export default function EditarUsuario({route}) {
     });
   }
 
-  const convidaFuncionarios = async (corpo) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/agencias/convida-funcionarios/' + usuario.id, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'x-access-token': tokken
-      },
-      body: JSON.stringify(corpo)
-    });
-  }
-
-  const buscaFuncionarios = async () => {
-    return await fetch('https://labtrip-backend.herokuapp.com/agencias/funcionarios/' + usuario.id, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'x-access-token': token
-      }
-    });
-  }
-
-  const deletaUsuario = async (corpo) => {
-    return await fetch('https://labtrip-backend.herokuapp.com/agencias/funcionarios/' + usuario.id, {
-      method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        'x-access-token': tokken
-      },
-      body: JSON.stringify(corpo)
-    });
-  }
 
   const getPerfis = async () => {
     return await fetch('https://labtrip-backend.herokuapp.com/perfis/', {
@@ -116,12 +82,6 @@ export default function EditarUsuario({route}) {
       }
     });
   }
-
-  const icon = 'close-thick', color = 'red';
-
-
-
-
 
   useEffect(() => {
     const request = async () => {
@@ -144,14 +104,14 @@ export default function EditarUsuario({route}) {
           console.log(json)
           setNomeUsuario(json[0].nome);
           onChangeTextEmail(json[0].email);
-          setDataNasc(moment(json[0].dataNascimento).add(1,'days').format('DD/MM/yyyy'));
+          setDataNasc(moment(json[0].dataNascimento).add(1, 'days').format('DD/MM/yyyy'));
           onChangeTextTelefone(json[0].telefone);
         }
       }
       catch (e) {
         console.log(e)
       }
-      finally{
+      finally {
         setShowLoader(false);
       }
     }
@@ -176,58 +136,54 @@ export default function EditarUsuario({route}) {
             </Text>
           </View>
         </View>
-          
+
       </Modal>
       <ScrollView>
         <View style={{ alignItems: 'center' }}>
-          <TextInput placeholder='Nome do usuário' style={styles.input} 
-            onChangeText={texto => setNomeUsuario(texto)} value={nomeUsuario}/>
-                <TextInput placeholder={"E-mail"} style={styles.input} 
-        keyboardType = "email-address"
-        onChangeText={text => onChangeTextEmail(text.trim())} value={email}  autoCapitalize={'none'}/>
+          <TextInput placeholder='Nome do usuário' style={styles.input}
+            onChangeText={texto => setNomeUsuario(texto)} value={nomeUsuario} />
+          <TextInput placeholder={"E-mail"} style={styles.input}
+            keyboardType="email-address"
+            onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} />
+          <Text style={styles.label}>Data de nascimento:</Text>
+          <View style={styles.containerDataCelular}>
+            <DatePicker
+              placeholder={"Data Nascimento"} style={styles.inputDataCelular}
+              date={moment(dataNasc, 'DD/MM/YYYY')}
+              format="DD/MM/YYYY"
+              minDate="01/01/1900"
+              onDateChange={data => setDataNasc(moment(data, 'DD/MM/YYYY'))} />
+          </View>
+          <TextInput placeholder={"Celular"} style={styles.inputDataCelular}
+            keyboardType='numeric'
+            onChangeText={text => onChangeTextTelefone(text.trim())} value={telefone} />
+          <Text style={styles.label}>Tipo de usuário:</Text>
+          <Picker style={styles.pickerComponente}
+            prompt="Tipo de usuário"
+            mode="dropdown"
 
-      <View style={styles.containerDataCelular}> 
+            selectedValue={selectedValue}
+            onValueChange={(itemValue, value) => {
+              setSelectedValue(itemValue)
+            }}>
+            {
+              perfil.map(p => {
+                return (
+                  <Picker.Item key={p.id} label={p.descricao} value={p.id} />
+                )
+              })
+            }
 
-        <DatePicker 
-        placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
-        date={moment(dataNasc, 'DD/MM/YYYY')}
-        format="DD/MM/YYYY"
-        minDate="01/01/1900"
-        onDateChange={data => setDataNasc(moment(data,'DD/MM/YYYY'))} />
-
-        <TextInput placeholder={"Celular"} style={styles.inputDataCelular}
-          keyboardType='numeric'  
-          onChangeText={text => onChangeTextTelefone(text.trim())} value={telefone} />
-
-      </View>
-    <Text style={styles.label}>Tipo de usuário:</Text>
-      <Picker style={styles.pickerComponente}
-        prompt="Tipo de usuário"
-        mode="dropdown"        
-        
-        selectedValue={selectedValue}
-        onValueChange={(itemValue, value) => {
-          setSelectedValue(itemValue)
-        }}>
-        {
-          perfil.map(p => {
-            return (
-              <Picker.Item key={p.id} label={p.descricao} value={p.id} />
-            )
-          })
-        }
-        
-      </Picker>         
-
+          </Picker>
           <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
-            try{
+            try {
               setShowLoader(true);
-              let response = await editaUsuario({ 
+              let response = await editaUsuario({
                 nome: nomeUsuario,
                 email: email,
-                dataNascimento: moment(dataNasc,'DD/MM/YYYY').format("YYYY-MM-DD"),
+                dataNascimento: moment(dataNasc, 'DD/MM/YYYY').format("YYYY-MM-DD"),
                 telefone: telefone,
-                perfilId:selectedValue 
+                perfilId: selectedValue
               });
               let json = await response.json();
               if (response.status >= 200 && response.status <= 299) {
@@ -238,17 +194,15 @@ export default function EditarUsuario({route}) {
                 alert(json.mensagem);
               }
             }
-            catch(e){
+            catch (e) {
               alert("Erro ao editar usuário.");
             }
-            finally{
+            finally {
               setShowLoader(false);
             }
           }}>
             <Text style={styles.botaoSalvarTexto}>Salvar Usuário</Text>
-
           </TouchableOpacity>
-
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -260,10 +214,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  label:{
-    fontSize: 16,
-    color: '#333333',
-    marginTop: '3%'
+  label: {
+    marginTop: '3%',
+    marginHorizontal: '2%',
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#999999',
+    width: '45%'
   },
   input: {
     marginTop: '3%',
@@ -282,17 +239,7 @@ const styles = StyleSheet.create({
     borderRadius: 41,
     backgroundColor: '#EBEBEB',
     color: '#333333',
-    width: '45%'
-  },
-  inputAddFuncionario: {
-    marginTop: '3%',
-    width: '85%',
-    height: 'auto',
-    padding: 15,
-    fontSize: 16,
-    borderRadius: 41,
-    backgroundColor: '#EBEBEB',
-    color: '#333333'
+    width: '95%'
   },
   pickerComponente: {
     marginTop: '3%',
@@ -302,23 +249,6 @@ const styles = StyleSheet.create({
     borderRadius: 41,
     backgroundColor: '#EBEBEB',
     color: '#333333'
-  },
-  containerAddFuncionarios: {
-    width: '90%',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
-  containerFuncionarios: {
-    borderStyle: 'dotted',
-    borderColor: '#333333',
-    borderWidth: 1,
-    borderRadius: 20,
-    marginTop: 10,
-    width: '90%',
-    alignItems: 'center',
-    flexDirection: 'column',
-    justifyContent: 'center'
   },
   botaoSalvar: {
     backgroundColor: '#3385FF',
@@ -364,22 +294,22 @@ const styles = StyleSheet.create({
     marginBottom: '3%',
   },
   textoParticipante: {
-      color: 'black',
-      fontSize: 18,
-      width: '60%',
-      maxWidth: '60%',
-      flexWrap: 'wrap',
-      textAlign: 'center'
+    color: 'black',
+    fontSize: 18,
+    width: '60%',
+    maxWidth: '60%',
+    flexWrap: 'wrap',
+    textAlign: 'center'
   },
   headerCardParticipante: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
   },
   fotoPerfil: {
-      borderRadius: 50,
-      width: 60,
-      height: 60
+    borderRadius: 50,
+    width: 60,
+    height: 60
   },
   containerDataCelular: {
     flexDirection: 'row',

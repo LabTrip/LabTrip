@@ -4,6 +4,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-nativ
 export default function ConvidarParticipantes() {
     return (
         <View style={styles.container}>
+            <Text style={styles.texto}>Digite o email do participante que deseja inserir na viagem.</Text>
             <TextInput placeholder='Email do convidado' autoCapitalize={'none'}
             autoCompleteType={'email'} style={styles.input} />
             <TouchableOpacity style={styles.botaoSalvar}>
@@ -46,4 +47,10 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 24,
     },
+    texto:{
+        fontSize: 24,
+        textAlign: 'center',
+        flexWrap: 'wrap',
+        maxWidth: '90%',
+    }
 })

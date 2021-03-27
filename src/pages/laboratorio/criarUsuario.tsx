@@ -23,7 +23,7 @@ interface Perfil {
 
 export default function CriarUsuario() {
 
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const [perfil, setPerfis] = useState<Perfil[]>([]);
   let token
   const [Token, setToken] = useState();
@@ -40,7 +40,7 @@ export default function CriarUsuario() {
       try {
         setShowLoader(true);
         const value = await AsyncStorage.getItem('AUTH');
-        if (value != null) {          
+        if (value != null) {
           token = JSON.parse(value)
           console.log(token)
           setToken(token)
@@ -55,7 +55,7 @@ export default function CriarUsuario() {
       catch (e) {
         console.log(e)
       }
-      finally{
+      finally {
         setShowLoader(false);
       }
     }
@@ -65,7 +65,7 @@ export default function CriarUsuario() {
 
 
 
-  const criaUsuario = async (corpo, Token ) => {
+  const criaUsuario = async (corpo, Token) => {
     return await fetch('https://labtrip-backend.herokuapp.com/usuarios', {
       method: 'POST',
       headers: {
@@ -99,19 +99,19 @@ export default function CriarUsuario() {
     });
   }
 
-  async function verificaCamposPrenchidos(){
-    if(nomeUsuario=='' || email=='' ||  telefone=='' ||
-       nomeUsuario==undefined || email==undefined || dataNasc==undefined || telefone==undefined){
+  async function verificaCamposPrenchidos() {
+    if (nomeUsuario == '' || email == '' || telefone == '' ||
+      nomeUsuario == undefined || email == undefined || dataNasc == undefined || telefone == undefined) {
       alert("Preencha todos os campos para prosseguir com o cadastro")
       return false;
-    }else
+    } else
       return true
   }
 
 
 
   return (
-    <View style={styles.container}> 
+    <View style={styles.container}>
       <Modal
         animationType="fade"
         transparent={true}
@@ -128,39 +128,37 @@ export default function CriarUsuario() {
             </Text>
           </View>
         </View>
-          
+
       </Modal>
       <TextInput placeholder={"Nome"} style={styles.input}
-        autoCompleteType={'name'} 
+        autoCompleteType={'name'}
         onChangeText={text => onChangeTextnomeUsuario(text.trim())} value={nomeUsuario} autoCapitalize={'none'} />
-      <TextInput placeholder={"E-mail"} style={styles.input} 
-        keyboardType = "email-address"
-        onChangeText={text => onChangeTextEmail(text.trim())} value={email}  autoCapitalize={'none'}/>
+      <TextInput placeholder={"E-mail"} style={styles.input}
+        keyboardType="email-address"
+        onChangeText={text => onChangeTextEmail(text.trim())} value={email} autoCapitalize={'none'} />
 
-      <View style={styles.containerDataCelular}> 
-
-        <DatePicker 
-        placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
-        date={dataNasc}
-        format="DD/MM/YYYY"
-        minDate="01/01/1900"
-        onDateChange={setDataNasc}/>     
-
-
-        <TextInput placeholder={"Celular"} style={styles.inputDataCelular}
-          keyboardType='numeric'  
-          onChangeText={text => onChangeTextTelefone(text.trim())} value={telefone} />
+      <Text style={styles.label}>Data de nascimento:</Text>
+      <View style={styles.containerDataCelular}>
+        <DatePicker
+          placeholder={"Data Nascimento"} style={styles.inputDataCelular}
+          date={dataNasc}
+          format="DD/MM/YYYY"
+          minDate="01/01/1900"
+          onDateChange={setDataNasc} />
       </View>
-    <Text style={styles.label}>Tipo de usuário:</Text>
+      <TextInput placeholder={"Celular"} style={styles.inputDataCelular}
+        keyboardType='numeric'
+        onChangeText={text => onChangeTextTelefone(text.trim())} value={telefone} />
+      <Text style={styles.label}>Tipo de usuário:</Text>
       <Picker style={styles.pickerComponente}
         prompt="Tipo de usuário"
-        mode="dropdown"        
-        
+        mode="dropdown"
+
         selectedValue={selectedValue}
         onValueChange={(itemValue, value) => {
           setSelectedValue(itemValue)
         }}>
-        
+
         {
           perfil.map(p => {
             return (
@@ -169,46 +167,46 @@ export default function CriarUsuario() {
           })
         }
 
-        
+
       </Picker>
 
       <TouchableOpacity style={styles.botaoCadastrar} onPress={async () => {
-        try{
+        try {
           setShowLoader(true);
           let prosseguir = await verificaCamposPrenchidos();
 
-          if(prosseguir){
+          if (prosseguir) {
             let responseConsultaEmail = await buscaUsuario(email, Token);
-    
-            if(responseConsultaEmail.status == 200){
+
+            if (responseConsultaEmail.status == 200) {
               alert('Já existe um usuário cadastrado com esses dados!')
-              
-            }else{
+
+            } else {
               let response = await criaUsuario({
                 nome: nomeUsuario,
                 email: email,
-                dataNascimento: moment(dataNasc,'DD/MM/YYYY').format("YYYY-MM-DD"),
+                dataNascimento: moment(dataNasc, 'DD/MM/YYYY').format("YYYY-MM-DD"),
                 telefone: telefone,
-                perfilId:selectedValue
-                }, Token);
+                perfilId: selectedValue
+              }, Token);
 
               let json = await response.json();
               if (response.status >= 200 && response.status <= 299) {
                 alert('Usuário cadastrado com sucesso!')
                 navigation.goBack();
-              }else{
+              } else {
                 alert(json.mensagem);
               }
             }
           }
         }
-        catch(e){
+        catch (e) {
           alert('Erro ao salvar usuário.')
         }
-        finally{
+        finally {
           setShowLoader(false);
         }
-        
+
       }}>
         <Text style={styles.botaoCadastrarTexto}>Cadastrar</Text>
       </TouchableOpacity>
@@ -242,7 +240,7 @@ const styles = StyleSheet.create({
     borderRadius: 41,
     backgroundColor: '#EBEBEB',
     color: '#333333',
-    width: '45%'
+    width: '95%'
   },
   pickerComponente: {
     marginTop: '3%',
@@ -253,10 +251,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#EBEBEB',
     color: '#333333'
   },
-  label:{
-    fontSize: 16,
-    color: '#333333',
-    marginTop: '3%'
+  label: {
+    marginTop: '3%',
+    marginHorizontal: '2%',
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#999999',
+    width: '45%'
   },
   botaoCadastrar: {
     backgroundColor: '#3385FF',
