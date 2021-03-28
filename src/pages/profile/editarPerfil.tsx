@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, ActivityIndicator,StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl, Alert } from 'react-native';
+import { Modal, ActivityIndicator, StyleSheet, Text, View, Image, TextInput, TouchableOpacity, RefreshControl, Alert } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StackActions, useNavigation } from '@react-navigation/native';
@@ -57,7 +57,7 @@ export default function EditarPerfil() {
                 token = JSON.parse(value)
             }
             if (user !== null) {
-                
+
                 userId = JSON.parse(user)
             }
             console.log(user)
@@ -66,7 +66,7 @@ export default function EditarPerfil() {
             if (response.status == 200) {
                 onChangeTextNome(json.nome);
                 onChangeTextEmail(json.email);
-                onChangeTextData(moment(json.dataNascimento).add(1,'days').format('DD/MM/yyyy'));
+                onChangeTextData(moment(json.dataNascimento).add(1, 'days').format('DD/MM/yyyy'));
                 onChangeTextTelefone(json.telefone);
             }
         }
@@ -77,13 +77,13 @@ export default function EditarPerfil() {
 
     const storeData = async (value, key) => {
         try {
-          await AsyncStorage.setItem(key, value)
-          return "ok";
+            await AsyncStorage.setItem(key, value)
+            return "ok";
         } catch (e) {
-          // saving error
-          return e
+            // saving error
+            return e
         }
-      }
+    }
 
     useEffect(() => {
         const request = async () => {
@@ -105,14 +105,14 @@ export default function EditarPerfil() {
                 if (response.status == 200) {
                     onChangeTextNome(json.nome);
                     onChangeTextEmail(json.email);
-                    onChangeTextData(moment(json.dataNascimento).add(1,'days').format('DD/MM/yyyy'));
+                    onChangeTextData(moment(json.dataNascimento).add(1, 'days').format('DD/MM/yyyy'));
                     onChangeTextTelefone(json.telefone);
                 }
             }
             catch (e) {
                 alert(e)
             }
-            finally{
+            finally {
                 setShowLoader(false);
             }
         }
@@ -139,7 +139,7 @@ export default function EditarPerfil() {
                     onPress: async () => {
                         const responseAuth = await storeData('', 'AUTH')
                         const responseUserId = await storeData('', 'USER_ID')
-                        if(responseAuth == 'ok' && responseUserId == 'ok'){
+                        if (responseAuth == 'ok' && responseUserId == 'ok') {
                             navigation.dispatch(
                                 StackActions.replace('Login', {
                                 })
@@ -164,18 +164,18 @@ export default function EditarPerfil() {
                 transparent={true}
                 visible={showLoader}
                 onRequestClose={() => {
-                setShowLoader(!showLoader)
+                    setShowLoader(!showLoader)
                 }}
             >
                 <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
-                    <Text style={styles.textStyle}>
-                    Aguarde...
+                    <View style={styles.modalView}>
+                        <ActivityIndicator style={styles.loader} animating={showLoader} size="large" color="#0FD06F" />
+                        <Text style={styles.textStyle}>
+                            Aguarde...
                     </Text>
+                    </View>
                 </View>
-                </View>
-                
+
             </Modal>
             <ScrollView
                 refreshControl={
@@ -193,45 +193,47 @@ export default function EditarPerfil() {
                         onChangeText={text => onChangeTextNome(text)} />
                     <TextInput placeholder={"Email"} value={email} style={styles.input}
                         onChangeText={text => onChangeTextEmail(text)} />
-                    <DatePicker 
-                        placeholder={"Data Nascimento"}  style={styles.inputDataCelular}
+                    <DatePicker
+                        placeholder={"Data Nascimento"} style={styles.input}
                         date={moment(data, 'DD/MM/YYYY')}
                         format="DD/MM/yyyy"
                         minDate="01/01/1900"
                         onDateChange={data => onChangeTextData(data)}
-                    /> 
+                    />
                     <TextInput placeholder={"Telefone"} value={telefone} style={styles.input}
                         onChangeText={text => onChangeTextTelefone(text)} />
                     <TouchableOpacity onPress={() => {
-                        navigation.navigate('AlterarSenha', {userId: idUsuario, token: tokenUsuario })
-                        }
+                        navigation.navigate('AlterarSenha', { userId: idUsuario, token: tokenUsuario })
+                    }
                     }>
                         <Text style={styles.link}>
                             Alterar senha
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
-                        setShowLoader(true);
-                        let response = await editaUsuario();
-                        if(response.status == 200){
-                            setShowLoader(false);
-                            alert('Dados alterados com sucesso.')
-                        }
-                        else{
-                            setShowLoader(false);
-                            alert('Erro ao alterar dados.')
-                        }
-                        console.log(moment(data, "DD/MM/YYYY").format("YYYY-MM-DD"))
-                    }}>
-                        <Text style={styles.botaoSalvarTexto}>Salvar</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.botaoSair} onPress={async () => {
+                    <View style={styles.containerBotoes}>
+                        <TouchableOpacity style={styles.botaoSalvar} onPress={async () => {
+                            setShowLoader(true);
+                            let response = await editaUsuario();
+                            if (response.status == 200) {
+                                setShowLoader(false);
+                                alert('Dados alterados com sucesso.')
+                            }
+                            else {
+                                setShowLoader(false);
+                                alert('Erro ao alterar dados.')
+                            }
+                            console.log(moment(data, "DD/MM/YYYY").format("YYYY-MM-DD"))
+                        }}>
+                            <Text style={styles.botaoSalvarTexto}>Salvar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.botaoSair} onPress={async () => {
 
-                        await confirmaLogout();
-                        
-                    }} >
-                        <Text style={styles.botaoSalvarTexto}>Sair da conta</Text>
-                    </TouchableOpacity>
+                            await confirmaLogout();
+
+                        }} >
+                            <Text style={styles.botaoSalvarTexto}>Sair da conta</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </ScrollView>
         </View>
@@ -246,6 +248,10 @@ const styles = StyleSheet.create({
     conteudo: {
         alignItems: 'center',
     },
+    containerBotoes: {
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
+    },
     fotoPerfil: {
         width: 150,
         height: 150,
@@ -253,49 +259,47 @@ const styles = StyleSheet.create({
         borderRadius: 82,
     },
     input: {
-        marginTop: 25,
-        width: 266,
-        height: 50,
-        backgroundColor: '#fff',
-        textAlign: 'center',
-        fontWeight: 'bold',
-        borderRadius: 32,
-        borderColor: 'black',
-        borderWidth: 1
+        marginTop: '5%',
+        width: '90%',
+        padding: 15,
+        fontSize: 16,
+        borderRadius: 41,
+        backgroundColor: '#EBEBEB',
+        color: '#333333',
+        textAlign: 'center'
     },
     botaoSalvar: {
         backgroundColor: '#3385FF',
-        width: 144,
-        height: 50,
+        width: '35%',
         padding: 10,
         borderRadius: 40,
-        marginTop: 30,
-        flexDirection: 'column',
+        marginTop: '5%',
         alignContent: 'center',
         justifyContent: 'center',
+        marginHorizontal: '5%'
     },
     botaoSair: {
-        backgroundColor: '#FB0105',
-        flex: 1,
+        backgroundColor: '#FF3333',
+        width: '35%',
         padding: 10,
         borderRadius: 40,
-        marginTop: 30,
-        flexDirection: 'column',
+        marginTop: '5%',
         alignContent: 'center',
         justifyContent: 'center',
+        marginHorizontal: '5%'
     },
     botaoSalvarTexto: {
-        textAlign: 'center',
-        color: '#FFFFFF',
-        fontSize: 24,
+        color: '#fff',
+        fontSize: 20,
+        textAlign: 'center'
     },
     link: {
-        marginTop: 30,
+        marginTop: '5%',
         textDecorationLine: 'underline',
         fontSize: 20,
     },
     containerDataCelular: {
-      flexDirection: 'row',
+        flexDirection: 'row',
     },
     inputDataCelular: {
         marginTop: 25,
@@ -312,35 +316,35 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     loader: {
-      flexDirection: 'column',
-      alignContent: 'center',
-      justifyContent: 'center',
+        flexDirection: 'column',
+        alignContent: 'center',
+        justifyContent: 'center',
     },
     centeredView: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
     },
     modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      opacity: 0.9,
-      borderRadius: 20,
-      padding: '20%',
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5
+        margin: 20,
+        backgroundColor: "white",
+        opacity: 0.9,
+        borderRadius: 20,
+        padding: '20%',
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
     },
     textStyle: {
-      color: "black",
-      fontWeight: "bold",
-      textAlign: "center"
+        color: "black",
+        fontWeight: "bold",
+        textAlign: "center"
     }
 });
