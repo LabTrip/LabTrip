@@ -3,16 +3,19 @@ import { View, StyleSheet, Text } from 'react-native';
 import BotaoMais from '../../components/botaoMais';
 import CardOrcamento from '../../components/cardOrcamento';
 import CardDespesasAdicionais from '../../components/cardDespesaAdicional';
+import { useNavigation } from '@react-navigation/native'
 
 
 export default function DetalhesOrcamento() {
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <BotaoMais />
+            <BotaoMais onPress={() =>
+                navigation.navigate('AdicionarDespesa')} />
             <CardOrcamento planejado={30000} saldoAtual={10000} />
 
             <Text style={styles.label}>Despesas adicionais: </Text>
-            <CardDespesasAdicionais data={'12/03/2021'} descricao={'Dogão na praça'} valor={458}/>
+            <CardDespesasAdicionais data={'12/03/2021'} descricao={'Dogão na praça'} valor={458} />
 
         </View>
 

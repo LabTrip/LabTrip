@@ -1,13 +1,17 @@
 import React from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function CardOrcamento(props) {
+    const navigation = useNavigation();
+
     return (
         <View style={styles.cardOrcamento}>
             <View style={styles.containerRow}>
                 <Text style={styles.texto}>Orçamento planejado: R$ {props.planejado}</Text>
-                <TouchableOpacity >
+                <TouchableOpacity onPress={() => navigation.navigate('EditarOrcamentoPlanejado', {orcamento:props.planejado})} >
                     <MaterialCommunityIcons name={'pencil'} color={'black'} size={25} />
                 </TouchableOpacity>
             </View>
