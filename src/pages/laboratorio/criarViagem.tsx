@@ -159,14 +159,11 @@ const styles = StyleSheet.create({
         width: '45%',
         marginHorizontal: '2%',
         height: 50,
-        backgroundColor: '#fff',
+        backgroundColor: '#EBEBEB',
         textAlign: 'center',
         justifyContent: 'space-around',
-        fontWeight: 'bold',
         borderRadius: 32,
-        borderColor: 'black',
-        borderWidth: 1,
-        padding: 10,
+        padding: 15,
         fontSize: 16,
     }
 
