@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import {useNavigation} from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 
 export default function EditarOrcamentoPlanejado({ route }) {
@@ -18,8 +18,7 @@ export default function EditarOrcamentoPlanejado({ route }) {
                 }}>
                     <Text style={styles.textoBotao}>Salvar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.botaoCancelar} onPress={() => {
-                }}>
+                <TouchableOpacity style={styles.botaoCancelar} onPress={() => navigation.goBack()}>
                     <Text style={styles.textoBotao}>Cancelar</Text>
                 </TouchableOpacity>
 
@@ -85,6 +84,6 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: 20,
         textAlign: 'center'
-        
+
     }
 })

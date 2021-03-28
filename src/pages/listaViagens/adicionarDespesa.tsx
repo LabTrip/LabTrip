@@ -32,8 +32,7 @@ export default function AdicionarDespesa({ route }) {
                 }}>
                     <Text style={styles.textoBotao}>Salvar</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.botaoCancelar} onPress={() => {
-                }}>
+                <TouchableOpacity style={styles.botaoCancelar} onPress={() => navigation.goBack() }>
                     <Text style={styles.textoBotao}>Cancelar</Text>
                 </TouchableOpacity>
 
