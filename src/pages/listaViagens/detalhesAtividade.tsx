@@ -1,8 +1,11 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
+export default function DetalhesAtividade({ route }) {
 
-export default function DetalhesAtividade({route}) {
+    const [gostei, setGostei] = useState(0);
+    const [naoGostei, setNaoGostei] = useState(0);
     return (
         <View style={styles.container}>
             <View style={styles.containerDetalhes}>
@@ -16,13 +19,20 @@ export default function DetalhesAtividade({route}) {
                 <Text style={styles.textoDetalhes}>Ensolarado, 25°</Text>
             </View>
             <Text style={styles.tituloDetalhes}>Custo R$ 500,00</Text>
-
-            <View style={[styles.containerDetalhes, {height: '40%'}]}>
+            <View style={[styles.containerDetalhes, { height: '40%' }]}>
                 <Text style={styles.tituloDetalhes}>Midias</Text>
             </View>
+            <View style={styles.containerVotos}>
+                <TouchableOpacity style={styles.botaoVoto} onPress={() => setGostei(gostei + 1)}>
+                    <MaterialCommunityIcons name="heart" color={'#FF2424'} size={31} />
+                    <Text>{gostei}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.botaoVoto} onPress={() => setNaoGostei(naoGostei + 1)}>
+                    <MaterialCommunityIcons name="close-thick" color={'#000000'} size={31} />
+                    <Text>{naoGostei}</Text>
+                </TouchableOpacity>
+            </View>
         </View>
-
-
     );
 }
 
@@ -44,6 +54,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    containerVotos: {
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+        width: '96%',
+        marginBottom: '3%'
+    },
     textoStatus: {
         color: '#0FD06F',
         marginRight: '5%',
@@ -61,5 +77,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         color: '#999999',
         fontSize: 24,
+    },
+    botaoVoto: {
+        flexDirection: 'row',
     }
 })
