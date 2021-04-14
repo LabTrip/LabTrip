@@ -19,8 +19,13 @@ export default function DetalhesAtividade({ route }) {
                 <Text style={styles.textoDetalhes}>Ensolarado, 25°</Text>
             </View>
             <Text style={styles.tituloDetalhes}>Custo R$ 500,00</Text>
-            <View style={[styles.containerDetalhes, { height: '40%' }]}>
-                <Text style={styles.tituloDetalhes}>Midias</Text>
+            <View style={[styles.containerDetalhes, { height: '40%', flexDirection: 'row', justifyContent: 'space-between' }]}>
+                <Text style={styles.tituloDetalhes}>
+                    Midias
+                </Text>
+                <TouchableOpacity>
+                    <MaterialCommunityIcons name="pencil" color={'black'} size={31} />
+                </TouchableOpacity>
             </View>
             <View style={styles.containerVotos}>
                 <TouchableOpacity style={styles.botaoVoto} onPress={() => setGostei(gostei + 1)}>
