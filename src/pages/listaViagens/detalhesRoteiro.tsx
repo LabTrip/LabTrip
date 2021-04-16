@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, Linking, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import CardRoteiro from '../../components/cardRoteiro';
 import ScrollViewFlat from '../../components/scrollViewFlat';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function DetalhesRoteiro() {
     const [selectedValue, setSelectedValue] = useState();
+
+
 
     let participantesData = [
         {
@@ -30,19 +33,26 @@ export default function DetalhesRoteiro() {
 
     return (
         <View style={styles.conteudo}>
-            <Text style={styles.texto}>Data</Text>
-            <Picker
-                prompt="Data"
-                selectedValue={selectedValue}
-                style={{ height: 48, width: 150 }}
-                onValueChange={(itemValue, itemIndex) => {
-                    setSelectedValue(itemValue)
-                }}
-            >
-                <Picker.Item label="21/01/2021" value="21/01/2021" />
-                <Picker.Item label="22/01/2021" value="22/01/2021" />
+            <View style={styles.containerTop}>
+                <Text style={styles.texto}>Data</Text>
+                <Picker
+                    prompt="Data"
+                    selectedValue={selectedValue}
+                    style={{ height: 48, width: 150 }}
+                    onValueChange={(itemValue) => {
+                        setSelectedValue(itemValue)
+                    }}
+                >
+                    <Picker.Item label="21/01/2021" value="21/01/2021" />
+                    <Picker.Item label="22/01/2021" value="22/01/2021" />
 
-            </Picker>
+                </Picker>
+                <TouchableOpacity style={styles.botaoBaixar} onPress={() => Linking.openURL('https://drive.google.com/uc?export=download&id=1kazyfB4JHoZSmczN-FBVXB4C8qN5b46G')}>
+                    <Text style={[styles.texto, {color: '#fff', fontSize: 20}]}>Baixar roteiro</Text>
+                    <MaterialCommunityIcons name={'file-download'} color={'#fff'} size={25} />
+
+                </TouchableOpacity>
+            </View>
             <ScrollViewFlat>
                 <FlatList
                     data={participantesData}
@@ -61,10 +71,22 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff'
     },
+    containerTop: {
+        marginTop: '3%',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     texto: {
-        marginTop: '2%',
-        marginLeft: '6%',
         color: '#999999',
         fontSize: 18,
     },
+    botaoBaixar: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: '#3385FF',
+        borderRadius: 40,
+        padding: 8
+
+    }
 });
