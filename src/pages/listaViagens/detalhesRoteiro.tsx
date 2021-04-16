@@ -47,7 +47,7 @@ export default function DetalhesRoteiro() {
                     <Picker.Item label="22/01/2021" value="22/01/2021" />
 
                 </Picker>
-                <TouchableOpacity style={styles.botaoBaixar} onPress={() => Linking.openURL('https://drive.google.com/uc?export=download&id=1kazyfB4JHoZSmczN-FBVXB4C8qN5b46G')}>
+                <TouchableOpacity style={styles.botaoBaixar} onPress={() => Linking.openURL('https://dl.dropbox.com/s/0skuwdlhg6q4fol/History%20of%20GIF.gif?dl=1')}>
                     <Text style={[styles.texto, {color: '#fff', fontSize: 20}]}>Baixar roteiro</Text>
                     <MaterialCommunityIcons name={'file-download'} color={'#fff'} size={25} />
 
