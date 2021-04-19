@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function DetalhesAtividade({ route }) {
 
     const [gostei, setGostei] = useState(0);
     const [naoGostei, setNaoGostei] = useState(0);
+    const navigation = useNavigation();
     return (
         <View style={styles.container}>
             <View style={styles.containerDetalhes}>
@@ -23,7 +25,7 @@ export default function DetalhesAtividade({ route }) {
                 <Text style={styles.tituloDetalhes}>
                     Midias
                 </Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('AdicionarMidias')}>
                     <MaterialCommunityIcons name="pencil" color={'black'} size={31} />
                 </TouchableOpacity>
             </View>
