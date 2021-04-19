@@ -13,7 +13,7 @@ export default function DetalhesAtividade({ route }) {
             <View style={styles.containerDetalhes}>
                 <Text style={styles.tituloDetalhes}>{route.params.atividade.nome}</Text>
                 <View style={styles.containerDataStatus}>
-                    <Text style={styles.textoDetalhes}>{route.params.data}alo</Text>
+                    <Text style={styles.textoDetalhes}>{route.params.data}</Text>
                     <Text style={styles.textoStatus}>Agendada</Text>
                 </View>
                 <Text style={styles.textoDetalhes}>{route.params.atividade.horario}</Text>
