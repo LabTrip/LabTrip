@@ -9,6 +9,7 @@ import CriarAgencia from '../../pages/laboratorio/criarAgencia';
 import CriarUsuario from '../../pages/laboratorio/criarUsuario';
 import EditarAgencia from '../../pages/laboratorio/editarAgencia'; 
 import EditarUsuario from '../../pages/laboratorio/editarUsuario';
+import MenuDetalhesViagemAgencia from '../menu/menuDetalhesViagemAgencia'
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -24,6 +25,7 @@ export default function TelasLaboratorio() {
       <Screen name="CriarUsuario" options={{ title: 'Criar usuário'}} component={CriarUsuario} />
       <Screen name="EditarAgencia" options={{ title: 'Editar agencia'}} component={EditarAgencia} />
       <Screen name="EditarUsuario" options={{ title: 'Editar usuário'}} component={EditarUsuario} />
+      <Screen name="MenuDetalhesViagemAgencia" options={{ title: 'Editar viagem'}} component={MenuDetalhesViagemAgencia} />
     </Navigator>
   );
 }

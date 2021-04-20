@@ -60,25 +60,9 @@ export default function EditarViagem({ route }) {
                 </View>
                 <TextInput placeholder={"Local da viagem"} value={localViagem} style={styles.input}
                     onChangeText={text => onChangeTextLocalViagem(text)} />
-
-                <View style={styles.containerAddFuncionarios}>
-                    <TextInput placeholder={"Adicionar Funcionarios"} style={styles.inputAddFuncionario} />
-                    <BotaoLupa onPress={() => alert('clicou para adicionar')} />
-                </View>
-
-                <View style={styles.containerParticipantes}>
-                    <FlatList
-                        data={participantesData}
-                        keyExtractor={(item) => item.id}
-                        renderItem={({ item }) => (
-                            <CardParticipante nome={item.nome} dono={item.dono} proprietario={item.proprietario} />
-                        )}
-                    />
-                </View>
-
+                    
                 <TouchableOpacity style={styles.botaoCriar} onPress={() => {
                     alert('Clicou em criar viagem!')
-                    navigation.goBack();
                 }}>
                     <Text style={styles.botaoCriarTexto}>Salvar viagem</Text>
                 </TouchableOpacity>

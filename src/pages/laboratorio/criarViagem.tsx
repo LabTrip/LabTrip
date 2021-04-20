@@ -51,11 +51,7 @@ export default function CriarViagem() {
                 </View>
                 <TextInput placeholder={"Local da viagem"} style={styles.input} />
                 <View style={styles.containerAddFuncionarios}>
-                    <TextInput placeholder={"Adicionar Dono"} style={styles.inputAddFuncionario} />
-                    <BotaoLupa onPress={() => alert('clicou para adicionar')} />
-                </View>
-                <View style={styles.containerAddFuncionarios}>
-                    <TextInput placeholder={"Adicionar Participantes"} style={styles.inputAddFuncionario} />
+                    <TextInput placeholder={"Adicionar proprietário da viagem"} style={styles.inputAddParticipante} />
                     <BotaoLupa onPress={() => alert('clicou para adicionar')} />
                 </View>
                 <View style={styles.containerParticipantes}>
@@ -112,7 +108,7 @@ const styles = StyleSheet.create({
         color: '#999999',
         width: '45%'
     },
-    inputAddFuncionario: {
+    inputAddParticipante: {
         marginTop: '3%',
         width: '85%',
         height: 'auto',
