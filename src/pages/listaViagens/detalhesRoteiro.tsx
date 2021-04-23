@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FlatList, Linking, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import CardRoteiro from '../../components/cardRoteiro';
+import CardAtividade from '../../components/cardAtividade';
 import ScrollViewFlat from '../../components/scrollViewFlat';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
@@ -58,7 +58,7 @@ export default function DetalhesRoteiro() {
                     data={participantesData}
                     keyExtractor={(item) => item.id}
                     renderItem={({ item }) => (
-                        <CardRoteiro nome={item.nome} local={item.local} horario={item.horario} item={item} data={selectedValue} />
+                        <CardAtividade nome={item.nome} local={item.local} horario={item.horario} item={item} data={selectedValue} />
                     )}
                 />
             </ScrollViewFlat>

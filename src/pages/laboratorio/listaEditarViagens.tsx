@@ -28,7 +28,7 @@ export default function ListaEditarViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: 2,
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagemAgencia"
     },
     {
       id: '4e07408562bedb8b60aaaace05c1decfe3ad16b72230967de01f640b7e4729b49fce',
@@ -37,7 +37,7 @@ export default function ListaEditarViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: 3,
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagemAgencia"
     },
     {
       id: '4e07408562bedb8b60ce05c1decfe3ad16b72230961fe01f640b7e4729baaa49fce',
@@ -46,7 +46,7 @@ export default function ListaEditarViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: 5,
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagemAgencia"
     },
     {
       id: '4e07428562bedb8b60ce05c1decfe3ad16b72230961fe01f640b7e4729baaa49fce',
@@ -55,7 +55,7 @@ export default function ListaEditarViagens() {
       dataFim: "28/02/2021",
       local: "Ubatuba - SP",
       status: 4,
-      navigate: "EditarViagem"
+      navigate: "MenuDetalhesViagemAgencia"
     }
   ];
 
