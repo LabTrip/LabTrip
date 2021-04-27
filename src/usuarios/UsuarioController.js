@@ -1,13 +1,19 @@
 import Usuario from './Usuario'
 import api from '../requesterConfig'
 const cryptoRandomString = require('crypto-random-string');
+const aws = require("aws-sdk");
+const fs = require("fs");
+const path = require("path");
+const { promisify } = require("util");
+const s3 = new aws.S3();
+import {s3Teste} from '../config/s3'
 
 const usuarioViewModel = (usuario) => ({
   id: usuario.id,
   nome: usuario.nome,
   email: usuario.email,
   telefone: usuario.telefone,
-  foto: usuario.foto,
+  urlFoto: usuario.urlFoto,
   perfilId: usuario.perfilId,
   descricao: usuario.descricao,
   dataNascimento: usuario.dataNascimento,
@@ -22,7 +28,6 @@ export default class UsuarioController {
   //GET /usuarios
   async buscaTodos(req, res) {
     try {
-      console.log("Busca todos")
       const usuarios = await this.usuarioRepository.buscaTodos();
       res.status(200).json(usuarios.map(u => usuarioViewModel(u)));
     }
@@ -34,7 +39,7 @@ export default class UsuarioController {
   async salva(req, res) {
     try {
 
-      const { nome, email, telefone, foto, perfilId, dataNascimento } = req.body;
+      const { nome, email, telefone, perfilId, dataNascimento } = req.body;
       const perfis = await this.verificaPermissaoCriarUsuario(req);
 
       let acesso = false;
@@ -53,7 +58,7 @@ export default class UsuarioController {
 
       const senhaProvisoria = cryptoRandomString({ length: 15, type: 'distinguishable' });
       const codigoVerificacao = cryptoRandomString({ length: 6, type: 'distinguishable' });
-      const usuario = new Usuario(nome, email, telefone, foto, perfilId, dataNascimento, codigoVerificacao, senhaProvisoria, undefined);
+      const usuario = new Usuario(nome, email, telefone, null, null, null, perfilId, dataNascimento, codigoVerificacao, senhaProvisoria, undefined);
 
       await this.usuarioRepository.salva(usuario);
 
@@ -108,7 +113,7 @@ export default class UsuarioController {
       if (acesso) {
         const { nome, email, telefone, foto, perfilId, dataNascimento } = req.body;
 
-        const usuario = new Usuario(nome, email, telefone, foto, perfilId, dataNascimento, null, null, req.usuario.id);
+        const usuario = new Usuario(nome, email, telefone, null, null, null, perfilId, dataNascimento, null, null, req.usuario.id);
 
         const usuarioAtualizado = await this.usuarioRepository.atualiza(usuario);
 
@@ -132,7 +137,7 @@ export default class UsuarioController {
       const acesso = await this.podeRealizarOperacaoPorId(req.acesso.tipoAcesso, req.usuario.id, req.token.id);
 
       if (acesso) {
-        const usuario = new Usuario(req.usuario.nome, req.usuario.email, req.usuario.telefone, req.usuario.foto, req.usuario.perfilId, req.usuario.dataNascimento, req.usuario.codigoVerificacao, req.body.senha, req.usuario.id);
+        const usuario = new Usuario(req.usuario.nome, req.usuario.email, req.usuario.telefone, null, null, null, req.usuario.perfilId, req.usuario.dataNascimento, req.usuario.codigoVerificacao, req.body.senha, req.usuario.id);
 
         await this.usuarioRepository.atualizaSenha(usuario);
 
@@ -159,6 +164,85 @@ export default class UsuarioController {
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
+  }
+
+  async mostraFotoPerfil(req, res) {
+    try{
+      const usuario = req.usuario;
+      var readStream = null;
+
+      if(usuario.chaveFoto && usuario.chaveFoto != ''){
+        readStream = await s3.getObject({Key: usuario.chaveFoto, Bucket: process.env.BUCKET_NAME}).createReadStream();
+      }
+      else{
+        readStream = await s3.getObject({Key: 'pattern-foto-de-perfil.png', Bucket: process.env.BUCKET_NAME}).createReadStream();
+      }
+      
+
+      readStream.pipe(res);
+    }
+    catch(e){
+      return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
+    }
+
+  }
+
+  async atualizaFotoPerfil(req, res) {
+    try{
+      const usuario = req.usuario;
+      const { originalname: name, size, key} = req.file;
+      const url = '/usuarios/fotoperfil/' + key;
+
+      const foto = {name: name, size: size, key: key, url: url}
+
+      await this.usuarioRepository.atualizaFotoPerfil(foto, usuario);
+
+      if(usuario.chaveFoto.length > 1){
+        await this.deletaArquivo(usuario.chaveFoto);
+      }
+    
+      return res.status(200).json({status: '200', mensagem: 'Foto atualizada com sucesso.'});
+    }
+    catch(e){
+      return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
+    }
+
+  }
+
+  async deletaFotoPerfil(req, res) {
+    try{
+      const usuario = req.usuario;
+
+      await this.usuarioRepository.atualizaFotoPerfil({name: '', key: '', url: ''}, usuario);
+
+      await this.deletaArquivo(usuario.chaveFoto);
+
+      return res.status(204).json({status: '200', mensagem: 'Foto deleta com sucesso.'});    
+    }
+    catch(e){
+      return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
+    }
+  }
+
+  async deletaArquivo(key){
+    if (process.env.STORAGE_TYPE === "s3") {
+      return s3
+        .deleteObject({
+          Bucket: process.env.BUCKET_NAME,
+          Key: key,
+        })
+        .promise()
+        .then((response) => {
+          //console.log(response.status);
+        })
+        .catch((response) => {
+          //console.log(response.status);
+        });
+    } else {
+      return promisify(fs.unlink)(
+        path.resolve(__dirname, "..", "..", "tmp", "uploads", key)
+      );
+    }
   }
 
   async podeRealizarOperacaoPorId(tipoAcesso, id, usuarioId, request = undefined) {

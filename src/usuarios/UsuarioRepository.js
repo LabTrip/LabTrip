@@ -1,3 +1,5 @@
+import { formatTokenType } from "sucrase/dist/parser/tokenizer/types";
+
 export default class UsuarioRepository{
     constructor(client){
       this.client = client;
@@ -47,6 +49,20 @@ export default class UsuarioRepository{
           telefone: usuario.telefone,
           perfilId: usuario.perfilId,
           dataNascimento: usuario.dataNascimento,
+          editadoEm: new Date().toISOString()
+        })
+        .returning("*");
+  
+        return firstRow;
+    }
+
+    async atualizaFotoPerfil(foto, usuario){
+      const [firstRow] = await this.client('usuario')
+        .where({'id': usuario.id})
+        .update({
+          nomeFoto: foto.name,
+          chaveFoto: foto.key,
+          urlFoto: foto.url,
           editadoEm: new Date().toISOString()
         })
         .returning("*");

@@ -9,6 +9,8 @@ import PerfilRepository from '../perfis/PerfilRepository'
 import AcessoRotaMiddleware from '../acesso_rota/AcessoRotaMiddleware'
 import AcessoRotaRepository from '../acesso_rota/AcessoRotaRepository'
 import {client} from '../config'
+const multer = require("multer");
+const multerConfig = require("../config/multer");
 
 export default function defineUsuarioRouter(){
   const router = express.Router();
@@ -41,6 +43,15 @@ export default function defineUsuarioRouter(){
     .get((req, res) => usuarioController.mostra(req, res))
     .put((req, res) => usuarioController.atualiza(req, res))
     .delete((req, res) => usuarioController.deleta(req, res));
+
+    router.route('/fotoperfil/:id')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    /*.all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))*/
+    .all((req, res, next) => usuarioMiddleware.usuarioExiste(req, res, next))
+    .get((req, res) => usuarioController.mostraFotoPerfil(req, res))
+    .put(multer(multerConfig).single("file"), (req, res) => usuarioController.atualizaFotoPerfil(req, res))
+    //.put((req, res) => usuarioController.atualizaFotoPerfil(req, res))
+    .delete((req, res) => usuarioController.deletaFotoPerfil(req, res));
 
     router.route('/email/:email')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
