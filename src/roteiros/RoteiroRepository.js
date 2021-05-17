@@ -39,7 +39,7 @@ export default class RoteiroRepository{
     async buscaPorId(req){
       switch(req.acesso.tipoAcesso){          
         case 'Total': 
-         return await this.buscaPorId_AcessoTotal(req.params.id, req.params.versao)
+         return await this.buscaPorId_AcessoTotal(req.params.viagemId)
         case 'Gerencial':
             return await this.buscaPorId_AcessoGerencial(req.params.id, req.params.versao, req.token.agenciaId);
           break;
@@ -53,6 +53,13 @@ export default class RoteiroRepository{
     }
 
     async buscaPorId_AcessoTotal(id, versao){
+      console.log(id)
+      return await this.client('roteiro')
+        .where({'id': id.toString()})
+        .first();
+    }
+
+    async buscaPorId_AcessoTotal_Versao(id, versao){
       console.log(id)
       console.log(versao)
       return await this.client('roteiro')
@@ -78,10 +85,15 @@ export default class RoteiroRepository{
         .andWhere({'usuario_viagem.usuarioId': usuarioId.toString()}).first();
     }
 
-    async buscaPorViagemId(viagemId, versao){
+    async buscaPorViagemId_Versao(viagemId, versao){
       return await this.client('roteiro')
         .Where({'viagemId': viagemId.toString()}).first()
         .andWhere({'versao': versao.toString()}).first();
+    }
+
+    async buscaPorViagemId(viagemId){
+      return await this.client('roteiro')
+        .where({'viagemId': viagemId.toString()});
     }
 
     async buscaPorViagemId_AcessoGerencial(viagemId, agenciaId){

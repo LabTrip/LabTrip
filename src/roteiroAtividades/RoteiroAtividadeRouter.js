@@ -35,6 +35,10 @@ export default function defineRoteiroAtividadeRouter(){
     .put((req, res) => roteiroAtividadeController.atualiza(req, res))
     .delete((req, res) => roteiroAtividadeController.deleta(req, res));
 
+  // ADICIONAR REQUEST PARA TRAZER TODAS AS ATIVIDADES DE UM ROTEIRO ESPECIFICO (roteiroId, versao)
+  // BUSCAR TAMBÉM AS INFORMAÇÕES ESPECÍFICAS DA VIAGEM
+  // ADMIN CONSEGUE ACESSAR TUDO, AGENTE APENAS ROTEIROS/ATIVIDAES VINCULADAS À AGENCIA E CLIENTE APENAS ÀS VIAGENS QUE PARTICIPA
+
 
   return router;
 }

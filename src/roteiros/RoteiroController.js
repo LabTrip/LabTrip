@@ -47,6 +47,18 @@ const roteiroViewModel = (roteiro) => ({
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }     
     }
+
+    async buscaRoteirosPorViagemId(req, res){
+      try{
+        const roteiros = await this.roteiroRepository.buscaPorViagemId(req.params.viagemId);
+        console.log(req.params.viagemId)
+        return res.status(200).json(roteiros.map(r => roteiroViewModel(r))); 
+
+      }catch(e){
+        console.log(e)
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
+      }     
+    }
   
     async atualiza(req,res){
       try{
