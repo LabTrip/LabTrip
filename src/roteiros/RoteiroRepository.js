@@ -20,26 +20,29 @@ export default class RoteiroRepository{
   }
   
     async buscaTodos_AcessoTotal(){
-        return await this.client('roteiro');
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id');
     }
 
     async buscaTodos_AcessoGerencial(agenciaId){
-      return await this.client('roteiro')
-      .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
-      .where({'viagem.agenciaId': agenciaId.toString()});    
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+        .where({'viagem.agenciaId': agenciaId.toString()});    
     }
 
     async buscaTodos_AcessoParcial(usuarioId){
-      return await this.client('roteiro')
-      .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
-      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-      .where({'usuario_viagem.usuarioId': usuarioId.toString()});    
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+        .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+        .where({'usuario_viagem.usuarioId': usuarioId.toString()});    
     }
 
     async buscaPorId(req){
       switch(req.acesso.tipoAcesso){          
         case 'Total': 
-         return await this.buscaPorId_AcessoTotal(req.params.viagemId)
+         return await this.buscaPorId_AcessoTotal(req.params.id, req.params.versao)
         case 'Gerencial':
             return await this.buscaPorId_AcessoGerencial(req.params.id, req.params.versao, req.token.agenciaId);
           break;
@@ -52,32 +55,67 @@ export default class RoteiroRepository{
   
     }
 
+    async buscarPorViagemId(req){
+      switch(req.acesso.tipoAcesso){          
+        case 'Total': 
+        
+         return await this.buscaPorViagemId_AcessoTotal(req)
+        case 'Gerencial':
+            return await this.buscaPorViagemId_AcessoGerencial(req);
+          break;
+        case 'Parcial':
+          return await this.buscaPorViagemId_AcessoParcial(req);
+          break;
+        default:
+          return undefined;
+      }
+  
+    }
+
     async buscaPorId_AcessoTotal(id, versao){
       console.log(id)
-      return await this.client('roteiro')
-        .where({'id': id.toString()})
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .where({'roteiro.id': id.toString(),
+                'roteiro.versao': versao.toString()
+              })
         .first();
     }
 
+    async buscaPorViagemId_AcessoTotal(req){
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .where({'viagemId': req.params.viagemId.toString()});
+    }
+
     async buscaPorId_AcessoTotal_Versao(id, versao){
-      console.log(id)
-      console.log(versao)
-      return await this.client('roteiro')
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
         .where({'id': id.toString()})
         .andWhere({'versao': versao.toString()}).first();
     }
 
 
     async buscaPorId_AcessoGerencial(roteiroId, versao, agenciaId){
-      return await this.client.select(['roteiro.*']).from('roteiro')
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
         .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+        .innerJoin('status','roteiro.statusId','status.id')
         .where({'roteiro.id': roteiroId.toString()})
         .andWhere({'versao': versao.toString()})
         .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
     }
+
+    async buscaPorViagemId_AcessoGerencial(req){
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+        .where({'roteiro.viagemId': req.params.viagemId.toString()})
+        .andWhere({'viagem.agenciaId': req.token.agenciaId.toString()});
+    }
   
     async buscaPorId_AcessoParcial(id, versao, usuarioId){
-      return await this.client.select(['roteiro.*', ]).from('roteiro')
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
         .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
         .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
         .where({'roteiro.id': id.toString()})
@@ -85,50 +123,46 @@ export default class RoteiroRepository{
         .andWhere({'usuario_viagem.usuarioId': usuarioId.toString()}).first();
     }
 
+    async buscaPorViagemId_AcessoParcial(req){
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+        .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+        .where({'roteiro.viagemId': req.params.viagemId.toString()})
+        .andWhere({'usuario_viagem.usuarioId': req.token.id.toString()});
+    }
+
     async buscaPorViagemId_Versao(viagemId, versao){
-      return await this.client('roteiro')
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
         .Where({'viagemId': viagemId.toString()}).first()
         .andWhere({'versao': versao.toString()}).first();
     }
 
     async buscaPorViagemId(viagemId){
-      return await this.client('roteiro')
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
         .where({'viagemId': viagemId.toString()});
     }
 
-    async buscaPorViagemId_AcessoGerencial(viagemId, agenciaId){
-      return await this.client.select(['roteiro.*']).from('roteiro')
-        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
-        .where({'roteiro.viagemId': viagemId.toString()})
-        .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
-    }
-  
-    async buscaPorViagemId_AcessoParcial(viagemId, usuarioId){
-      return await this.client.select(['roteiro.*', ]).from('roteiro')
-        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
-        .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-        .where({'roteiro.viagemId': id.toString()})
-        .andWhere({'usuario_viagem.usuarioId': usuarioId.toString()}).first();
-    }  
-
     async salva(roteiro){
       const [firstRow] = await this.client('roteiro')
-     .insert({
-       viagemId: roteiro.viagemId,
-       statusId: roteiro.statusId,
-       versao: roteiro.versao
-     })
-       .returning("*");  
-       return firstRow;     
+        .insert({
+        viagemId: roteiro.viagemId,
+        statusId: roteiro.statusId,
+        versao: roteiro.versao,
+        descricaoRoteiro: roteiro.descricaoRoteiro,
+        }).returning("*");  
+
+      return firstRow;     
     }    
   
     async atualiza(roteiro){
       const [firstRow] = await this.client('roteiro')
-        .where({'id': roteiro.id.toString()})
-        .andWhere({'versao': roteiro.versao.toString()})
-        .update({
-          statusId: roteiro.statusId   
-        })
+        .where({'id': roteiro.id.toString(),
+                'versao': roteiro.versao.toString()
+              })
+        .update(roteiro)
         .returning("*");
   
         return firstRow;

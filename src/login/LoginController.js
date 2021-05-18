@@ -55,7 +55,13 @@ export default class LoginController {
 
         if(usuario && (usuario.perfilId == 2 || usuario.perfilId == 3)){
           const funcionario = await this.loginRepository.buscaAgenciaId(usuario.id);
-          tokenContent.agenciaId = funcionario.agenciaId;
+          if(funcionario){
+            tokenContent.agenciaId = funcionario.agenciaId;
+          }
+          else{
+            tokenContent.agenciaId = null;
+          }
+          
         }
         
         const token = jwt.sign(tokenContent, process.env.SECRET, {expiresIn: 2592000});
@@ -67,6 +73,7 @@ export default class LoginController {
       }
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     

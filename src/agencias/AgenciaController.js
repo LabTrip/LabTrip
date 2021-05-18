@@ -149,6 +149,7 @@ export default class AgenciaController {
       res.status(200).send(this.retornoConvite());  
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     

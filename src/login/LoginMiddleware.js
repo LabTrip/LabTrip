@@ -9,6 +9,7 @@ export default class LoginMiddleware{
     async usuarioExiste(req, res, next){
       try{
         const usuario = await this.usuarioRepository.buscaPorEmail(req.body.email);
+        
         if(!usuario){
           return res.status(403).json({status: '403', mensagem: 'E-mail e/ou senha inválidos.'});       
         }
@@ -16,6 +17,7 @@ export default class LoginMiddleware{
         next();
       }
       catch(e){
+        console.log(e)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
        

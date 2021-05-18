@@ -35,6 +35,12 @@ export default function defineRoteiroRouter(){
     .put((req, res) => roteiroController.atualiza(req, res))
     .delete((req, res) => roteiroController.deleta(req, res));
 
+  router.route('/versionar/:id/:versao')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+    .all((req, res, next) => roteiroMiddleware.roteiroExiste(req, res, next))  
+    .post((req, res) => roteiroController.versiona(req, res));
+
   router.route('/:viagemId')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
@@ -42,12 +48,6 @@ export default function defineRoteiroRouter(){
     .put((req, res) => roteiroController.atualiza(req, res))
     .delete((req, res) => roteiroController.deleta(req, res));
 
-    // REALIZAR MAIS ALGUNS TESTES DAS REQUESTS
-    // ADICIONAR BUSCA DE ROTEIROS APENAS PELO ID
-    // TRAZER DADOS DE NOME DO ROTEIRO, DATA INICIO, DATA FIM, NOME DO STATUS
-    // VERIFICAR SE O CONTROLE DE ACESSO ESTÁ COMPLETO
-    // REQUEST PARA VERSIONAR O ROTEIRO
-    // 
 
   return router;
 }

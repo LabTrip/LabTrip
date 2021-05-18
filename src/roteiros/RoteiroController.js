@@ -4,7 +4,9 @@ const roteiroViewModel = (roteiro) => ({
     id: roteiro.id,
     viagemId: roteiro.viagemId,
     statusId: roteiro.statusId,
+    status: roteiro.status,
     versao: roteiro.versao,
+    descricaoRoteiro: roteiro.descricaoRoteiro,
   });
   
   
@@ -29,9 +31,22 @@ const roteiroViewModel = (roteiro) => ({
   
     async salva(req, res){
       try {
-        const {viagemId, statusId, versao} = req.body;
-        const roteiro = new Roteiro(viagemId, statusId, versao);
-        await this.roteiroRepository.salva(roteiro);
+        const {viagemId, statusId, versao, descricaoRoteiro} = req.body;
+        const roteiro = await this.roteiroRepository.salva(new Roteiro(viagemId, statusId, versao, descricaoRoteiro));
+        
+        res.status(201).json(roteiroViewModel(roteiro));
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
+      }      
+    }
+
+    async versiona(req, res){
+      try {
+        const {viagemId, statusId, versao, descricaoRoteiro} = req.roteiro;
+        const versaoAtual = versao + 1
+        const roteiro = await this.roteiroRepository.salva(new Roteiro(viagemId, statusId, versaoAtual, descricaoRoteiro));
+        
         res.status(201).json(roteiroViewModel(roteiro));
       }
       catch(e){
@@ -50,8 +65,8 @@ const roteiroViewModel = (roteiro) => ({
 
     async buscaRoteirosPorViagemId(req, res){
       try{
-        const roteiros = await this.roteiroRepository.buscaPorViagemId(req.params.viagemId);
         console.log(req.params.viagemId)
+        const roteiros = await this.roteiroRepository.buscarPorViagemId(req);
         return res.status(200).json(roteiros.map(r => roteiroViewModel(r))); 
 
       }catch(e){
@@ -62,11 +77,11 @@ const roteiroViewModel = (roteiro) => ({
   
     async atualiza(req,res){
       try{
-        const {viagemId, statusId, versao, id } = req.body;
-        const roteiro = new Roteiro(viagemId, statusId, versao, id); 
-        const roteiroAtualizado = await this.roteiroRepository.atualiza(roteiro);
-        return res.status(200).json(roteiroViewModel(roteiroAtualizado));      
+        const {viagemId, statusId, versao, descricaoRoteiro, id } = req.body;
+        const roteiro = await this.roteiroRepository.atualiza(new Roteiro(viagemId, statusId, versao, descricaoRoteiro, id));
+        return res.status(200).json(roteiroViewModel(roteiro));      
       }catch(e){
+        console.log(e)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }      
     }    
