@@ -145,6 +145,15 @@ export default class RoteiroRepository{
         .where({'viagemId': viagemId.toString()});
     }
 
+    async buscaPorViagemIdRoteiroAprovado(viagemId){
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .where({
+          'viagemId': viagemId.toString(),
+          'status.descricao': 'Aprovado'
+        });
+    }
+
     async salva(roteiro){
       const [firstRow] = await this.client('roteiro')
         .insert({
@@ -153,6 +162,13 @@ export default class RoteiroRepository{
         versao: roteiro.versao,
         descricaoRoteiro: roteiro.descricaoRoteiro,
         }).returning("*");  
+
+      return firstRow;     
+    }    
+
+    async versiona(roteiro){
+      const [firstRow] = await this.client('roteiro')
+        .insert(roteiro).returning("*");  
 
       return firstRow;     
     }    
@@ -173,5 +189,18 @@ export default class RoteiroRepository{
         .where('id', roteiro.id)
         .andWhere({'versao': roteiro.versao})
         .delete()
+    }
+
+    async buscaRoteiroAtividades(roteiro){
+      return await this.client('roteiro_atividade')
+        .where({
+          'roteiroId': roteiro.id.toString(),
+          'versaoRoteiro': roteiro.versao.toString()
+        });
+    }
+
+    async versionaRoteiroAtividades(roteiroAtividades){
+      return await this.client('roteiro_atividade')
+      .insert(roteiroAtividades).returning("*");  
     }
   }

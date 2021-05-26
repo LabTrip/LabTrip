@@ -1,4 +1,8 @@
 import Viagem from './Viagem'
+const jwt = require('jsonwebtoken');
+import {mailer} from '../smtpConfig'
+import EmailConviteTemplate from '../template/EmailConviteTemplate'
+require('dotenv/config');
 
 const viagemViewModel = (viagem) => ({
   id:  viagem.id,
@@ -204,33 +208,101 @@ export default class ViagemController {
     
   }
 
-  async salvaParticipantes(req, res){
+  async convidaParticipantes(req, res){
+    try{
+      let participantes = req.body.participantes;
+
+      for(let participante of participantes){
+        const usuario = await this.viagemRepository.buscaUsuarioPorId(participante.usuarioId);
+        
+        if(!usuario){
+          return res.status(400).json({status: '400', mensagem: 'Um ou mais dos usuários informado(s) não encontrado(s).'});
+        }
+        let convite = participante;
+        convite.viagemId = req.viagem.id;
+        convite.email = usuario.email;
+        convite.subject = "Convite para participar de viagem";
+        convite.mensagem = 
+        "Olá, " + usuario.nome + 
+        ". <br><br> Você recebeu um convite para participar da viagem \"" + req.viagem.descricao + "\".";
+        
+        let token = jwt.sign(
+          convite,
+          process.env.SECRET,
+          {
+            expiresIn: 600000
+          }
+        );
+    
+        convite.link = process.env.BASE_URL + 'viagens/aceitar-convite/' + token
+        
+        const envio = await new EmailConviteTemplate(convite).enviaConvite();
+        if(envio != "OK"){
+          return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+        }
+      }      
+
+      return res.status(200).json({status: '200', mensagem: 'Convite(s) enviado(s) com sucesso.'});
+
+    }
+    catch(e){
+      console.log(e)
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
+  }
+
+  async salvaParticipante(req, res){
+    try{
+      const convite = req.params.convite;
+
+      let participante;
+
+      jwt.verify(convite, process.env.SECRET, (err, decoded) => {
+        if(err){
+          return res.status(403).json({status:"403",message:"Convite expirado."}).end();
+        }
+      
+        participante = decoded;
+      });
+
+      await this.viagemRepository.salvaParticipantes(participante);      
+
+      return res.status(200).send(await new EmailConviteTemplate(convite).retornoConvite());
+    }
+    catch(e){
+      console.log(e)
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+    
+  }
+
+  async atualizaParticipantes(req, res){
     try{
       const participantes = req.body.participantes;
 
       if(participantes){
-        const participantesAtualizados = [];
-
         for(let participante of participantes){
-          participantesAtualizados.push({
+          const usuario = await this.viagemRepository.buscaUsuarioPorId(participante.usuarioId);
+        
+          if(!usuario){
+            return res.status(400).json({status: '400', mensagem: 'Um ou mais dos usuários informado(s) não encontrado(s).'});
+          }
+          
+          participante = {
             usuarioId: participante.usuarioId,
             permissaoViagemId: participante.permissaoViagemId,
             viagemId: req.viagem.id
-          });
-        }
+          };
 
-        await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+          await this.viagemRepository.salvaParticipantes(participante);
+        }
       }
       
-      if(req.method == 'PUT'){
-        return res.status(202).end();
-      }
-      else{
-        return res.status(201).end();
-      }
-
+      return res.status(202).json({status: '202', mensagem: 'Alterado com sucesso.'});    
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     

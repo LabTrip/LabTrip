@@ -49,9 +49,13 @@ export default function defineViagemRouter(){
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => viagemMiddleware.viagemExiste(req, res, next))
     .get((req, res) => viagemController.buscaParticipantes(req, res))
-    .post((req, res) => viagemController.salvaParticipantes(req, res))
-    .put((req, res) => viagemController.salvaParticipantes(req, res))
+    .post((req, res) => viagemController.convidaParticipantes(req, res))
+    .put((req, res) => viagemController.atualizaParticipantes(req, res))
     .delete((req, res) => viagemController.deletaParticipantes(req, res));
+
+    router.route('/aceitar-convite/:convite')
+    .get((req, res) => viagemController.salvaParticipante(req, res))
+    
 
   return router;
 }

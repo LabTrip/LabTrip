@@ -80,9 +80,11 @@ export default class ViagemRepository{
       })
   }
 
-  async salvaParticipantes(participantes){
+  async salvaParticipantes(participante){
     await this.client('usuario_viagem')
-      .insert(participantes)
+      .insert({usuarioId: participante.usuarioId,
+        permissaoViagemId: participante.permissaoViagemId,
+        viagemId: participante.viagemId})
       .onConflict(["usuarioId","viagemId"])
       .merge()
       .returning("*");
@@ -105,5 +107,12 @@ export default class ViagemRepository{
 
   async buscaPermissoes(){
     return await this.client('permissao_viagem');
+  }
+
+  async buscaUsuarioPorId(id){
+    return await this.client.select(['usuario.*','perfil.descricao'])
+    .from('usuario')
+    .innerJoin('perfil','usuario.perfilId','perfil.id')
+    .where({'usuario.id': id.toString()}).first();
   }
 }

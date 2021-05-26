@@ -98,13 +98,14 @@ export default class AgenciaController {
           agencia: agencia.nome,
           link:  process.env.BASE_URL + 'agencias/convida-funcionarios/aceitar/' + token
         }
-    
+        
         await this.enviaConvite(convite);
       }
       
       res.status(200).json({status: '200', mensagem: 'Convite enviado com sucesso'});  
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -134,10 +135,12 @@ export default class AgenciaController {
 
       let usuarioId;
       let agenciaId;
+      let resposta;
   
       jwt.verify(convite, process.env.SECRET, (err, decoded) => {
         if(err){
-          return res.status(403).json({status:"403",message:"Convite expirado."}).end();
+          resposta = this.retornoConvite("Convite expirado.")
+          return res.status(403).send(resposta);
         }
   
         usuarioId = decoded.usuarioId;
@@ -145,11 +148,11 @@ export default class AgenciaController {
       });
   
       await this.agenciaRepository.salvaFuncionario(usuarioId,agenciaId);
-  
-      res.status(200).send(this.retornoConvite());  
+
+      resposta = this.retornoConvite("O seu convite foi aceito com sucesso!");
+      res.status(200).send(resposta);  
     }
     catch(e){
-      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -256,7 +259,7 @@ export default class AgenciaController {
     return corpo.toString();
   }
 
-  retornoConvite(){
+  retornoConvite(message){
 
     const corpo = "<!DOCTYPE html><html><head>" +
         "<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'>" +
@@ -278,9 +281,9 @@ export default class AgenciaController {
         "table.ov tr:nth-child(2n+1) td {background: #CFE7F3;}" +
         "table.footer {border-top: solid 1px #CCCCCC;color: #999999;}" +
         "</style></head><body>" +
-        "<div class='logo'><img src='https://yt3.ggpht.com/h7v4PLxOl-4v3GFwdraTCW7D2ZJwIQbbP380kwT0ssrDh1UTlZeXo9oSkTrj5n1BBSEv_Uk4YQ=w1707-fcrop64=1,00005a57ffffa5a8-k-c0xffffffff-no-nd-rj'></div>" +
+        "<div class='logo'><img src='" + process.env.BASE_URL + "public/logo-banner'></div>" +
         "<div class='line'></div><br>" +
-        "<div class='mensagem'><h2>O seu convite foi aceito com sucesso!</h2></div>" +
+        "<div class='mensagem'><h2>" + message +"</h2></div>" +
         "</body></html>";
 
 

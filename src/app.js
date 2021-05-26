@@ -9,6 +9,7 @@ import definePerfilRouter from './perfis/PerfilRouter'
 import defineLocalRouter from './locais/LocalRouter'
 import defineRoteiroRouter from './roteiros/RoteiroRouter'
 import defineRoteiroAtividadeRouter from './roteiroAtividades/RoteiroAtividadeRouter'
+import definePublicRouter from './public/PublicRouter'
 
 
 const path = require("path");
@@ -31,6 +32,7 @@ export default function LabTrip() {
   app.use('/locais', defineLocalRouter());
   app.use('/roteiros', defineRoteiroRouter());
   app.use('/roteiroAtividades', defineRoteiroAtividadeRouter());
+  app.use('/public', definePublicRouter());
   app.use(
     "/files",
     express.static(path.resolve(__dirname, "..", "tmp", "uploads"))

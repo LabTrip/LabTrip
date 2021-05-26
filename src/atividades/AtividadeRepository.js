@@ -78,4 +78,5 @@ export default class AtividadeRepository{
           deletadoEm: new Date().toISOString()
         });
     }
+
   }
