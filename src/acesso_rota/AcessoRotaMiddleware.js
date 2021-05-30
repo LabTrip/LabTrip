@@ -12,6 +12,8 @@ export default class AcessoRotaMiddleware{
         metodo: req.method
       }
 
+      console.log(requisitante.endpoint)
+
       if((requisitante.perfilId == 2 || requisitante.perfilId == 3) && (req.token.agenciaId == null || req.token.agenciaId == undefined)){
         return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso: usuário de funcionário sem agência atrelada.'});
       }

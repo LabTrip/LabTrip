@@ -7,7 +7,7 @@ export default class RoteiroMiddleware{
     async roteiroExiste(req, res, next){   
       const roteiro = await this.verificaAcessoRoteiro(req)
       if(!roteiro){
-        return res.status(404).json({status: '403', mensagem: 'Roteiro não encontrado.'});       
+        return res.status(404).json({status: '403', mensagem: 'Roteiro não encontrado ou sem permissão de acesso.'});       
       }
       req.roteiro = roteiro;
       next(); 
