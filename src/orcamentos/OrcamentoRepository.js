@@ -39,7 +39,8 @@ export default class OrcamentoRepository{
   }
 
   async buscaPorRoteiroIdVersaoTipoIndividual(id, versao, tipoId, usuarioId){
-    return await this.client('orcamento')
+    return await this.client.select(['orcamento.*'])
+      .from('orcamento')
       .innerJoin('usuario_orcamento','orcamento.id','usuario_orcamento.orcamentoId')
       .where({
               'orcamento.roteiroId': id.toString(),
@@ -143,6 +144,15 @@ export default class OrcamentoRepository{
     }).first();
   }
 
+  async buscaUsuarioOrcamento(orcamentoId, usuarioId){
+    return await this.client('usuario_orcamento')
+      .where({
+        usuarioId: usuarioId,
+        orcamentoId: orcamentoId
+      })
+      .first();
+  }
+
   async linkaOrcamentoUsuario(orcamentoId, usuarioId){
     await this.client('usuario_orcamento')
       .insert({
@@ -158,5 +168,37 @@ export default class OrcamentoRepository{
       .from('despesa_extra')
       .innerJoin('usuario','usuario.id','usuarioId')
       .where({'despesa_extra.orcamentoId': orcamentoId.toString()});
+  }
+
+  async buscaPermissaoViagem(viagemId, usuarioId){
+    return await this.client.select(['usuario_viagem.*','permissao_viagem.descricao'])
+      .from('usuario_viagem')
+      .innerJoin('permissao_viagem','permissao_viagem.id','permissaoViagemId')
+      .where({
+        'usuario_viagem.usuarioId': usuarioId.toString(),
+        'usuario_viagem.viagemId': viagemId.toString()
+      }).first();
+  }
+
+  async buscaDespesaPorId(despesaId){
+    return await this.client('despesa_extra')
+      .where(despesaId).first();
+  }
+
+  async salvaDespesaExtra(despesa){
+    const [firstRow] = await this.client('despesa_extra')
+      .insert(despesa)
+      .returning("*");
+
+    return firstRow;
+  }
+
+  async atualizaDespesaExtra(despesa){
+    const [firstRow] = await this.client('despesa_extra')
+      .where({'id': despesa.id})
+      .update(despesa)
+      .returning("*");
+
+      return firstRow;
   }
 }

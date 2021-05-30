@@ -27,27 +27,28 @@ export default function defineOrcamentoRouter(){
    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
    .post((req, res) => orcamentoController.salva(req, res));
 
-  router.route('/:roteiroId/:versaoRoteiro?')
+    router.route('/despesaExtra')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+    .all((req, res, next) => orcamentoMiddleware.orcamentoExiste(req, res, next))
+    .all((req, res, next) => orcamentoMiddleware.podeCriarDespesa(req, res, next))
+    .post((req, res) => orcamentoController.salvaDespesaExtra(req, res));
+
+    router.route('/despesaExtra/:id')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+    .all((req, res, next) => orcamentoMiddleware.despesaExtraExiste(req, res, next))
+    .all((req, res, next) => orcamentoMiddleware.orcamentoExiste(req, res, next))
+    .all((req, res, next) => orcamentoMiddleware.podeCriarDespesa(req, res, next))
+    .put((req, res) => orcamentoController.salvaDespesaExtra(req, res))
+    .delete((req, res) => orcamentoController.salvaDespesaExtra(req, res));
+
+    router.route('/:roteiroId/:versaoRoteiro?')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => orcamentoMiddleware.roteiroExiste(req, res, next))
     .get((req, res) => orcamentoController.mostra(req, res))
     .put((req, res) => orcamentoController.atualiza(req, res));
-
-    router.route('/despesa-extra')
-    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
-    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
-    .all((req, res, next) => orcamentoMiddleware.orcamentoExiste(req, res, next))
-    .all((req, res, next) => orcamentoMiddleware.usuarioProprietario(req, res, next))
-    .post((req, res) => orcamentoController.salvaDespesaExtra(req, res));
-
-    router.route('/despesa-extra/:id')
-    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
-    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
-    .all((req, res, next) => orcamentoMiddleware.orcamentoExiste(req, res, next))
-    .all((req, res, next) => orcamentoMiddleware.usuarioProprietario(req, res, next))
-    .put((req, res) => orcamentoController.salvaDespesaExtra(req, res))
-    .delete((req, res) => orcamentoController.salvaDespesaExtra(req, res));
 
   return router;
 }

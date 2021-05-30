@@ -1,5 +1,6 @@
 require('dotenv/config');
 import Orcamento from './Orcamento'
+import DespesaExtra from './DespesaExtra'
 
 const orcamentoViewModel = (orcamento) => ({
   id:  orcamento.id,
@@ -94,7 +95,7 @@ export default class OrcamentoController {
 
   async mostra(req, res){
     try{
-      const tipoOrcamento = await this.buscaTipoOracmento(req.query.tipo);
+      const tipoOrcamento = await this.buscaTipoOracmento(req.query.tipoOrcamento);
       if(!tipoOrcamento){
         return res.status(404).json({status: '404', mensagem: 'O tipo de orçamento buscado não existe.'});
       }
@@ -156,7 +157,7 @@ export default class OrcamentoController {
   async atualizaOrcamento(req,res){    
     try{
       const {valorTotal} = req.body;
-      const tipoOrcamento = await this.buscaTipoOracmento(req.query.tipo);
+      const tipoOrcamento = await this.buscaTipoOracmento(req.query.tipoOrcamento);
       if(!tipoOrcamento){
         return res.status(400).json({status: '400', mensagem: 'O tipo de orçamento buscado não existe.'});
       }
@@ -190,10 +191,29 @@ export default class OrcamentoController {
     try{
       const {orcamentoId, custo, descricao, data} = req.body;
 
-      
+      console.log(new DespesaExtra(orcamentoId, custo, descricao, req.token.id, data));
+      const despesaExtra = await this.orcamentoRepository.salvaDespesaExtra(new DespesaExtra(orcamentoId, custo, descricao, req.token.id, data));
+
+      return res.status(200).json(despesaExtra);
     }
     catch(e){
+      console.log(e);
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+  }
 
+  async atualizaDespesaExtra(req, res){
+    try{
+      const {orcamentoId, custo, descricao, data} = req.body;
+
+      const despesaExtra = this.orcamentoRepository.salvaDespesaExtra(new DespesaExtra(orcamentoId, custo, descricao, req.token.id, req.despesa.data, req.despesa.id));
+      console.log(despesaExtra);
+
+      return res.status(200).json(despesaExtra);
+    }
+    catch(e){
+      console.log(e);
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
 
