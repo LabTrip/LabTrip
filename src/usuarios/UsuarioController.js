@@ -197,13 +197,14 @@ export default class UsuarioController {
 
       await this.usuarioRepository.atualizaFotoPerfil(foto, usuario);
 
-      if(usuario.chaveFoto.length > 1){
+      if(usuario.chaveFoto){
         await this.deletaArquivo(usuario.chaveFoto);
       }
     
       return res.status(200).json({status: '200', mensagem: 'Foto atualizada com sucesso.'});
     }
     catch(e){
+      console.log(e)
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
 
