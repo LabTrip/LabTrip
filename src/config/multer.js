@@ -38,7 +38,7 @@ const storageTypes = {
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "private",
     key: (req, file, cb) => {
-      console.log(file);
+      console.log(req.body);
       crypto.randomBytes(16, (err, hash) => {
         if (err) cb(err);
 
