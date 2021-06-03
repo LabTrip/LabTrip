@@ -190,7 +190,7 @@ export default class UsuarioController {
   async atualizaFotoPerfil(req, res) {
     try{
       const usuario = req.usuario;
-      console.log(req.file);
+      console.log(req.headers);
       const {name, size, key} = req.file;
       const url = '/usuarios/fotoperfil/' + key;
 

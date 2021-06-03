@@ -13,6 +13,7 @@ const viagemViewModel = (viagem) => ({
   status: viagem.status,
   agenciaId: viagem.agenciaId,
   usuarioDonoId: viagem.usuarioDonoId,
+  dono: viagem.dono,
   criadoPorId: viagem.criadoPorId,
   participantes: viagem.participantes,
 });

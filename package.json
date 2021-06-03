@@ -40,14 +40,13 @@
     "nodemailer": "^6.4.17",
     "nodemon": "^2.0.7",
     "pg": "^8.5.1",
-    "sucrase": "^3.17.0",
+    "sucrase": "^3.18.1",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.13.5",
     "babel-jest": "^26.6.3",
     "babel-polyfill": "^6.26.0",
-    "es6-plato": "^1.2.3",
     "jest": "^26.6.3",
     "jest-sonar-reporter": "^2.0.0",
     "regenerator-runtime": "^0.13.7",
