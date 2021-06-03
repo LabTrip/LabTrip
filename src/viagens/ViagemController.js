@@ -71,8 +71,11 @@ export default class ViagemController {
 
   async salva(req, res){
     try{
-      const {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes} = req.body;
+      let {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes} = req.body;
       if(req.token.agenciaId == agenciaId || req.acesso.tipoAcesso == "Total"){
+        if(req.token.agenciaId == agenciaId || !criadoPorId){
+          criadoPorId = req.token.id;
+        }
         const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);
     
         await this.viagemRepository.salva(viagem);
@@ -119,7 +122,7 @@ export default class ViagemController {
     try{
       const{descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes, deletarParticipantes} = req.body;
 
-      const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, req.viagem.id);
+      const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, req.viagem.criadoPorId, req.viagem.id);
       
       await this.viagemRepository.atualiza(viagem);
 
