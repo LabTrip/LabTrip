@@ -182,7 +182,7 @@ export default class OrcamentoRepository{
 
   async buscaDespesaPorId(despesaId){
     return await this.client('despesa_extra')
-      .where(despesaId).first();
+      .where({'id': despesaId}).first();
   }
 
   async salvaDespesaExtra(despesa){
@@ -200,5 +200,11 @@ export default class OrcamentoRepository{
       .returning("*");
 
       return firstRow;
+  }
+
+  async deletaDespesaExtra(despesa){
+    await this.client('despesa_extra')
+      .where({'id': despesa.id})
+      .delete();
   }
 }

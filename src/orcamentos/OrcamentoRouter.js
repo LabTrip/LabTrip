@@ -40,8 +40,8 @@ export default function defineOrcamentoRouter(){
     .all((req, res, next) => orcamentoMiddleware.despesaExtraExiste(req, res, next))
     .all((req, res, next) => orcamentoMiddleware.orcamentoExiste(req, res, next))
     .all((req, res, next) => orcamentoMiddleware.podeCriarDespesa(req, res, next))
-    .put((req, res) => orcamentoController.salvaDespesaExtra(req, res))
-    .delete((req, res) => orcamentoController.salvaDespesaExtra(req, res));
+    .put((req, res) => orcamentoController.atualizaDespesaExtra(req, res))
+    .delete((req, res) => orcamentoController.deletaDespesaExtra(req, res));
 
     router.route('/:roteiroId/:versaoRoteiro?')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))

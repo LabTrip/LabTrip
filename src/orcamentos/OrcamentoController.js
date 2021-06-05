@@ -206,10 +206,22 @@ export default class OrcamentoController {
     try{
       const {orcamentoId, custo, descricao, data} = req.body;
 
-      const despesaExtra = this.orcamentoRepository.salvaDespesaExtra(new DespesaExtra(orcamentoId, custo, descricao, req.token.id, req.despesa.data, req.despesa.id));
+      const despesaExtra = await this.orcamentoRepository.atualizaDespesaExtra(new DespesaExtra(orcamentoId, custo, descricao, req.token.id, data, req.despesa.id));
       console.log(despesaExtra);
 
       return res.status(200).json(despesaExtra);
+    }
+    catch(e){
+      console.log(e);
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+  }
+
+  async deletaDespesaExtra(req, res){
+    try{
+      await this.orcamentoRepository.deletaDespesaExtra(req.despesa);
+
+      return res.status(200).json({status: "200", mensagem: "Deletado com sucesso!"});
     }
     catch(e){
       console.log(e);

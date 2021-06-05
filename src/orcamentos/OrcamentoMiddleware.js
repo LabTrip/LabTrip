@@ -25,7 +25,7 @@ export default class OrcamentoMiddleware{
           orcamento = await this.orcamentoRepository.buscaPorId(req.body.orcamentoId);
         }
         else if(req.route.path == '/despesaExtra/:id'){
-          console.log(req.body.orcamentoId);
+          console.log(req.despesa);
           orcamento = await this.orcamentoRepository.buscaPorId(req.despesa.orcamentoId);
         }
         else{
@@ -116,12 +116,12 @@ export default class OrcamentoMiddleware{
     }
 
     async despesaExtraExiste(req, res, next){
-      const despesa = this.orcamentoExiste.buscaDespesaPorId(req.params.id);
+      const despesa = await this.orcamentoRepository.buscaDespesaPorId(req.params.id);
 
       if(!despesa){
         return res.status(403).json({status: '403', mensagem: 'A despesa não foi encontrada.'});       
       }
-
+      console.log(despesa)
       req.despesa = despesa;
       next();
     }

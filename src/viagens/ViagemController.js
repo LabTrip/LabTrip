@@ -20,6 +20,7 @@ const viagemViewModel = (viagem) => ({
 
 const participantesViewModel = (participantes) => ({
     usuarioId:  participantes.usuarioId,
+    nome: participantes.nome,
     viagemId: participantes.viagemId,
     permissaoViagemId: participantes.permissaoViagemId,
 });
@@ -180,6 +181,7 @@ export default class ViagemController {
       return res.status(200).json({participantes: participantes.map(p => participantesViewModel(p))});
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
