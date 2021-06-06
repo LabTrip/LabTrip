@@ -23,6 +23,7 @@ const participantesViewModel = (participantes) => ({
     nome: participantes.nome,
     viagemId: participantes.viagemId,
     permissaoViagemId: participantes.permissaoViagemId,
+    descricao: participantes.descricao
 });
 
 const permissoesViagemViewModel = (permissoes) => ({

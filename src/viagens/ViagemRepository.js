@@ -111,9 +111,10 @@ export default class ViagemRepository{
   }
 
   async buscaParticipantes(viagem){
-    return await this.client.select(['usuario_viagem.*','usuario.nome as nome'])
+    return await this.client.select(['usuario_viagem.*','usuario.nome as nome','permissao_viagem.descricao as descricao'])
       .from('usuario_viagem')
       .innerJoin('usuario','usuario_viagem.usuarioId','usuario.id')
+      .innerJoin('permissao_viagem','usuario_viagem.permissaoViagemId','permissao_viagem.id')
       .where('viagemId', viagem.id);
   }
 
