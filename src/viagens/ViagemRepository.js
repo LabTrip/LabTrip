@@ -7,13 +7,15 @@ export default class ViagemRepository{
     return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
+    .orderBy('viagem.criadoEm','desc');
   }
 
   async buscaTodosAtivos(){
     return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
-    .where({'deletadoEm': null});
+    .where({'deletadoEm': null})
+    .orderBy('viagem.criadoEm','desc');
   }
 
   async buscaComFiltro(filtro, userId){
@@ -29,7 +31,8 @@ export default class ViagemRepository{
       .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
       .where({
         usuarioId: id,
-      });
+      })
+      .orderBy('viagem.criadoEm','desc');
   }
 
   async buscaTodosDaAgencia(agenciaId){
@@ -38,7 +41,8 @@ export default class ViagemRepository{
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
       .where({
         agenciaId: agenciaId.toString(),
-      });
+      })
+      .orderBy('viagem.criadoEm','desc');
   }
 
   async salva(viagem){
