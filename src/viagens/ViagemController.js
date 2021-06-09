@@ -374,4 +374,19 @@ export default class ViagemController {
   
   }
 
+  async buscaPermissoesGerais(req, res){
+    try{
+      let permissoes
+      
+        permissoes =  await this.viagemRepository.buscaPermissoes();
+
+      return res.status(200).json({permissoes: permissoes.map(u => permissoesViagemViewModel(u))}); 
+    }
+    catch(e){
+      console.log(e)
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+  
+  }
+
 }

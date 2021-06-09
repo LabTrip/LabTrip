@@ -34,6 +34,10 @@ export default function defineViagemRouter(){
    .all((req, res, next) => viagemMiddleware.viagemExiste(req, res, next))
    .get((req, res) => viagemController.buscaPermissoes(req, res))
 
+  router.route('/permissoes-viagem')
+   .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .get((req, res) => viagemController.buscaPermissoesGerais(req, res))
+
    router.route('/filtraviagens')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
    .post((req, res) => viagemController.buscaComFiltro(req, res));
