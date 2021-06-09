@@ -324,10 +324,18 @@ export default class ViagemController {
 
   async buscaPermissoes(req, res){
     try{
-      const permissoes =  await this.viagemRepository.buscaPermissoes();
+      let permissoes
+      if(req.token.perfilId == 4){
+        permissoes =  await this.viagemRepository.buscaPermissoes_cliente();
+      }
+      else{
+        permissoes =  await this.viagemRepository.buscaPermissoes();
+      }
+
       return res.status(200).json({permissoes: permissoes.map(u => permissoesViagemViewModel(u))}); 
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   
