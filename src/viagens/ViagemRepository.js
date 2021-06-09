@@ -122,14 +122,28 @@ export default class ViagemRepository{
       .where('viagemId', viagem.id);
   }
 
-  async buscaPermissoes_cliente(){
+  async buscaPermissaoDoUsuario(usuarioId, viagemId){
+    return await this.client('usuario_viagem')
+    .where({
+      usuarioId: usuarioId.toString(),
+      viagemId: viagemId.toString()
+    }).first();
+  }
+
+  async buscaPermissoesProprietario(){
     return await this.client('permissao_viagem')
     .where({descricao: 'Proprietário'})
     .orWhere({descricao: 'Membro'});
   }
 
+  async buscaPermissoesMembro(){
+    return await this.client('permissao_viagem')
+    .where({descricao: 'Membro'});
+  }
+
   async buscaPermissoes(){
-    return await this.client('permissao_viagem');
+    return await this.client('permissao_viagem')
+      .whereNot({id: 4});
   }
 
   async buscaUsuarioPorId(id){

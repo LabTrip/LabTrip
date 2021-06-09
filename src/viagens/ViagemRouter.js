@@ -28,8 +28,10 @@ export default function defineViagemRouter(){
    .get((req, res) => viagemController.buscaTodos(req, res))
    .post((req, res) => viagemController.salva(req, res));
 
-  router.route('/permissoes-viagem')
+  router.route('/permissoes-viagem/:id')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+   .all((req, res, next) => viagemMiddleware.viagemExiste(req, res, next))
    .get((req, res) => viagemController.buscaPermissoes(req, res))
 
    router.route('/filtraviagens')

@@ -16,6 +16,7 @@ const viagemViewModel = (viagem) => ({
   dono: viagem.dono,
   criadoPorId: viagem.criadoPorId,
   participantes: viagem.participantes,
+  alterar: viagem.alterar
 });
 
 const participantesViewModel = (participantes) => ({
@@ -28,7 +29,7 @@ const participantesViewModel = (participantes) => ({
 
 const permissoesViagemViewModel = (permissoes) => ({
   id:  permissoes.id,
-  descricao: permissoes.descricao,
+  descricao: permissoes.descricao
 });
 
 const verificaStatusViagem = (dataFim) => {
@@ -102,6 +103,22 @@ export default class ViagemController {
 
           await this.viagemRepository.salvaParticipantes(participantesAtualizados);
         }
+        else{
+          const participantesAtualizados = [
+            {
+              usuarioId: usuarioDonoId,
+              permissaoViagemId: 1,
+              viagemId: viagem.id
+            },
+            {
+              usuarioId: criadoPorId,
+              permissaoViagemId: 3,
+              viagemId: viagem.id
+            }
+          ];
+
+          await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+        }
 
         return res.status(201).json(viagemViewModel(viagem));
       }
@@ -119,10 +136,18 @@ export default class ViagemController {
   async mostra(req, res){
     try{
       const participantes =  await this.viagemRepository.buscaParticipantes(req.viagem);
+      const permissaoViagem = await this.viagemRepository.buscaPermissaoDoUsuario(req.token.id, req.viagem.id);
+      if(permissaoViagem && permissaoViagem.permissaoViagemId == 2){
+        req.viagem.alterar = false;
+      }
+      else{
+        req.viagem.alterar = true;
+      }
       req.viagem.participantes = participantes;
       return res.status(200).json(viagemViewModel(req.viagem)); 
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -325,8 +350,16 @@ export default class ViagemController {
   async buscaPermissoes(req, res){
     try{
       let permissoes
+      const viagem = req.viagem;
       if(req.token.perfilId == 4){
-        permissoes =  await this.viagemRepository.buscaPermissoes_cliente();
+        const permissaoViagem = await this.viagemRepository.buscaPermissaoDoUsuario(req.token.id, viagem.id);
+        console.log(permissaoViagem)
+        if(permissaoViagem.permissaoViagemId == 1){
+          permissoes =  await this.viagemRepository.buscaPermissoesProprietario();
+        }
+        else{
+          permissoes =  await this.viagemRepository.buscaPermissoesMembro();
+        }
       }
       else{
         permissoes =  await this.viagemRepository.buscaPermissoes();
