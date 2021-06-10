@@ -14,8 +14,10 @@ export default class AcessoRotaMiddleware{
 
       console.log(requisitante.endpoint)
 
-      if((requisitante.perfilId == 2 || requisitante.perfilId == 3) && (req.token.agenciaId == null || req.token.agenciaId == undefined)){
-        return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso: usuário de funcionário sem agência atrelada.'});
+      if((requisitante.perfilId == 2 || requisitante.perfilId == 3)){
+        if(!this.verificaAgenciaAtrelada(req)){
+          return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso: usuário de funcionário sem agência atrelada.'});
+        }        
       }
 
       const acesso = await this.acessoRotaRepository.buscaAcesso(requisitante)
@@ -28,7 +30,35 @@ export default class AcessoRotaMiddleware{
     }
 
 
-    async verificaAgenciaAtrelada(){
+    async verificaAgenciaAtrelada(req){
+      let acesso = false;
 
+      if((this.rotaNecessitaAgencia(req.route.path)) && (req.token.agenciaId == null || req.token.agenciaId == undefined)){
+        acesso = false
+      }
+      else{
+        acesso = true
+      }
+
+      return acesso;
+    }
+
+    rotaNecessitaAgencia(rota){
+      const rotasRequireAgenciaAtrelada = [
+        'viagens',
+        'roteiros',
+        'orcamentos',
+        'atividades',
+        'agencias'
+      ];
+      let necessita = false;
+
+      rotasRequireAgenciaAtrelada.map((r) => {
+        if(rota.includes(r)){
+          let necessita = true;
+        }
+      })
+
+      return necessita
     }
   }
