@@ -143,6 +143,7 @@ const roteiroViewModel = (roteiro) => ({
         await this.roteiroRepository.deleta(req.roteiro);
         return res.status(204).end();
       }catch(e){
+        console.log(e)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }    
     }

@@ -186,7 +186,7 @@ export default class RoteiroRepository{
   
     async deleta(roteiro){
       await this.client('roteiro')
-        .where('id', roteiro.id)
+        .where({'id': roteiro.id})
         .andWhere({'versao': roteiro.versao})
         .delete()
     }
