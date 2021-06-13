@@ -167,7 +167,8 @@ export default class OrcamentoRepository{
     return await this.client.select(['despesa_extra.*','usuario.nome as nomeUsuario'])
       .from('despesa_extra')
       .innerJoin('usuario','usuario.id','usuarioId')
-      .where({'despesa_extra.orcamentoId': orcamentoId.toString()});
+      .where({'despesa_extra.orcamentoId': orcamentoId.toString()})
+      .orderBy('data','desc');
   }
 
   async buscaPermissaoViagem(viagemId, usuarioId){
