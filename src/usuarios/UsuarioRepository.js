@@ -18,6 +18,22 @@ export default class UsuarioRepository{
   
         return firstRow;
     }
+
+    async salvaTokenNotificacao(token, usuarioId){
+      const [firstRow] = await this.client('token_notificacao')
+        .insert({
+          tokenNotificacao: token,
+          usuarioId: usuarioId
+        })
+        .returning("*");
+  
+        return firstRow;
+    }
+
+    async buscaTokenNotificacao(usuarioId){
+      return await this.client('token_notificacao')
+        .where({usuarioId: usuarioId});
+    }
   
     async buscaPorId(id){
       return await this.client.select(['usuario.*','perfil.descricao'])

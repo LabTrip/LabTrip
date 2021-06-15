@@ -36,6 +36,11 @@ export default function defineUsuarioRouter(){
    .all((req, res, next) => usuarioMiddleware.verificaUsuarioJaCadastrado(req, res, next))
    .post((req, res) => usuarioController.salva(req, res));
 
+  router.route('/notification-token')
+   .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+   .post((req, res) => usuarioController.salvaTokenNotificacao(req, res));
+
   router.route('/:id')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))

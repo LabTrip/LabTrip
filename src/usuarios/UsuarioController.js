@@ -70,6 +70,35 @@ export default class UsuarioController {
 
   }
 
+  async salvaTokenNotificacao(req, res) {
+    try {
+
+      const { token } = req.body;
+
+      await this.usuarioRepository.salvaTokenNotificacao(token, req.token.id);
+
+      res.status(200).json({status: "200", mensagem: 'Token salvo com sucesso'});
+    }
+    catch (e) {
+      console.log(e)
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
+    }
+
+  }
+
+  async mostraTokenNotificacao(req, res) {
+    try {
+
+      const tokens = await this.usuarioRepository.buscaTokenNotificacao(req.token.id);
+
+      res.status(200).json(tokens);
+    }
+    catch (e) {
+      return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
+    }
+
+  }
+
   async verificaPermissaoCriarUsuario(req) {
     try {
       let perfis = undefined;
