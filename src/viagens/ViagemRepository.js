@@ -152,4 +152,13 @@ export default class ViagemRepository{
     .innerJoin('perfil','usuario.perfilId','perfil.id')
     .where({'usuario.id': id.toString()}).first();
   }
+
+  async buscaStatusComFiltro(filtro){
+    return await this.client('status')
+      .where(filtro).first();
+  }
+
+  async buscaStatus(filtro){
+    return await this.client('status');
+  }
 }
