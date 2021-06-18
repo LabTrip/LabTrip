@@ -4,6 +4,11 @@ import {mailer} from '../smtpConfig'
 import EmailConviteTemplate from '../template/EmailConviteTemplate'
 require('dotenv/config');
 
+const statusAtualizarAutomaticamente = [
+  'Planejado',
+  'Em andamento'
+]
+
 const viagemViewModel = (viagem) => ({
   id:  viagem.id,
   descricao: viagem.descricao,
@@ -17,6 +22,17 @@ const viagemViewModel = (viagem) => ({
   criadoPorId: viagem.criadoPorId,
   participantes: viagem.participantes,
   alterar: viagem.alterar
+});
+
+const updateViagemViewModel = (viagem) => ({
+  id:  viagem.id,
+  descricao: viagem.descricao,
+  dataInicio: viagem.dataInicio,
+  dataFim: viagem.dataFim,
+  statusId: viagem.statusId,
+  agenciaId: viagem.agenciaId,
+  usuarioDonoId: viagem.usuarioDonoId,
+  criadoPorId: viagem.criadoPorId
 });
 
 const participantesViewModel = (participantes) => ({
@@ -64,6 +80,8 @@ export default class ViagemController {
             return res.status(403).json({status:'403', mensagem:'Acesso restrito.'})
       }
       
+      viagens = await this.atualizaStatusAutomatico(viagens);
+
       res.status(200).json(viagens.map(u => viagemViewModel(u)));
     }
     catch(e){
@@ -71,6 +89,38 @@ export default class ViagemController {
     }
   }
 
+  async atualizaStatusAutomatico(viagens){
+    let novoStatus, statusObject;
+    let viagensAtualizadas = viagens;
+    const status = await this.viagemRepository.buscaStatus();
+
+    viagensAtualizadas.map(async (viagem, index) => {
+      if(statusAtualizarAutomaticamente.indexOf(viagem.status) >= 0){
+        if(viagem.dataIncio <= new Date() && viagem.dataFim >= new Date()){
+          novoStatus = "Em andamento";
+        }
+        else if(viagem.dataFim <= new Date()){
+          novoStatus = "Concluído";
+        }
+        else{
+          novoStatus = viagem.status;
+        }
+        
+        status.map((s) => {
+          if(s.descricao === novoStatus){
+            statusObject = s;
+          }
+        });
+
+        viagem.statusId = statusObject.id;
+        viagem.status = statusObject.descricao;
+        this.viagemRepository.atualiza(updateViagemViewModel(viagem));
+        viagensAtualizadas[index] = viagem;
+      }
+    });
+
+    return viagensAtualizadas;
+  }
 
   async salva(req, res){
     try{
@@ -151,6 +201,7 @@ export default class ViagemController {
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
+
 
   async atualiza(req,res){    
     try{
