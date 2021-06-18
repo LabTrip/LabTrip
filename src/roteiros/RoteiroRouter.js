@@ -32,21 +32,23 @@ export default function defineRoteiroRouter(){
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => roteiroMiddleware.roteiroExiste(req, res, next))  
     .get((req, res) => roteiroController.mostra(req, res))
-    .put((req, res) => roteiroController.atualiza(req, res))
-    .delete((req, res) => roteiroController.deleta(req, res));
+    .delete((req, res) => roteiroController.deleta(req, res))
+    .all((req, res, next) => roteiroMiddleware.verificaAprovacaoRoteiro(req, res, next))
+    .put((req, res) => roteiroController.atualiza(req, res));
 
   router.route('/versionar/:id/:versao')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => roteiroMiddleware.roteiroExiste(req, res, next))  
+    .all((req, res, next) => roteiroMiddleware.verificaAprovacaoRoteiro(req, res, next))
     .post((req, res) => roteiroController.versiona(req, res));
 
   router.route('/:viagemId')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .get((req, res) => roteiroController.buscaRoteirosPorViagemId(req, res))
-    .put((req, res) => roteiroController.atualiza(req, res))
-    .delete((req, res) => roteiroController.deleta(req, res));
+    //.put((req, res) => roteiroController.atualiza(req, res))
+    //.delete((req, res) => roteiroController.deleta(req, res));
 
 
   return router;
