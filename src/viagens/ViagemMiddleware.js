@@ -75,4 +75,19 @@ export default class ViagemMiddleware{
       return viagemAtualizada;
     }
 
+    async verificaAprovacaoViagem(req, res, next){   
+      const statusAprovado = await this.viagemRepository.buscaStatusComFiltro({descricao: 'Planejado'});
+      const {statusId} = req.body;
+      
+      if(req.viagem.status == 'Em planejamento' && statusId == statusAprovado.id){
+        const roteiroAprovado = await this.viagemRepository.buscaRoteiroAprovadoDaViagemId(req.viagem.id, 'Aprovado');
+        
+        if(!roteiroAprovado){
+          return res.status(403).json({status: '403', mensagem: 'Não é permitido finalizar planejamento de viagem sem um roteiro aprovado. Aprove um roteiro e tente novamente.'});       
+        }
+      }
+      
+      next(); 
+    }
+
   }
