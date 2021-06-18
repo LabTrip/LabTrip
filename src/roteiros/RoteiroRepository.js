@@ -203,4 +203,16 @@ export default class RoteiroRepository{
       return await this.client('roteiro_atividade')
       .insert(roteiroAtividades).returning("*");  
     }
+
+    async buscaRoteiroAprovadoDaViagemId(viagemId, status, roteiroId, versaoRoteiro){
+      return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+        .innerJoin('status','roteiro.statusId','status.id')
+        .whereRaw(' not (roteiro.id = ? and roteiro.versao = ?) and ("roteiro"."viagemId" = ? and status.descricao = ?)', [roteiroId, versaoRoteiro, viagemId.toString(), status])
+        .first();
+    }
+
+    async buscaStatusComFiltro(filtro){
+      return await this.client('status')
+        .where(filtro).first();
+    }
   }

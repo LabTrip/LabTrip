@@ -161,4 +161,14 @@ export default class ViagemRepository{
   async buscaStatus(filtro){
     return await this.client('status');
   }
+
+  async buscaRoteiroAprovadoDaViagemId(viagemId, status){
+    return await this.client.select(['roteiro.*','status.descricao as status']).from('roteiro')
+      .innerJoin('status','roteiro.statusId','status.id')
+      .where({
+        'roteiro.viagemId': viagemId,
+        'status.descricao': status
+      })
+      .first();
+  }
 }

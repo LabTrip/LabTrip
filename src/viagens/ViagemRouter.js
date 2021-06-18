@@ -47,8 +47,9 @@ export default function defineViagemRouter(){
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => viagemMiddleware.viagemExiste(req, res, next))
     .get((req, res) => viagemController.mostra(req, res))
-    .put((req, res) => viagemController.atualiza(req, res))
-    .delete((req, res) => viagemController.deleta(req, res));
+    .delete((req, res) => viagemController.deleta(req, res))
+    .all((req, res, next) => viagemMiddleware.verificaAprovacaoViagem(req, res, next))
+    .put((req, res) => viagemController.atualiza(req, res));
 
   router.route('/participantes/:id')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
