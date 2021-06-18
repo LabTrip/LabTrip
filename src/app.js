@@ -9,6 +9,9 @@ import definePerfilRouter from './perfis/PerfilRouter'
 import defineLocalRouter from './locais/LocalRouter'
 import defineRoteiroRouter from './roteiros/RoteiroRouter'
 import defineRoteiroAtividadeRouter from './roteiroAtividades/RoteiroAtividadeRouter'
+import defineVotacaoRouter from './votacoes/VotacaoRouter'
+import defineDadosEssenciaisRouter from './dadosEssenciais/DadosEssenciaisRouter'
+import defineListaContatosRouter from './listaContatos/ListaContatosRouter'
 import defineOrcamentoRouter from './orcamentos/OrcamentoRouter'
 import definePublicRouter from './public/PublicRouter'
 
@@ -33,6 +36,9 @@ export default function LabTrip() {
   app.use('/locais', defineLocalRouter());
   app.use('/roteiros', defineRoteiroRouter());
   app.use('/roteiroAtividades', defineRoteiroAtividadeRouter());
+  app.use('/votacoes', defineVotacaoRouter());
+  app.use('/dadosEssenciais', defineDadosEssenciaisRouter());
+  app.use('/listaContatos', defineListaContatosRouter());
   app.use('/orcamentos', defineOrcamentoRouter());
   app.use('/public', definePublicRouter());
   app.use(

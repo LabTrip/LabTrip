@@ -1,6 +1,8 @@
 export default class RoteiroAtividade{
-    constructor(atividadeId, roteiroId, versaoRoteiro, dataInicio, dataFim, custo, statusId, observacaoCliente, observacaoAgente){
+    constructor(id, atividadeId, roteiroId, versaoRoteiro, dataInicio, dataFim, custo, statusId, observacaoCliente, observacaoAgente){
+      this.roteiroAtividadeId = id;
       this.atividadeId = atividadeId;
+      this.atividade = new Atividade();
       this.roteiroId = roteiroId;
       this.versaoRoteiro = versaoRoteiro;
       this.dataInicio = new Date(dataInicio).toISOString();

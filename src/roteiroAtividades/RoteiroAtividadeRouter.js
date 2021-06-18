@@ -5,6 +5,8 @@ import AcessoRotaMiddleware from '../acesso_rota/AcessoRotaMiddleware'
 import AcessoRotaRepository from '../acesso_rota/AcessoRotaRepository'
 import RoteiroAtividadeController from './RoteiroAtividadeController'
 import RoteiroAtividadeMiddleware from './RoteiroAtividadeMiddleware'
+import RoteiroMiddleware from '../roteiros/RoteiroMiddleware'
+import RoteiroRepository from '../roteiros/RoteiroRepository'
 import RoteiroAtividadeRepository from './RoteiroAtividadeRepository'
 import {client} from '../config'
 
@@ -14,6 +16,9 @@ export default function defineRoteiroAtividadeRouter(){
   const loginRepository = new LoginRepository(client);
   const loginMiddleware = new LoginMiddleware(loginRepository);
 
+  const roteiroRepository = new RoteiroRepository(client);
+  const roteiroMiddleware = new RoteiroMiddleware(roteiroRepository);
+
   const acessoRotaRepository = new AcessoRotaRepository(client)
   const acessoRotaMiddleware = new AcessoRotaMiddleware(acessoRotaRepository)
 
@@ -21,13 +26,14 @@ export default function defineRoteiroAtividadeRouter(){
   const roteiroAtividadeController = new RoteiroAtividadeController(roteiroAtividadeRepository);
   const roteiroAtividadeMiddleware = new RoteiroAtividadeMiddleware(roteiroAtividadeRepository);
 
+
   router.route('/')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
    .get((req, res) => roteiroAtividadeController.buscaTodos(req, res))
    .post((req, res) => roteiroAtividadeController.salva(req, res));
 
-  router.route('/:atividadeId/:roteiroId/:versaoRoteiro')
+  router.route('/:roteiroAtividadeId')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => roteiroAtividadeMiddleware.roteiroAtividadeExiste(req, res, next))  
@@ -35,9 +41,10 @@ export default function defineRoteiroAtividadeRouter(){
     .put((req, res) => roteiroAtividadeController.atualiza(req, res))
     .delete((req, res) => roteiroAtividadeController.deleta(req, res));
 
-  // ADICIONAR REQUEST PARA TRAZER TODAS AS ATIVIDADES DE UM ROTEIRO ESPECIFICO (roteiroId, versao)
-  // BUSCAR TAMBÉM AS INFORMAÇÕES ESPECÍFICAS DA VIAGEM
-  // ADMIN CONSEGUE ACESSAR TUDO, AGENTE APENAS ROTEIROS/ATIVIDAES VINCULADAS À AGENCIA E CLIENTE APENAS ÀS VIAGENS QUE PARTICIPA
+  router.route('/:roteiroId/:versaoRoteiro')  
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+    .get((req, res) => roteiroAtividadeController.buscaTodosPorRoteiro(req, res))
 
 
   return router;
