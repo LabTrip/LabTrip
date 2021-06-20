@@ -1,13 +1,22 @@
 import RoteiroAtividade from './RoteiroAtividade'
 
 const roteiroAtividadeViewModel = (roteiroAtividade) => ({  
+    roteiroAtividadeId: roteiroAtividade.id,
     atividadeId: roteiroAtividade.atividadeId,
+    local: roteiroAtividade.local,
+    endereco: roteiroAtividade.endereco,
+    cidade: roteiroAtividade.cidade,
+    pais: roteiroAtividade.pais,
+    latitude: roteiroAtividade.latitude,
+    longitude: roteiroAtividade.longitude,
     roteiroId: roteiroAtividade.roteiroId,
     versaoRoteiro: roteiroAtividade.versaoRoteiro,
     dataInicio: roteiroAtividade.dataInicio,
     dataFim: roteiroAtividade.dataFim,
     custo: roteiroAtividade.custo,
     statusId: roteiroAtividade.statusId,
+    votoPositivo:roteiroAtividade.positivo,
+    votoNegativo:roteiroAtividade.negativo,
     observacaoCliente: roteiroAtividade.observacaoCliente,
     observacaoAgente: roteiroAtividade.observacaoAgente,
   });
@@ -26,9 +35,27 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
         res.status(200).json(roteiroAtividade.map(u => roteiroAtividadeViewModel(u)));
       }  
       catch(e){
-         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});        
+        console.log(e)
+         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+                 
       }
     }
+
+
+    //GET /roteiroAtividades
+    async buscaTodosPorRoteiro(req, res) {
+    
+      try{
+ 
+        const roteiroAtividade= await this.roteiroAtividadeRepository.buscaTodosPorRoteiro(req);
+        res.status(200).json(roteiroAtividade.map(u => roteiroAtividadeViewModel(u)));
+      }  
+      catch(e){
+          console.log(e) 
+          return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+                  
+      }
+    } 
   
     async salva(req, res){
       try {
@@ -65,9 +92,7 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
     }    
 
     async deleta(req, res){
-      console.log("deletacontroler")
-      try{
-       
+       try{
         await this.roteiroAtividadeRepository.deleta(req.roteiroAtividade);     
         return res.status(204).end();
       }catch(e){
