@@ -25,6 +25,8 @@ export default class UsuarioRepository{
           tokenNotificacao: token,
           usuarioId: usuarioId
         })
+        .onConflict('tokenNotificacao')
+        .ignore()
         .returning("*");
   
         return firstRow;

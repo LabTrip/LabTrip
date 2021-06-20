@@ -11,6 +11,7 @@ import defineRoteiroRouter from './roteiros/RoteiroRouter'
 import defineRoteiroAtividadeRouter from './roteiroAtividades/RoteiroAtividadeRouter'
 import defineOrcamentoRouter from './orcamentos/OrcamentoRouter'
 import definePublicRouter from './public/PublicRouter'
+import defineNotificacaoRouter from './notificacoes/NotificacaoRouter'
 
 
 const path = require("path");
@@ -35,6 +36,7 @@ export default function LabTrip() {
   app.use('/roteiroAtividades', defineRoteiroAtividadeRouter());
   app.use('/orcamentos', defineOrcamentoRouter());
   app.use('/public', definePublicRouter());
+  app.use('/notificacoes', defineNotificacaoRouter());
   app.use(
     "/files",
     express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
