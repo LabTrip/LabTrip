@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 import {mailer} from '../smtpConfig'
 import EmailConviteTemplate from '../template/EmailConviteTemplate'
 require('dotenv/config');
+import api from '../requesterConfig'
 
 const statusAtualizarAutomaticamente = [
   'Planejado',
@@ -165,6 +166,8 @@ export default class ViagemController {
           return res.status(400).json({status: '400', mensagem: 'É necessário incluir ao menos um participante na viagem.'});
         }
 
+        await this.notificaViagem(req, viagem, req.method)
+
         return res.status(201).json(viagemViewModel(viagem));
       }
       else{
@@ -238,8 +241,10 @@ export default class ViagemController {
       const viagemAtualizada = await this.viagemRepository.buscaPorId(req.viagem.id) 
       const novosParticipantes =  await this.viagemRepository.buscaParticipantes(req.viagem);
       viagemAtualizada.participantes = novosParticipantes;
+
+      await this.notificaViagem(req, viagemAtualizada, req.method)
+
       return res.status(200).json(viagemViewModel(viagemAtualizada));
-      
     }
     catch(e){
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
@@ -434,6 +439,52 @@ export default class ViagemController {
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   
+  }
+
+  async notificaViagem(req, viagem, operacao){
+    try{
+      let titulo, mensagem, dado;
+      const participantes = await this.viagemRepository.buscaParticipantes(viagem);
+
+      switch(operacao){
+        case 'POST':
+          titulo = 'Nova viagem criada'
+          mensagem = 'A viagem ' + viagem.descricao + ' foi criada e você foi adicionado à ela.'
+          break;
+        case 'PUT':
+          titulo = 'Viagem atualizada'
+          mensagem = 'A viagem ' + viagem.descricao + ' que você participa foi atualizada.'
+          break;
+      }
+
+      const body = {
+        participantes: participantes,
+        titulo: titulo,
+        mensagem: mensagem,
+        dado: viagem
+      }
+
+      this.notifica(req, body);
+    }
+    catch(e){
+      console.log(e)
+    }
+    
+  }
+
+
+  async notifica(req, body) {
+    await api.post("notificacoes/", body,
+      {
+        headers: {
+          'x-access-token': req.headers['x-access-token']
+      }
+    }).then((response) => {
+        //console.log('Response ' + response.data.perfis)
+    }).catch((err) => {
+        console.error("ops! ocorreu um erro" + err);
+        return undefined;
+    });
   }
 
 }
