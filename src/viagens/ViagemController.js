@@ -140,7 +140,7 @@ export default class ViagemController {
     
         await this.viagemRepository.salva(viagem);
 
-        if(!participantes){
+        if(participantes){
           const participantesAtualizados = [];
 
           for(let participante of participantes){
@@ -151,23 +151,18 @@ export default class ViagemController {
             });
           }
 
-          await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+          participantesAtualizados.push({
+            usuarioId: criadoPorId,
+            permissaoViagemId: 3,
+            viagemId: viagem.id
+          });
+          
+          participantesAtualizados.map(async (p) => {
+            await this.viagemRepository.salvaParticipantes(p);
+          })
         }
         else{
-          const participantesAtualizados = [
-            {
-              usuarioId: usuarioDonoId,
-              permissaoViagemId: 1,
-              viagemId: viagem.id
-            },
-            {
-              usuarioId: criadoPorId,
-              permissaoViagemId: 3,
-              viagemId: viagem.id
-            }
-          ];
-
-          await this.viagemRepository.salvaParticipantes(participantesAtualizados);
+          return res.status(400).json({status: '400', mensagem: 'É necessário incluir ao menos um participante na viagem.'});
         }
 
         return res.status(201).json(viagemViewModel(viagem));
@@ -178,6 +173,7 @@ export default class ViagemController {
 
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
