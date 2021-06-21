@@ -21,11 +21,11 @@ export default class OrcamentoMiddleware{
       try{
         let orcamento;
         if(req.route.path == '/despesaExtra'){
-          console.log(req.body.orcamentoId);
+          
           orcamento = await this.orcamentoRepository.buscaPorId(req.body.orcamentoId);
         }
         else if(req.route.path == '/despesaExtra/:id'){
-          console.log(req.despesa);
+          
           orcamento = await this.orcamentoRepository.buscaPorId(req.despesa.orcamentoId);
         }
         else{
@@ -42,7 +42,7 @@ export default class OrcamentoMiddleware{
           }
         })
           .then((response) => {
-            //console.log('Response ' + response.data.perfis)
+            
             return response.data;
           })
           .catch((err) => {
@@ -67,7 +67,7 @@ export default class OrcamentoMiddleware{
       let temPermissao = false;
       if(req.orcamento.tipoOrcamentoId == 1){
         const roteiro = await this.requestRoteiro(req, req.orcamento.roteiroId, req.orcamento.versaoRoteiro)
-        console.log(roteiro)
+        
         const permissaoViagem = await this.orcamentoRepository.buscaPermissaoViagem(roteiro.viagemId, req.token.id);
 
         if(permissaoViagem && (permissaoViagem.descricao == 'Proprietário' || permissaoViagem.descricao == 'Agente' || req.token.perfilId == 2 || req.token.perfilId == 1)){
@@ -75,9 +75,9 @@ export default class OrcamentoMiddleware{
         }
       }
       else{
-        console.log(req.orcamento.id, req.token.id)
+        
         const usuarioOrcamento = await this.orcamentoRepository.buscaUsuarioOrcamento(req.orcamento.id, req.token.id);
-        console.log(usuarioOrcamento)
+        
         if(usuarioOrcamento){
           temPermissao = true;
         }
@@ -99,7 +99,7 @@ export default class OrcamentoMiddleware{
           }
         })
           .then((response) => {
-            //console.log('Response ' + response.data.perfis)
+            
             return response.data;
           })
           .catch((err) => {
@@ -121,7 +121,7 @@ export default class OrcamentoMiddleware{
       if(!despesa){
         return res.status(403).json({status: '403', mensagem: 'A despesa não foi encontrada.'});       
       }
-      console.log(despesa)
+      
       req.despesa = despesa;
       next();
     }

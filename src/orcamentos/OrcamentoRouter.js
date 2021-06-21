@@ -48,7 +48,7 @@ export default function defineOrcamentoRouter(){
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => orcamentoMiddleware.roteiroExiste(req, res, next))
     .get((req, res) => orcamentoController.mostra(req, res))
-    .put((req, res) => orcamentoController.atualiza(req, res));
+    .put((req, res) => orcamentoController.atualizaOrcamento(req, res));
 
   return router;
 }

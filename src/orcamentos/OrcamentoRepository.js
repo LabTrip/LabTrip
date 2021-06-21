@@ -3,17 +3,34 @@ export default class OrcamentoRepository{
     this.client = client;
   }
 
-  async buscaTodos(){
-    return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
-    .innerJoin('status', 'viagem.statusId', 'status.id')
+  async buscaParticipantesDaViagem(orcamentoId){
+    return await this.client.select([
+      'p.usuarioId'
+    ])
+    .from('usuario_viagem as p')
+    .distinct()
+    .join('viagem as v', 'p.viagemId', 'v.id')
+    .join('roteiro as r', 'p.viagemId', 'r.viagemId')
+    .join('orcamento as o', 'r.id', 'o.roteiroId')
+    .where({
+      'o.id': orcamentoId
+    });
   }
 
-  async buscaTodosComPermissao(id){
-    return await this.client('viagem')
-      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-      .where({
-        usuarioId: id,
-      });
+  async buscaDadosDaViagem(orcamentoId){
+    return await this.client.select([
+      'v.*',
+      'r.*',
+      'o.*'
+    ])
+    .from('usuario_viagem as p')
+    .distinct()
+    .join('viagem as v', 'p.viagemId', 'v.id')
+    .join('roteiro as r', 'p.viagemId', 'r.viagemId')
+    .join('orcamento as o', 'r.id', 'o.roteiroId')
+    .where({
+      'o.id': orcamentoId
+    });
   }
 
   async salva(orcamento){
@@ -50,20 +67,6 @@ export default class OrcamentoRepository{
             }).first();
   }
 
-  async buscaPorId_AcessoGerencial(id, agenciaId){
-    return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
-      .innerJoin('status', 'viagem.statusId', 'status.id')
-      .where({'viagem.id': id.toString()})
-      .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
-  }
-
-  async buscaPorId_AcessoParcial(id, usuarioId){
-    return await this.client.select(['viagem.*', 'status.descricao as status']).from('viagem')
-      .innerJoin('status', 'viagem.statusId', 'status.id')
-      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-      .where({'viagem.id': id.toString()})
-      .where({'usuario_viagem.usuarioId': usuarioId.toString()}).first();
-  }
 
   async atualiza(orcamento){
     const [firstRow] = await this.client('orcamento')
@@ -72,34 +75,6 @@ export default class OrcamentoRepository{
       .returning("*");
 
       return firstRow;
-  }
-
-  async deleta(viagem){
-    await this.client('viagem')
-      .where('id', viagem.id)
-      .update({
-        deletadoEm: new Date().toISOString,
-      })
-  }
-
-  async salvaParticipantes(participante){
-    await this.client('usuario_viagem')
-      .insert({usuarioId: participante.usuarioId,
-        permissaoViagemId: participante.permissaoViagemId,
-        viagemId: participante.viagemId})
-      .onConflict(["usuarioId","viagemId"])
-      .merge()
-      .returning("*");
-  }
-
-  async deletaParticipantes(participantes){
-    for(let participante of participantes){
-      await this.client('usuario_viagem')
-        .where((builder) => {
-          builder.where('usuarioId', participante.usuarioId).andWhere('viagemId', participante.viagemId)
-        })
-        .delete();
-    }
   }
 
   async buscaParticipantes(viagem){

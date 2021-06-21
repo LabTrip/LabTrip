@@ -13,12 +13,16 @@ export default class NotificacaoController {
     try {
 
       let messages = [];
-      let {pushTokens, titulo, mensagem, dado} = req.body;
+      let {participantes, titulo, mensagem, dado} = req.body;
+
+      const pushTokens = await this.notificacaoRepository.buscaTokenNotificacao(participantes);
 
       for (let pushToken of pushTokens) {
-
+        pushToken = pushToken.tokenNotificacao;
+        
           if (!Expo.isExpoPushToken(pushToken)) {
               console.error(`Push token ${pushToken} is not a valid Expo push token`);
+              console.log(pushToken)
               continue;
           }
 
@@ -27,7 +31,7 @@ export default class NotificacaoController {
               sound: 'default',
               title: titulo || 'Labtrip',
               body: mensagem || 'Bem vindo ao nosso app!',
-              data: { withSome: 'data' },
+              data: dado || { withSome: 'data' },
           })
       }
       let chunks = expo.chunkPushNotifications(messages);
