@@ -215,4 +215,20 @@ export default class RoteiroRepository{
       return await this.client('status')
         .where(filtro).first();
     }
+
+    async buscaviagemPorId(id){
+      return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+      .innerJoin('status', 'viagem.statusId', 'status.id')
+      .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
+        .where({'viagem.id': id.toString()}).first();
+    }
+
+    async buscaParticipantes(viagem){
+      return await this.client.select(['usuario_viagem.*','usuario.nome as nome','permissao_viagem.descricao as descricao'])
+        .from('usuario_viagem')
+        .innerJoin('usuario','usuario_viagem.usuarioId','usuario.id')
+        .innerJoin('permissao_viagem','usuario_viagem.permissaoViagemId','permissao_viagem.id')
+        .where('viagemId', viagem.id);
+    }
+  
   }

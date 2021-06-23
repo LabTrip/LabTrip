@@ -35,6 +35,8 @@ const roteiroViewModel = (roteiro) => ({
         const {viagemId, statusId, versao, descricaoRoteiro} = req.body;
         const roteiro = await this.roteiroRepository.salva(new Roteiro(viagemId, statusId, versao, descricaoRoteiro));
         
+        await this.notificaRoteiro(req, roteiro, req.method)
+
         res.status(201).json(roteiroViewModel(roteiro));
       }
       catch(e){
@@ -59,6 +61,8 @@ const roteiroViewModel = (roteiro) => ({
           await await this.roteiroRepository.versionaRoteiroAtividades(roteiroAtividades);
         }
         
+        await this.notificaRoteiro(req, roteiro, req.method)
+
         res.status(201).json(roteiroViewModel(roteiro));
       }
       catch(e){
@@ -131,6 +135,12 @@ const roteiroViewModel = (roteiro) => ({
       try{
         const {viagemId, statusId, versao, descricaoRoteiro, id } = req.body;
         const roteiro = await this.roteiroRepository.atualiza(new Roteiro(viagemId, statusId, versao, descricaoRoteiro, id));
+        
+        if(req.roteiro.statusId != statusId && (roteiro.statusId == 2 || roteiro.statusId == 6)){
+          console.log('chamou')
+          await this.notificaRoteiro(req, roteiro, req.method)
+        }
+
         return res.status(200).json(roteiroViewModel(roteiro));      
       }catch(e){
         console.log(e)
@@ -146,6 +156,57 @@ const roteiroViewModel = (roteiro) => ({
         console.log(e)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }    
+    }
+
+    async notificaRoteiro(req, roteiro, operacao){
+      try{
+        let titulo, mensagem, dado;
+
+        const viagem = await this.roteiroRepository.buscaviagemPorId(roteiro.viagemId)
+        const participantes = await this.roteiroRepository.buscaParticipantes(viagem);
+  
+        switch(operacao){
+          case 'POST':
+            titulo = 'Novo roteiro criado'
+            mensagem = 'Um novo roteiro foi criado na viagem ' + viagem.descricao + '.'
+            break;
+          case 'PUT':
+            titulo = 'Roteiro atualizado'
+            mensagem = 'O status do roteiro ' + roteiro.descricao + 'da viagem ' + viagem.descricao + ' mudou para "' + roteiro.status + '".'
+            break;
+        }
+  
+        const body = {
+          participantes: participantes,
+          titulo: titulo,
+          mensagem: mensagem,
+          dado: {
+            viagem: viagem,
+            roteiro: roteiro,
+          }
+        }
+  
+        this.notifica(req, body);
+      }
+      catch(e){
+        console.log(e)
+      }
+      
+    }
+  
+  
+    async notifica(req, body) {
+      await api.post("notificacoes/", body,
+        {
+          headers: {
+            'x-access-token': req.headers['x-access-token']
+        }
+      }).then((response) => {
+          //console.log('Response ' + response.data.perfis)
+      }).catch((err) => {
+          console.error("ops! ocorreu um erro" + err);
+          return undefined;
+      });
     }
   
   }
