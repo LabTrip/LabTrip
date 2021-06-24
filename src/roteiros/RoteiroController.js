@@ -162,6 +162,7 @@ const roteiroViewModel = (roteiro) => ({
       try{
         let titulo, mensagem, dado;
 
+        const status = await this.roteiroRepository.buscaStatusPorId(roteiro.statusId)
         const viagem = await this.roteiroRepository.buscaviagemPorId(roteiro.viagemId)
         const participantes = await this.roteiroRepository.buscaParticipantes(viagem);
   
@@ -172,7 +173,7 @@ const roteiroViewModel = (roteiro) => ({
             break;
           case 'PUT':
             titulo = 'Roteiro atualizado'
-            mensagem = 'O status do roteiro ' + roteiro.descricao + 'da viagem ' + viagem.descricao + ' mudou para "' + roteiro.status + '".'
+            mensagem = 'O status do roteiro ' + roteiro.descricao + 'da viagem ' + viagem.descricao + ' mudou para "' + status.descricao + '".'
             break;
         }
   

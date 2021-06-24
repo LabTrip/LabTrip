@@ -223,6 +223,11 @@ export default class RoteiroRepository{
         .where({'viagem.id': id.toString()}).first();
     }
 
+    async buscaStatusPorId(id){
+      return await this.client.select(['status.*']).from('status')
+        .where({'status.id': id.toString()}).first();
+    }
+
     async buscaParticipantes(viagem){
       return await this.client.select(['usuario_viagem.*','usuario.nome as nome','permissao_viagem.descricao as descricao'])
         .from('usuario_viagem')
