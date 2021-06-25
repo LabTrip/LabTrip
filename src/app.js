@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import cors from 'cors';
 import defineUsuarioRouter from './usuarios/UsuarioRouter'
 import defineViagemRouter from './viagens/ViagemRouter'
@@ -12,6 +12,7 @@ import defineRoteiroAtividadeRouter from './roteiroAtividades/RoteiroAtividadeRo
 import defineVotacaoRouter from './votacoes/VotacaoRouter'
 import defineDadosEssenciaisRouter from './dadosEssenciais/DadosEssenciaisRouter'
 import defineListaContatosRouter from './listaContatos/ListaContatosRouter'
+import defineChatRouter from './chats/ChatRouter'
 import defineOrcamentoRouter from './orcamentos/OrcamentoRouter'
 import definePublicRouter from './public/PublicRouter'
 import defineNotificacaoRouter from './notificacoes/NotificacaoRouter'
@@ -40,6 +41,7 @@ export default function LabTrip() {
   app.use('/votacoes', defineVotacaoRouter());
   app.use('/dadosEssenciais', defineDadosEssenciaisRouter());
   app.use('/listaContatos', defineListaContatosRouter());
+  app.use('/chats', defineChatRouter());
   app.use('/orcamentos', defineOrcamentoRouter());
   app.use('/public', definePublicRouter());
   app.use('/notificacoes', defineNotificacaoRouter());
