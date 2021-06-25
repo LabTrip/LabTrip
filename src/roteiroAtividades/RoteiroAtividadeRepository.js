@@ -25,14 +25,14 @@ export default class RoteiroAtividadeRepository{
       return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
       .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
       .innerJoin('local', 'atividade.localId', 'local.id')
-      .innerJoin(((builder) => { builder
+      .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      
         .count('votacao.gostou as positivo')
         .where({'votacao.gostou': true})
         .groupBy('votacao.roteiroAtividadeId')
         .as('subqueryPositivo')
         }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-      .innerJoin(((builder) => { builder
+      .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      
         .count('votacao.gostou as negativo')
         .where({'votacao.gostou': false})
@@ -48,14 +48,14 @@ export default class RoteiroAtividadeRepository{
     .innerJoin('local', 'atividade.localId', 'local.id')
     .innerJoin('roteiro', 'roteiroAtividade.roteiroId', 'roteiro.id')
     .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
       .where({'votacao.gostou': true})
       .groupBy('votacao.roteiroAtividadeId')
       .as('subqueryPositivo')
       }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as negativo')
       .where({'votacao.gostou': false})
@@ -70,14 +70,14 @@ export default class RoteiroAtividadeRepository{
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
     .innerJoin('roteiro', 'roteiro_atividade.roteiroId', 'roteiro.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
       .where({'votacao.gostou': true})
       .groupBy('votacao.roteiroAtividadeId')
       .as('subqueryPositivo')
       }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as negativo')
       .where({'votacao.gostou': false})
@@ -111,14 +111,14 @@ export default class RoteiroAtividadeRepository{
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
       .where({'votacao.gostou': true})
       .groupBy('votacao.roteiroAtividadeId')
       .as('subqueryPositivo')
       }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as negativo')
       .where({'votacao.gostou': false})
@@ -134,14 +134,14 @@ export default class RoteiroAtividadeRepository{
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
     .innerJoin('roteiro', 'roteiroAtividade.roteiroId', 'roteiro.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
       .where({'votacao.gostou': true})
       .groupBy('votacao.roteiroAtividadeId')
       .as('subqueryPositivo')
       }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as negativo')
       .where({'votacao.gostou': false})
@@ -160,14 +160,14 @@ export default class RoteiroAtividadeRepository{
     .innerJoin('votacao', 'votacao.roteiroAtividadeId', 'roteiro_atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
     .innerJoin('roteiro', 'roteiro_atividade.roteiroId', 'roteiro.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
       .where({'votacao.gostou': true})
       .groupBy('votacao.roteiroAtividadeId')
       .as('subqueryPositivo')
       }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as negativo')
       .where({'votacao.gostou': false})
@@ -201,14 +201,14 @@ export default class RoteiroAtividadeRepository{
   async buscaPorId_AcessoTotal(roteiroAtividadeId){
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
       .where({'votacao.gostou': true})
       .groupBy('votacao.roteiroAtividadeId')
       .as('subqueryPositivo')
       }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-    .innerJoin(((builder) => { builder
+    .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as negativo')
       .where({'votacao.gostou': false})
@@ -223,14 +223,14 @@ export default class RoteiroAtividadeRepository{
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
       .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
       .where({'roteiro_atividade.id': roteiroAtividadeId.toString()})
-      .innerJoin(((builder) => { builder
+      .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      
         .count('votacao.gostou as positivo')
         .where({'votacao.gostou': true})
         .groupBy('votacao.roteiroAtividadeId')
         .as('subqueryPositivo')
         }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-      .innerJoin(((builder) => { builder
+      .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      
         .count('votacao.gostou as negativo')
         .where({'votacao.gostou': false})
@@ -245,14 +245,14 @@ export default class RoteiroAtividadeRepository{
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
       .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
       .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-      .innerJoin(((builder) => { builder
+      .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      
         .count('votacao.gostou as positivo')
         .where({'votacao.gostou': true})
         .groupBy('votacao.roteiroAtividadeId')
         .as('subqueryPositivo')
         }), 'subqueryPositivo.roteiroAtividadeId','roteiro_atividade.id')
-      .innerJoin(((builder) => { builder
+      .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      
         .count('votacao.gostou as negativo')
         .where({'votacao.gostou': false})
@@ -282,7 +282,7 @@ export default class RoteiroAtividadeRepository{
   }
 
   async atualiza(roteiroAtividade){
-    const [firstRow] = await this.client('roteiro_atividade')
+     const [firstRow] = await this.client('roteiro_atividade')
     .where({'roteiro_atividade.id': roteiroAtividade.id})
     .update({      
       dataInicio: roteiroAtividade.dataInicio,
@@ -299,6 +299,7 @@ export default class RoteiroAtividadeRepository{
   }
 
   async deleta(roteiroAtividade){
+    console.log(roteiroAtividade)
     await this.client('roteiro_atividade')
     .where({'roteiro_atividade.id': roteiroAtividade.id}).first()
     .delete()

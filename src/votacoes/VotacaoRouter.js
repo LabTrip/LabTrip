@@ -25,7 +25,7 @@ export default function defineVotacaoRouter(){
   
   const votacaoRepository = new VotacaoRepository(client);
   const votacaoController = new VotacaoController(votacaoRepository);
-  const votacaoMiddleware = new VotacaoMiddleware(votacaoRepository)
+  const votacaoMiddleware = new VotacaoMiddleware(votacaoRepository);
 
 
   router.route('/')

@@ -23,6 +23,17 @@ const votacaoViewModel = (votacao) => ({
       }
       
     }
+
+    async buscaTodosPorRoteiroAtividade(req, res) {
+      try{
+        const votacoes = await this.votacaoRepository.buscaTodosPorRoteiroAtividade(req);
+        res.status(200).json(votacoes.map(u => votacaoViewModel(u)));
+      }
+      catch(e){
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e.detail.toString()});
+      }
+      
+    }
   
     async salva(req, res){
       try{

@@ -1,7 +1,7 @@
 import RoteiroAtividade from './RoteiroAtividade'
 
 const roteiroAtividadeViewModel = (roteiroAtividade) => ({  
-    roteiroAtividadeId: roteiroAtividade.id,
+    id: roteiroAtividade.id,
     atividadeId: roteiroAtividade.atividadeId,
     local: roteiroAtividade.local,
     endereco: roteiroAtividade.endereco,
@@ -65,7 +65,7 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
         res.status(201).json(roteiroAtividadeViewModel(roteiroAtividade));
       }
       catch(e){
-        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e.toString()});       
       }      
     }
   
@@ -81,8 +81,8 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
   
     async atualiza(req,res){
       try{
-        const {atividadeId, roteiroId, versaoRoteiro, dataInicio, dataFim, custo, statusId, observacaoCliente, observacaoAgente} = req.body;
-        const roteiroAtividade= new RoteiroAtividade(atividadeId, roteiroId, versaoRoteiro, dataInicio, dataFim, custo, statusId, observacaoCliente, observacaoAgente);
+        const {atividadeId, roteiroId, versaoRoteiro, dataInicio, dataFim, custo, statusId, observacaoCliente, observacaoAgente, id} = req.body;
+        const roteiroAtividade= new RoteiroAtividade(atividadeId, roteiroId, versaoRoteiro, dataInicio, dataFim, custo, statusId, observacaoCliente, observacaoAgente, id);
         const roteiroAtividadeAtualizado = await this.roteiroAtividadeRepository.atualiza(roteiroAtividade);
 
         return res.status(200).json(roteiroAtividadeViewModel(roteiroAtividadeAtualizado));      
@@ -93,6 +93,7 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
 
     async deleta(req, res){
        try{
+         console.log('controller', req.roteiroAtividade)
         await this.roteiroAtividadeRepository.deleta(req.roteiroAtividade);     
         return res.status(204).end();
       }catch(e){

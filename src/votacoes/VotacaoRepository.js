@@ -54,7 +54,7 @@ export default class VotacaoRepository{
         .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
     }
   
-    async buscaPorId_AcessoParcial(roteiroAtividadId, usuarioId, usuarioIdToken){
+    async buscaPorId_AcessoParcial(roteiroAtividadeId, usuarioId, usuarioIdToken){
       return await this.client.select(['votacao.*']).from('votacao')
       .innerJoin('roteiro_atividade', 'votacao.roteiroAtividadeId', 'roteiro_atividade.id')
       .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
@@ -62,6 +62,46 @@ export default class VotacaoRepository{
       .where({'votacao.roteiroAtividadeId': roteiroAtividadeId.toString()})
       .andWhere({'votacao.usuarioId': usuarioId.toString()})
       .andWhere({'usuario_viagem.usuarioId': usuarioIdToken.toString()}).first();
+
+    }
+
+    async buscaTodosPorRoteiroAtividade(req){
+      switch(req.acesso.tipoAcesso){          
+        case 'Total': 
+         return await this.buscaTodosPorRoteiroAtividade_AcessoTotal(req.params.roteiroAtividadeId);
+         break;
+        case 'Gerencial':
+            return await this.buscaTodosPorRoteiroAtividade_AcessoGerencial(req.params.roteiroAtividadeId, req.token.agenciaId);
+          break;
+        case 'Parcial':
+          return await this.buscaTodosPorRoteiroAtividade_AcessoParcial(req.params.roteiroAtividadeId, req.token.id);
+          break;
+        default:
+          return undefined;
+      }
+  
+    }
+  
+    async buscaTodosPorRoteiroAtividade_AcessoTotal(roteiroAtividadId){
+      return await this.client.from('votacao')
+        .where({'votacao.roteiroAtividadeId': roteiroAtividadId.toString()});
+    }
+  
+    async buscaTodosPorRoteiroAtividade_AcessoGerencial(roteiroAtividadeId, agenciaId){
+      return await this.client.select(['votacao.*']).from('votacao')
+        .innerJoin('roteiro_atividade', 'votacao.roteiroAtividadeId', 'roteiro_atividade.id')
+        .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
+        .where({'votacao.roteiroAtividadeId': roteiroAtividadeId.toString()})
+        .andWhere({'viagem.agenciaId': agenciaId.toString()});
+    }
+  
+    async buscaTodosPorRoteiroAtividade_AcessoParcial(roteiroAtividadeId, usuarioId, usuarioIdToken){
+      return await this.client.select(['votacao.*']).from('votacao')
+      .innerJoin('roteiro_atividade', 'votacao.roteiroAtividadeId', 'roteiro_atividade.id')
+      .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
+      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+      .where({'votacao.roteiroAtividadeId': roteiroAtividadeId.toString()})
+      .andWhere({'usuario_viagem.usuarioId': usuarioIdToken.toString()});
 
     }
   
