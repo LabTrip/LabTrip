@@ -99,24 +99,13 @@ export default function LabTrip() {
   
     // Runs when client disconnects
     socket.on('disconnect', () => {
-      const user = userLeave(socket.id);
-  
-      if (user) {
-        io.to(user.room).emit(
-          'message',
-          formatMessage(botName, `${user.username} has left the chat`)
-        );
-  
-        // Send users and room info
-        io.to(user.room).emit('roomUsers', {
-          room: user.room,
-          users: getRoomUsers(user.room)
-        });
-      }
+      
     });
   })
 
-  server.listen(process.env.PORT || 5001)
+  server.listen(process.env.PORT || 5001, function(){
+    console.log('Hello!');
+  })
   
   return app;
 }
