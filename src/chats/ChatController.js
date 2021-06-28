@@ -1,4 +1,6 @@
 import Chat from './Chat'
+const http = require('http')
+const WebSocket = require('ws');
 
 const chatViewModel = (chat) => ({
     viagemId: chat.viagemId,
@@ -24,15 +26,43 @@ const chatViewModel = (chat) => ({
       
     }
 
-    async buscaTodosPorViagemIdTopicoId(req, res) {
+    conectaAoChat(ws, req) {
       try{
-        const chats = await this.chatRepository.buscaTodosPorViagemIdTopicoId(req);
-        res.status(200).json(chats.map(u => chatViewModel(u)));
+        let rooms = []
+        console.log(req.params.viagemId)
+        console.log(req.params.topicoId)
+
+        rooms.map((r, index) => {
+
+        })
+        
+        ws.on('message', msg => {
+          aWss.clients.forEach(function (client) {
+            if(client != ws && client.readyState === ws.OPEN){
+              client.send(msg);
+            }
+          });
+        })
+
+        ws.on('close', () => {
+                console.log('WebSocket was closed')
+        })
       }
       catch(e){
+        console.log(e)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e});
       }
       
+    }
+
+    adicionaASala(ws, req){
+      try{
+        let salas = [];
+
+      }
+      catch(e){
+
+      }
     }
   
     async salva(req, res){

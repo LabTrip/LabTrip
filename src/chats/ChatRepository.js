@@ -22,16 +22,16 @@ export default class ChatRepository{
     }
   
 
-    async buscaPorId(req){
+    async buscaPorViagemTopicoId(req){
       switch(req.acesso.tipoAcesso){          
         case 'Total': 
-         return await this.buscaPorId_AcessoTotal(req.params.chatId);
+         return await this.buscaPorId_AcessoTotal(req.params.viagemId, req.params.topicoId);
          break;
         case 'Gerencial':
-            return await this.buscaPorId_AcessoGerencial(req.params.chatId, req.token.agenciaId);
+            return await this.buscaPorId_AcessoGerencial(req.params.viagemId, req.params.topicoId, req.token.agenciaId);
           break;
         case 'Parcial':
-          return await this.buscaPorId_AcessoParcial(req.params.chatId, req.token.id);
+          return await this.buscaPorId_AcessoParcial(req.params.viagemId, req.params.topicoId, req.token.id);
           break;
         default:
           return undefined;
@@ -39,22 +39,31 @@ export default class ChatRepository{
   
     }
   
-    async buscaPorId_AcessoTotal(chatId){
+    async buscaPorId_AcessoTotal(viagemId, topicoId){
       return await this.client.from('chat')
-        .where({'chat.id': chatId.toString()}).first();
+        .where({
+          'chat.vaigemId': viagemId.toString(),
+          'chat.topicoId': topicoId.toString()
+        }).first();
     }
   
-    async buscaPorId_AcessoGerencial(chatId, agenciaId){
+    async buscaPorId_AcessoGerencial(viagemId, topicoId, agenciaId){
       return await this.client.select(['chat.*']).from('chat')
         .innerJoin('viagem', 'chat.viagemId', 'viagem.id')
-        .where({'chat.id': chatId.toString()})
+        .where({
+          'chat.vaigemId': viagemId.toString(),
+          'chat.topicoId': topicoId.toString()
+        })
         .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
     }
   
-    async buscaPorId_AcessoParcial(chatId, usuarioIdToken){
+    async buscaPorId_AcessoParcial(viagemId, topicoId, usuarioIdToken){
       return await this.client.select(['chat.*']).from('chat')
       .innerJoin('usuario_chat', 'chat.id', 'usuario_chat.chatId')
-      .where({'chat.id': chatId.toString()})
+      .where({
+        'chat.vaigemId': viagemId.toString(),
+        'chat.topicoId': topicoId.toString()
+      })
       .andWhere({'usuario_chat.usuarioId': usuarioIdToken.toString()}).first();
     }
 

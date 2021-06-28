@@ -8,7 +8,7 @@ import ChatRepository from './ChatRepository'
 import ChatMiddleware from './ChatMiddleware'
 import {client} from '../config'
 
-export default function defineChatRouter(){
+export default function defineChatRouter(expressWs){
   const router = express.Router();
 
   const loginRepository = new LoginRepository(client);
@@ -36,11 +36,5 @@ export default function defineChatRouter(){
     .put((req, res) => chatController.atualiza(req, res))
     .delete((req, res) => chatController.deleta(req, res));
 
-  router.route('/:viagemId/:topicoId')  
-    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
-    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
-    .get((req, res) => chatController.buscaTodosPorViagemIdTopicoId(req, res))
-
-
-  return router;
+  return router; 
 }
