@@ -53,13 +53,17 @@ export default function LabTrip() {
   );
 
   app.get('/', function(req, res) {
-    res.status(200).send('Olá  mundo!');
+    res.status(200).json({mensagem: 'Olá  mundo!'});
   });
+
+  /*app.listen(process.env.PORT || 5001, function(){
+    console.log('Hello!');
+  });*/
 
   /** Create HTTP server. */
   const server = http.createServer(app);
   /** Create socket connection */
-  const io = socketio(server);
+  const io = socketio().listen(server);
   io.on('connection', socket => {
     console.log('Alou')
     socket.on('joinRoom', ({ username, room }) => {
@@ -112,5 +116,7 @@ export default function LabTrip() {
     });
   })
 
+  server.listen(process.env.PORT || 5001)
+  
   return app;
 }
