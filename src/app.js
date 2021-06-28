@@ -28,7 +28,7 @@ export default function LabTrip() {
   const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
-  //app.use('/', httpsRedirect());
+  app.use('/', httpsRedirect());
   app.use(helmet());
   app.use(cors());
   app.use('/usuarios', defineUsuarioRouter());
@@ -43,7 +43,7 @@ export default function LabTrip() {
   app.use('/votacoes', defineVotacaoRouter());
   app.use('/dadosEssenciais', defineDadosEssenciaisRouter());
   app.use('/listaContatos', defineListaContatosRouter());
-  //app.use('/chats', defineChatRouter());
+  app.use('/chats', defineChatRouter());
   app.use('/orcamentos', defineOrcamentoRouter());
   app.use('/public', definePublicRouter());
   app.use('/notificacoes', defineNotificacaoRouter());
@@ -52,14 +52,14 @@ export default function LabTrip() {
     express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
   );
 
-  /*app.get('/', function(req, res) {
+  app.get('/', function(req, res) {
     res.status(200).send('Olá  mundo!');
-  });*/
+  });
 
   /** Create HTTP server. */
-  //const server = http.createServer(app);
+  const server = http.createServer(app);
   /** Create socket connection */
-  /*const io = socketio(server);
+  const io = socketio(server);
   io.on('connection', socket => {
     console.log('Alou')
     socket.on('joinRoom', ({ username, room }) => {
@@ -110,7 +110,7 @@ export default function LabTrip() {
         });
       }
     });
-  })*/
+  })
 
   return app;
 }
