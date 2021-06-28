@@ -57,9 +57,9 @@ export default function LabTrip() {
   });*/
 
   /** Create HTTP server. */
-  const server = http.createServer(app);
+  //const server = http.createServer(app);
   /** Create socket connection */
-  const io = socketio(server);
+  /*const io = socketio(server);
   io.on('connection', socket => {
     console.log('Alou')
     socket.on('joinRoom', ({ username, room }) => {
@@ -110,7 +110,7 @@ export default function LabTrip() {
         });
       }
     });
-  })
+  })*/
 
   return app;
 }
