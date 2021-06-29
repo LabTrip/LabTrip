@@ -91,7 +91,7 @@ export default class RoteiroAtividadeRepository{
   }
 
   async buscaTodosPorRoteiro(req){
-    console.log(req)
+    //console.log(req)
     switch(req.acesso.tipoAcesso){          
       case 'Total':
        return await this.buscaTodosPorRoteiro_AcessoTotal(req.params.roteiroId, req.params.versaoRoteiro);
@@ -133,7 +133,7 @@ export default class RoteiroAtividadeRepository{
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
-    .innerJoin('roteiro', 'roteiroAtividade.roteiroId', 'roteiro.id')
+    .innerJoin('roteiro', 'roteiro_atividade.roteiroId', 'roteiro.id')
     .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
