@@ -33,9 +33,8 @@ export default class Chat {
       
       // Welcome current user
       if(chat.mensagens && chat.mensagens.length > 0){
-        chat.mensagens.map((m) => {
-          socket.emit('message', this.chatController.formataMensagem({enviadoPor: m.enviadoPor, usuarioId: m.usuarioId, id: m.id}, m.mensagem));
-        })
+        const messages = chat.mensagens.map((m) => this.chatController.formataMensagem({enviadoPor: m.enviadoPor, usuarioId: m.usuarioId, id: m.id}, m.mensagem));
+        socket.emit('messages', messages);
       }
   
     });
