@@ -24,7 +24,7 @@ export default class Chat {
       }
       const chat = await this.chatMiddleware.buscaChat(token, room);
       if(!chat){
-        socket.emit('message', this.chatController.formataMensagem('Labtrip', 'O chat informado não existe.'));
+        socket.emit('message', this.chatController.formataMensagem({enviadoPor: 'Labtrip', usuarioId: '0'}, 'O chat informado não existe.'));
         return
       }
       const user = this.chatController.conectaAoChat(socket.id, userAuth.nome, userAuth.id, room, chat);
@@ -34,7 +34,7 @@ export default class Chat {
       // Welcome current user
       if(chat.mensagens && chat.mensagens.length > 0){
         chat.mensagens.map((m) => {
-          socket.emit('message', this.chatController.formataMensagem(m.enviadoPor, m.mensagem));
+          socket.emit('message', this.chatController.formataMensagem({enviadoPor: m.enviadoPor, usuarioId: m.usuarioId, id: m.id}, m.mensagem));
         })
       }
   
@@ -46,11 +46,11 @@ export default class Chat {
 
       const mensagem = await this.chatController.salvaMensagem(user, msg);
       if(!mensagem){
-        socket.emit('message', this.chatController.formataMensagem('Labtrip', 'Não foi possível enviar sua mensagem.'));
+        socket.emit('message', this.chatController.formataMensagem({enviadoPor: 'Labtrip', usuarioId: '0'}, 'Não foi possível enviar sua mensagem.'));
         return
       }
   
-      this.io.to(user.room).emit('message', this.chatController.formataMensagem(user.username, msg));
+      this.io.to(user.room).emit('message', this.chatController.formataMensagem({enviadoPor: user.username, usuarioId: user.userId, id: mensagem.id}, msg));
     });
   
     // Runs when client disconnects

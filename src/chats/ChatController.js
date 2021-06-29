@@ -78,11 +78,11 @@ const chatViewModel = (chat) => ({
       }
     }
 
-    formataMensagem(username, text) {
+    formataMensagem(metadata, mensagem) {
       try{
         return {
-          username,
-          text,
+          metadata,
+          mensagem,
           time: moment().format('h:mm a')
         };
       }
