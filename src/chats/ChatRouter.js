@@ -25,8 +25,13 @@ export default function defineChatRouter(expressWs){
   router.route('/')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
-   .get((req, res) => chatController.buscaTodos(req, res))
    .post((req, res) => chatController.salva(req, res));
+
+  router.route('/:viagemId/:topico?')
+   .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+   .all((req, res, next) => chatMiddleware.chatExiste(req, res, next))    
+   .get((req, res) => chatController.mostra(req, res));
 
   router.route('/:chatId')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))

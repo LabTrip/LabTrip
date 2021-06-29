@@ -1,17 +1,21 @@
 import Chat from './Chat'
-const http = require('http')
-const WebSocket = require('ws');
+const moment = require('moment')
+import api from '../requesterConfig'
 
 const chatViewModel = (chat) => ({
+    id: chat.id,
     viagemId: chat.viagemId,
     nome: chat.nome,
-    topico: chat.topicoId,
+    topicoId: chat.topicoId,
+    descTopico: chat.descTopico,
+    mensagens: chat.mensagens
   });  
   
   export default class ChatController {
   
     constructor(chatRepository) {
       this.chatRepository = chatRepository;
+      this.users = [];
     }
   
     //GET 
@@ -26,87 +30,156 @@ const chatViewModel = (chat) => ({
       
     }
 
-    conectaAoChat(ws, req) {
+    conectaAoChat(id, username, userId, room, chat) {
       try{
-        let rooms = []
-        console.log(req.params.viagemId)
-        console.log(req.params.topicoId)
+        const user = { id, username, userId, room , chat};
 
-        rooms.map((r, index) => {
+        this.users.push(user);
 
-        })
-        
-        ws.on('message', msg => {
-          aWss.clients.forEach(function (client) {
-            if(client != ws && client.readyState === ws.OPEN){
-              client.send(msg);
-            }
-          });
-        })
-
-        ws.on('close', () => {
-                console.log('WebSocket was closed')
-        })
+        return user;
       }
       catch(e){
         console.log(e)
-        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e});
+        return undefined;
       }
       
     }
 
-    adicionaASala(ws, req){
+    buscaUsuariosDaSala(room) {
       try{
-        let salas = [];
+        return this.users.filter(user => user.room === room);
+      }
+      catch(e){
+        console.log(e)
+        return undefined;
+      }
+      
+    }
+
+    buscaUsuarioAtual(id) {
+      try{
+        return this.users.find(user => user.id === id);
+      }
+      catch(e){
+        console.log(e)
+        return undefined;
+      }
+      
+    }
+
+    async salvaMensagem(user, msg){
+      try{
+        const mensagem = await this.chatRepository.salvarMensagem(user, msg);
+        return mensagem;
+      }
+      catch(e){
+        console.log(e)
+        return undefined;
+      }
+    }
+
+    formataMensagem(username, text) {
+      try{
+        return {
+          username,
+          text,
+          time: moment().format('h:mm a')
+        };
+      }
+      catch(e){
+        console.log(e)
+        return undefined;
+      }
+    }
+
+    desconectaDoChat(id){
+      try{
+        const index = this.users.findIndex(user => user.id === id);
+
+        if (index !== -1) {
+          return this.users.splice(index, 1)[0];
+        }
 
       }
       catch(e){
-
+        console.log(e);
       }
     }
   
     async salva(req, res){
       try{
-        const {nome, viagemId, topicoId} = req.body;
-        const chat = new Chat(nome, viagemId, topicoId);
-        return res.status(201).json(chatViewModel(await this.chatRepository.salva(chat)));
+        const {viagemId, topico} = req.body;
+        const topicoObject = await this.chatRepository.buscaTopico(topico);
+        
+        if(!topicoObject){
+          return res.status(400).json({status: '400', mensagem: 'O tópico informado não existe.'});           
+        }
+
+        const viagem = await this.buscaViagem(req, viagemId);
+        if(!viagem){
+          return res.status(400).json({status: '400', mensagem: 'A viagem informado não existe.'});           
+        }
+
+        const chatObject = {
+          nome: topicoObject.descricao,
+          topicoId: topicoObject.id,
+          viagemId: viagemId
+        }
+
+        const chat = await this.chatRepository.salva(chatObject)
+        let participantes = []
+
+        viagem.participantes.map((p) => {
+          participantes.push({usuarioId: p.usuarioId, chatId: chat.id});
+        })
+
+        await this.chatRepository.salvaParticipantes(participantes);
+
+        return res.status(201).json(chatViewModel(chat));
       }
       catch(e){
-          return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});           
+        console.log(e)
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});           
       }      
     }
-  
-    mostra(req, res){
+
+    async buscaViagem(req, viagemId){
       try{
-        return res.status(200).json(chatViewModel(req.chat)); 
+        const viagem = await api.get('viagens/'+viagemId, 
+          {
+            headers: {
+              'x-access-token': req.headers['x-access-token']
+            }
+          }).then((response) => {
+            //console.log('Response ' + response.data.perfis)
+            return response.data;
+          }).catch((err) => {
+              console.error("ops! ocorreu um erro" + err);
+              return undefined;
+          });
+
+        return viagem;
       }
       catch(e){
-        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+        console.log(e)
+        return undefined;
       }
-      
     }
   
-    async atualiza(req,res){     
+    async mostra(req, res){
       try{
-        const{id, nome, viagemId, topicoId} = req.body;
-        const chat = new Chat(id, nome, viagemId, topicoId); 
+        const verificar = req.query.verificar
+
+        if(!verificar){
+          const mensagens = await this.chatRepository.buscaMensagens(req.chat.id);
+          req.chat.mensagens = mensagens;
+        }
         
-        const chatAtualizado = await this.chatRepository.atualiza(chat);
-        return res.status(200).json(chatViewModel(chatAtualizado));      
+        return res.status(200).json(chatViewModel(req.chat)); 
+
       }
       catch(e){
-        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
-      }
-      
-    }
-  
-  
-    async deleta(req, res){
-      try{
-        await this.chatRepository.deleta(req.chat);
-        return res.status(204).end();
-      }
-      catch(e){
+        console.log(e)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       

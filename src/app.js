@@ -64,44 +64,8 @@ export default function LabTrip() {
   const server = http.createServer(app);
   /** Create socket connection */
   const io = socketio().listen(server);
-  io.on('connection', socket => {
-    console.log('Alou')
-    socket.on('joinRoom', ({ username, room }) => {
-      console.log('deu join')
-      const user = userJoin(socket.id, username, room);
-  
-      socket.join(user.room);
-  
-      // Welcome current user
-      socket.emit('message', formatMessage(botName, 'Welcome to ChatCord!'));
-  
-      // Broadcast when a user connects
-      socket.broadcast
-        .to(user.room)
-        .emit(
-          'message',
-          formatMessage(botName, `${user.username} has joined the chat`)
-        );
-  
-      // Send users and room info
-      io.to(user.room).emit('roomUsers', {
-        room: user.room,
-        users: getRoomUsers(user.room)
-      });
-    });
-  
-    // Listen for chatMessage
-    socket.on('chatMessage', msg => {
-      const user = getCurrentUser(socket.id);
-  
-      io.to(user.room).emit('message', formatMessage(user.username, msg));
-    });
-  
-    // Runs when client disconnects
-    socket.on('disconnect', () => {
-      
-    });
-  })
+  const chat = new Chat(io);
+  io.on('connection', socket => chat.connection(socket))
 
   server.listen(process.env.PORT || 5001, function(){
     console.log('Hello!');

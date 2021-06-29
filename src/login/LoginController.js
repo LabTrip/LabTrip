@@ -104,6 +104,7 @@ export default class LoginController {
   validaSessao(req,res){
     try{
       const token = req.headers['x-access-token'];
+      
       jwt.verify(token, process.env.SECRET, (err, decoded) => {
           if(err){
             return res.status(401).json({status:"401", mensagem:"Token inválido ou faltando."});
@@ -113,10 +114,11 @@ export default class LoginController {
           req.id = decoded.id;
           req.perfilId = decoded.perfilId;
           req.geradoEm = decoded.geradoEm;
-          return res.status(200).json({status:"200", mensagem:"Sessão válida."});
+          return res.status(200).json({status:"200", mensagem:"Sessão válida.", sessionInfo: decoded});
       });
     }
     catch(e){
+      console.log(e)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
