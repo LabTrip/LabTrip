@@ -37,6 +37,9 @@ export default class Chat {
         const messages = chat.mensagens.map((m) => this.chatController.formataMensagem({enviadoPor: m.enviadoPor, usuarioId: m.usuarioId, id: m.id}, m.mensagem));
         socket.emit('messages', messages);
       }
+      else{
+        socket.emit('messages', []);
+      }
   
     });
   
