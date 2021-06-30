@@ -15,8 +15,9 @@ export default class Chat {
   users = [];
   
   connection(socket) {
-    console.log('conectou')
+    //console.log('conectou')
     socket.on('joinRoom', async ({ token, room }) => {
+      //console.log('join')
       const userAuth = await this.chatMiddleware.autentica(token);
       if(!userAuth){
         socket.emit('message', this.chatController.formataMensagem('Labtrip', 'Você precisa se identificar antes de participar deste chat.'));
