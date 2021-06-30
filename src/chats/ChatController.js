@@ -70,7 +70,7 @@ const chatViewModel = (chat) => ({
     async salvaMensagem(user, msg){
       try{
         const mensagem = await this.chatRepository.salvarMensagem(user, msg);
-        return mensagem;
+        return mensagem[0];
       }
       catch(e){
         console.log(e)

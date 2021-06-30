@@ -31,7 +31,7 @@ export default class Chat {
       const user = this.chatController.conectaAoChat(socket.id, userAuth.nome, userAuth.id, room, chat);
   
       socket.join(user.room);
-      
+      //console.log(user)
       // Welcome current user
       if(chat.mensagens && chat.mensagens.length > 0){
         const messages = chat.mensagens.map((m) => this.chatController.formataMensagem({enviadoPor: m.enviadoPor, usuarioId: m.usuarioId, id: m.id}, m.mensagem));
@@ -49,7 +49,7 @@ export default class Chat {
         socket.emit('message', this.chatController.formataMensagem({enviadoPor: 'Labtrip', usuarioId: '0'}, 'Não foi possível enviar sua mensagem.'));
         return
       }
-  
+      //console.log(mensagem)
       this.io.to(user.room).emit('message', this.chatController.formataMensagem({enviadoPor: user.username, usuarioId: user.userId, id: mensagem.id}, msg));
     });
   
