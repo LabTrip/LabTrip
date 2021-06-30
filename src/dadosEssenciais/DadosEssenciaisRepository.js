@@ -12,12 +12,12 @@ export default class DadosEssenciaisRepository{
       console.log(dadosEssenciais)
       const [firstRow] = await this.client('dados_essenciais')
         .insert({
-            id: dadosEssenciais.id, 
             usuarioId: dadosEssenciais.usuarioId, 
             roteiroAtividadeId: dadosEssenciais.roteiroAtividadeId, 
             nomeArquivo: dadosEssenciais.nomeArquivo, 
             chaveArquivo: dadosEssenciais.chaveArquivo, 
-            urlArquivo: dadosEssenciais.urlArquivo, 
+            urlArquivo: dadosEssenciais.urlArquivo,
+            dataUpload: dadosEssenciais.dataUpload,  
             privado: dadosEssenciais.privado
         })
         .returning("*");
@@ -109,13 +109,28 @@ export default class DadosEssenciaisRepository{
   
   
     async atualiza(dadosEssenciais){
+      console.log(dadosEssenciais)
       const [firstRow] = await this.client('dados_essenciais')
-        .where({'dados_essenciais.id': dadosEssenciais.dadosEssenciaisId})
+        .where({'id': dadosEssenciais.id})
         .update({
             nomeArquivo: dadosEssenciais.nomeArquivo, 
             chaveArquivo: dadosEssenciais.chaveArquivo, 
             urlArquivo: dadosEssenciais.urlArquivo, 
             privado: dadosEssenciais.privado
+        })
+        .returning("*");
+  
+        return firstRow;
+    }
+
+    async atualizaArquivoRoteiroAtividade(arquivo, dadosEssenciais){
+      const [firstRow] = await this.client('dados_essenciais')
+        .where({'id': dadosEssenciais.id})
+        .update({
+          nomeArquivo: arquivo.name,
+          chaveArquivo: arquivo.key,
+          urlArquivo: arquivo.url,
+          dataUpload: new Date().toISOString(),
         })
         .returning("*");
   
