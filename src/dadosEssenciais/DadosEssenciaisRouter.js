@@ -9,6 +9,8 @@ import DadosEssenciaisMiddleware from './DadosEssenciaisMiddleware'
 import RoteiroAtividadeMiddleware from '../roteiroAtividades/RoteiroAtividadeMiddleware'
 import RoteiroAtividadeRepository from '../roteiroAtividades/RoteiroAtividadeRepository'
 import {client} from '../config'
+const multer = require("multer");
+const multerConfig = require("../config/multer");
 
 export default function defineDadosEssenciaisRouter(){
   const router = express.Router();
@@ -41,6 +43,15 @@ export default function defineDadosEssenciaisRouter(){
     .get((req, res) => dadosEssenciaisController.mostra(req, res))
     .put((req, res) => dadosEssenciaisController.atualiza(req, res))
     .delete((req, res) => dadosEssenciaisController.deleta(req, res));
+
+  
+  router.route('/arquivoDadosEssenciais/:dadosEssenciaisId')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+    .all((req, res, next) => dadosEssenciaisMiddleware.dadosEssenciaisExiste(req, res, next))  
+    .get((req, res) => dadosEssenciaisController.mostraArquivoRoteiroAtividade(req, res))
+    .put(multer(multerConfig).single("file"), (req, res) => dadosEssenciaisController.atualizaArquivoRoteiroAtividade(req, res))
+    .delete((req, res) => dadosEssenciaisController.deletaArquivoRoteiroAtividade(req, res));  
    
    router.route('/roteiroAtividade/:roteiroAtividadeId') 
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))

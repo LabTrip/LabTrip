@@ -46,7 +46,12 @@ export default class RoteiroAtividadeRepository{
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
-    .innerJoin('roteiro', 'roteiroAtividade.roteiroId', 'roteiro.id')
+    .innerJoin('roteiro', function() {
+      this.on(function() {
+        this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+        this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+      })
+    })
     .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
     .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
@@ -66,10 +71,17 @@ export default class RoteiroAtividadeRepository{
   }
 
   async buscaTodos_AcessoParcial(usuarioId){
-    return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
+    return await this.client.select( 'local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
-    .innerJoin('roteiro', 'roteiro_atividade.roteiroId', 'roteiro.id')
+    .innerJoin('roteiro', function() {
+      this.on(function() {
+        this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+        this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+      })
+    })
+    .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+    .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
     .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
@@ -84,10 +96,8 @@ export default class RoteiroAtividadeRepository{
       .groupBy('votacao.roteiroAtividadeId')
       .as('subqueryNegativo')
       }), 'subqueryNegativo.roteiroAtividadeId','roteiro_atividade.id')
-    .where({'viagem.agenciaId': agenciaId.toString()})   
-    .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
-    .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
       .where({'usuario_viagem.usuarioId': usuarioId.toString()});
+  
   }
 
   async buscaTodosPorRoteiro(req){
@@ -111,7 +121,12 @@ export default class RoteiroAtividadeRepository{
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
-    .innerJoin('roteiro', 'roteiro_atividade.roteiroId', 'roteiro.id')
+    .innerJoin('roteiro', function() {
+      this.on(function() {
+        this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+        this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+      })
+    })
     .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
@@ -134,7 +149,12 @@ export default class RoteiroAtividadeRepository{
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
-    .innerJoin('roteiro', 'roteiro_atividade.roteiroId', 'roteiro.id')
+    .innerJoin('roteiro', function() {
+      this.on(function() {
+        this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+        this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+      })
+    })
     .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
@@ -160,7 +180,12 @@ export default class RoteiroAtividadeRepository{
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
     .innerJoin('votacao', 'votacao.roteiroAtividadeId', 'roteiro_atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
-    .innerJoin('roteiro', 'roteiro_atividade.roteiroId', 'roteiro.id')
+    .innerJoin('roteiro', function() {
+      this.on(function() {
+        this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+        this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+      })
+    })
     .leftJoin(((builder) => { builder
       .select('roteiroAtividadeId').from('votacao')      
       .count('votacao.gostou as positivo')
@@ -222,8 +247,14 @@ export default class RoteiroAtividadeRepository{
 
   async buscaPorId_AcessoGerencial(roteiroAtividadeId, agenciaId){
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
-      .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
-      .where({'roteiro_atividade.id': roteiroAtividadeId.toString()})
+      .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')  
+      .innerJoin('roteiro', function() {
+          this.on(function() {
+            this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+            this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+          })
+        })
+      .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')      
       .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      
         .count('votacao.gostou as positivo')
@@ -239,12 +270,20 @@ export default class RoteiroAtividadeRepository{
         .as('subqueryNegativo')
         }), 'subqueryNegativo.roteiroAtividadeId','roteiro_atividade.id')
       .innerJoin('local', 'atividade.localId', 'local.id')
+        .where({'roteiro_atividade.id': roteiroAtividadeId.toString()})
         .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
   }
 
   async buscaPorId_AcessoParcial(roteiroAtividadeId, usuarioId){
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
-      .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
+      .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
+      .innerJoin('roteiro', function() {
+        this.on(function() {
+          this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+          this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+        })
+      })
+      .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
       .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
       .leftJoin(((builder) => { builder
         .select('roteiroAtividadeId').from('votacao')      

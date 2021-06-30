@@ -9,7 +9,7 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
     pais: roteiroAtividade.pais,
     latitude: roteiroAtividade.latitude,
     longitude: roteiroAtividade.longitude,
-    roteiroId: roteiroAtividade.roteiroId,
+    roteiroId: roteiroAtividade.roteiroId,    
     versaoRoteiro: roteiroAtividade.versaoRoteiro,
     dataInicio: roteiroAtividade.dataInicio,
     dataFim: roteiroAtividade.dataFim,
