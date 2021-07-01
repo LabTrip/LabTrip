@@ -22,6 +22,7 @@ export default class DadosEssenciaisMiddleware{
     }
 
     async verificaAcessoDadosEssenciais(req){
+      console.log("porID")
       if(req.acesso.tipoAcesso== "Total" || req.acesso.tipoAcesso== "Gerencial"|| req.acesso.tipoAcesso== "Parcial"){
         return await this.dadosEssenciaisRepository.buscaPorId(req);
       }else{

@@ -27,11 +27,12 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
     //GET 
     async buscaTodos(req, res) {
       try{
-        const dadosEssenciais = await this.dadosEssenciaisRepository.buscaTodos();
+        const dadosEssenciais = await this.dadosEssenciaisRepository.buscaTodos(req);
         res.status(200).json(dadosEssenciais.map(u => dadosEssenciaisViewModel(u)));
       }
-      catch(e){        
-        return res.status(400).json({status: '400', mensagem: e});
+      catch(e){ 
+        console.log(e)       
+        return res.status(400).json({status: '400', mensagem: e.toString()});
       }
       
     }
@@ -49,7 +50,6 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
     }
   
     async salva(req, res){
-      console.log("salvando")
       try{
         const {usuarioId, roteiroAtividadeId, nomeArquivo, privado} = req.body;
         console.log(req.body)
@@ -58,7 +58,7 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
       }
       catch(e){  
         console.log(e)      
-        return res.status(400).json({status: '400', mensagem: e.detail});
+        return res.status(400).json({status: '400', mensagem: e.toString()});
           
       }      
     }
@@ -68,7 +68,7 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         return res.status(200).json(dadosEssenciaisViewModel(req.dadosEssenciais)); 
       }
       catch(e){
-        return res.status(400).json({status: '400', mensagem: e.detail});
+        return res.status(400).json({status: '400', mensagem:e.toString()});
       }
       
     }
@@ -82,8 +82,7 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         return res.status(200).json(dadosEssenciaisViewModel(dadosEssenciaisAtualizado));      
       }
       catch(e){
-        console.log(e)
-        return res.status(400).json({status: '400', mensagem: e});
+          return res.status(400).json({status: '400', mensagem: e.toString()});
       }
       
     }
@@ -96,7 +95,7 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         return res.status(204).end();
       }
       catch(e){
-        return res.status(400).json({status: '400', mensagem: e});
+        return res.status(400).json({status: '400', mensagem: e.toString()});
       }
       
     }
@@ -106,7 +105,7 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
     try{
       const dadosEssenciais = req.dadosEssenciais;
       var readStream = null;
-      console.log(dadosEssenciais)
+
 
       if(dadosEssenciais.chaveArquivo && dadosEssenciais.chaveArquivo != ''){
         readStream = await s3.getObject({Key: dadosEssenciais.chaveArquivo, Bucket: process.env.BUCKET_NAME}).createReadStream();
