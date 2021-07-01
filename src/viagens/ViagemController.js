@@ -458,7 +458,7 @@ export default class ViagemController {
       }
 
       const body = {
-        icone: 'airplane',
+        icone: 'airplanemode-active',
         participantes: participantes,
         titulo: titulo,
         mensagem: mensagem,
