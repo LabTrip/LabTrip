@@ -26,6 +26,7 @@ export default function defineUsuarioRouter(){
 
   router.route('/')
    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+   .get((req, res) => notificacaoController.mostraNotificacoes(req, res))
    .post((req, res) => notificacaoController.notifica(req, res));
 
   return router;

@@ -178,6 +178,7 @@ const roteiroViewModel = (roteiro) => ({
         }
   
         const body = {
+          icone: 'airplanemode-active',
           participantes: participantes,
           titulo: titulo,
           mensagem: mensagem,

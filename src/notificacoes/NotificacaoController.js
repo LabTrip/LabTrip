@@ -13,8 +13,19 @@ export default class NotificacaoController {
     try {
 
       let messages = [];
-      let {participantes, titulo, mensagem, dado} = req.body;
+      let {participantes, titulo, mensagem, dado, icone} = req.body;
 
+      const notificacao = await this.notificacaoRepository.salva({iconeLabel: icone, descricao: mensagem})
+      console.log(notificacao)
+      const usuario_notificacao = await this.notificacaoRepository.salvaUsuarioNotificacao(participantes.map((p) => {
+          return {
+              notificacaoId: notificacao.id,
+              usuarioId: p.usuarioId,
+              dataNotificacao: new Date().toUTCString(),
+              visualizado: false
+          }
+      }));
+      console.log(usuario_notificacao)
       const pushTokens = await this.notificacaoRepository.buscaTokenNotificacao(participantes);
 
       for (let pushToken of pushTokens) {
@@ -80,13 +91,25 @@ export default class NotificacaoController {
           }
       })();
 
-      res.status(200).json({"status": 200, "mensgaem": "Notificação enviada com sucesso"});
+      res.status(200).json({"status": 200, "mensagem": "Notificação enviada com sucesso"});
     }
     catch (e) {
         console.log(e)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
+  }
+
+  async mostraNotificacoes(req, res){
+      try{
+        const notificacoes = await this.notificacaoRepository.buscaNotificacoesPorUsuarioId(req.token.id);
+
+        return res.status(200).json(notificacoes);
+      }
+      catch(e){
+        console.log(e)
+        return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
+      }
   }
 
 }
