@@ -3,13 +3,57 @@ export default class DadosEssenciaisRepository{
       this.client = client;
     }
   
-    async buscaTodos(){
-    
-      return await this.client('dados_essenciais');
+    async buscaTodos(req){
+       switch(req.acesso.tipoAcesso){          
+        case 'Total': 
+         return await this.buscaTodos_AcessoTotal();
+         break;
+        case 'Gerencial':
+            return await this.buscaTodos_AcessoGerencial(req.token.agenciaId);
+          break;
+        case 'Parcial':
+          return await this.buscaTodos_AcessoParcial(req.token.id);
+          break;
+        default:
+          return undefined;
+      }  
+    }
+
+    async buscaTodos_AcessoTotal(){
+      return await this.client.from('dados_essenciais')
+        
+    }
+  
+    async buscaTodos_AcessoGerencial(agenciaId){
+      return await this.client.select(['dados_essenciais.*']).from('dados_essenciais')
+        .innerJoin('roteiro_atividade', 'dados_essenciais.roteiroAtividadeId', 'roteiro_atividade.id')
+        .innerJoin('roteiro', function() {
+          this.on(function() {
+            this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+            this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+          })
+        })
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+        .where({'viagem.agenciaId': agenciaId.toString()});
+    }
+  
+    async buscaTodos_AcessoParcial(usuarioIdToken){
+      return await this.client.select(['dados_essenciais.*']).from('dados_essenciais')
+        .innerJoin('roteiro_atividade', 'dados_essenciais.roteiroAtividadeId', 'roteiro_atividade.id')
+        .innerJoin('roteiro', function() {
+          this.on(function() {
+            this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+            this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+          })
+        })
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
+        .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+        //se privado somente quem registrou pode ver entre participantes da viagem
+        .whereRaw('("usuario_viagem"."usuarioId" = ? ) and ("dados_essenciais"."usuarioId" = ? or "dados_essenciais"."privado" = ?)', [usuarioIdToken.toString(), usuarioIdToken.toString(), false])
+  
     }
   
     async salva(dadosEssenciais){
-      console.log(dadosEssenciais)
       const [firstRow] = await this.client('dados_essenciais')
         .insert({
             usuarioId: dadosEssenciais.usuarioId, 
@@ -26,7 +70,7 @@ export default class DadosEssenciaisRepository{
     }
   
 
-    async buscaPorId(req){      
+    async buscaPorId(req){ 
       switch(req.acesso.tipoAcesso){          
         case 'Total': 
          return await this.buscaPorId_AcessoTotal(req.params.dadosEssenciaisId);
@@ -51,7 +95,13 @@ export default class DadosEssenciaisRepository{
     async buscaPorId_AcessoGerencial(dadosEssenciaisId, agenciaId){
       return await this.client.select(['dados_essenciais.*']).from('dados_essenciais')
         .innerJoin('roteiro_atividade', 'dados_essenciais.roteiroAtividadeId', 'roteiro_atividade.id')
-        .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
+        .innerJoin('roteiro', function() {
+          this.on(function() {
+            this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+            this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+          })
+        })
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
         .where({'dados_essenciais.id': dadosEssenciaisId.toString()})
         .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
     }
@@ -59,11 +109,17 @@ export default class DadosEssenciaisRepository{
     async buscaPorId_AcessoParcial(dadosEssenciaisId, usuarioIdToken){
       return await this.client.select(['dados_essenciais.*']).from('dados_essenciais')
         .innerJoin('roteiro_atividade', 'dados_essenciais.roteiroAtividadeId', 'roteiro_atividade.id')
-        .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
+        .innerJoin('roteiro', function() {
+          this.on(function() {
+            this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+            this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+          })
+        })
+        .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
         .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-        .where({'dados_essenciais.id': dadosEssenciaisId.toString()})
-        .andWhere({'usuario_viagem.usuarioId': usuarioIdToken.toString()}).first();
-
+        //se privado somente quem registrou pode ver entre participantes da viagem
+        .whereRaw('(dados_essenciais.id= ?) and ("usuario_viagem"."usuarioId" = ? ) and ("dados_essenciais"."usuarioId" = ? or "dados_essenciais"."privado" = ?)', [dadosEssenciaisId.toString(),usuarioIdToken.toString(), usuarioIdToken.toString(), false])
+        .first();
     }
 
     async buscaPorRoteiroAtividadeId(req){
@@ -91,7 +147,13 @@ export default class DadosEssenciaisRepository{
     async buscaPorRoteiroAtividadeId_AcessoGerencial(roteiroAtividadeId, agenciaId){
         return await this.client.select(['dados_essenciais.*']).from('dados_essenciais')
             .innerJoin('roteiro_atividade', 'dados_essenciais.roteiroAtividadeId', 'roteiro_atividade.id')
-            .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
+            .innerJoin('roteiro', function() {
+              this.on(function() {
+                this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+                this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+              })
+            })
+            .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
             .where({'dados_essenciais.roteiroAtividadeId': roteiroAtividadeId.toString()})
             .andWhere({'viagem.agenciaId': agenciaId.toString()});
     }
@@ -99,13 +161,17 @@ export default class DadosEssenciaisRepository{
     async buscaPorRoteiroAtividadeId_AcessoParcial(roteiroAtividadeId, usuarioIdToken){
         return await this.client.select(['dados_essenciais.*']).from('dados_essenciais')
             .innerJoin('roteiro_atividade', 'dados_essenciais.roteiroAtividadeId', 'roteiro_atividade.id')
-            .innerJoin('viagem', 'roteiro_atividade.viagemId', 'viagem.id')
+            .innerJoin('roteiro', function() {
+              this.on(function() {
+                this.on('roteiro_atividade.roteiroId', '=', 'roteiro.id')
+                this.andOn('roteiro_atividade.versaoRoteiro', '=', 'roteiro.versao')
+              })
+            })
+            .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
             .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-            .where({'dados_essenciais.roteiroAtividadeId': roteiroAtividadeId.toString()})
-            .andWhere({'usuario_viagem.usuarioId': usuarioIdToken.toString()});
-
-    }
-    
+            //se privado somente quem registrou pode ver entre participantes da viagem
+            .whereRaw('("dados_essenciais"."roteiroAtividadeId"= ?) and ("usuario_viagem"."usuarioId" = ? ) and ("dados_essenciais"."usuarioId" = ? or "dados_essenciais"."privado" = ?)', [ roteiroAtividadeId.toString(),usuarioIdToken.toString(), usuarioIdToken.toString(), false]);
+    }   
   
   
     async atualiza(dadosEssenciais){
