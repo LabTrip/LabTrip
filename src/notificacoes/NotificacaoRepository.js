@@ -6,12 +6,18 @@ export default class NotificacaoRepository{
     }
 
   
-    async salva(usuario){
-      const [firstRow] = await this.client('usuario')
-        .insert(usuario)
+    async salva(notificacao){
+      const [firstRow] = await this.client('notificacao')
+        .insert(notificacao)
         .returning("*");
   
         return firstRow;
+    }
+
+    async salvaUsuarioNotificacao(usuariosNotificacao){
+      return await this.client('usuario_notificacao')
+        .insert(usuariosNotificacao)
+        .returning("*");
     }
 
     async salvaTokenNotificacao(token, usuarioId){
@@ -41,6 +47,13 @@ export default class NotificacaoRepository{
       .from('usuario')
       .innerJoin('perfil','usuario.perfilId','perfil.id')
       .where({'usuario.id': id.toString()}).first();
+    }
+
+    async buscaNotificacoesPorUsuarioId(usuarioId){
+      return await this.client.select(['usuario_notificacao.*','notificacao.descricao as descricao', 'notificacao.iconeLabel as icone'])
+      .from('usuario_notificacao')
+      .innerJoin('notificacao','usuario_notificacao.notificacaoId','notificacao.id')
+      .where({'usuarioId': usuarioId.toString()});
     }
 
   }

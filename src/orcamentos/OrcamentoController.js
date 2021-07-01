@@ -272,6 +272,7 @@ export default class OrcamentoController {
       }
 
       const body = {
+        icone: 'attach-money',
         participantes: participantes,
         titulo: titulo,
         mensagem: mensagem,
@@ -303,6 +304,7 @@ export default class OrcamentoController {
       }
 
       const body = {
+        icone: 'attach-money',
         participantes: participantes,
         titulo: titulo,
         mensagem: mensagem,

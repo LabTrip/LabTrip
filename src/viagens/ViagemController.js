@@ -458,6 +458,7 @@ export default class ViagemController {
       }
 
       const body = {
+        icone: 'airplane',
         participantes: participantes,
         titulo: titulo,
         mensagem: mensagem,
