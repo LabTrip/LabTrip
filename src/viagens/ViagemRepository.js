@@ -119,7 +119,8 @@ export default class ViagemRepository{
       .from('usuario_viagem')
       .innerJoin('usuario','usuario_viagem.usuarioId','usuario.id')
       .innerJoin('permissao_viagem','usuario_viagem.permissaoViagemId','permissao_viagem.id')
-      .where('viagemId', viagem.id);
+      .where('viagemId', viagem.id)
+      .orderByRaw("permissao_viagem.descricao = 'Proprietário' desc, permissao_viagem.descricao='Agente' desc, usuario.nome asc");
   }
 
   async buscaPermissaoDoUsuario(usuarioId, viagemId){
