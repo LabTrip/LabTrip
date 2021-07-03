@@ -89,6 +89,28 @@ const atividadeViewModel = (atividade) => ({
       }
       
     }
+
+    async mostraBusca(req, res){
+      try{
+        const descricaoAtividade = req.query.descricaoAtividade
+
+        let atividades
+
+        if(req.acesso.tipoAcesso == "Total"){
+          atividades = await this.atividadeRepository.buscaPorDescricaoAtividade(descricaoAtividade);
+        }
+        else{
+          atividades = await this.atividadeRepository.buscaPorDescricaoAtividadeAgenciaId(descricaoAtividade, req.token.agenciaId);
+        }
+        console.log(atividades)
+        return res.status(200).json(atividades.map((a) => atividadeViewModel(a))); 
+      }
+      catch(e){
+        console.log(e)
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+      }
+      
+    }
   
     localExiste(localId){
       try{

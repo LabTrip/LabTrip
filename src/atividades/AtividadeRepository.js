@@ -13,6 +13,19 @@ export default class AtividadeRepository{
       .innerJoin('local', 'atividade.localId', 'local.id')
       .where({'atividade.agenciaId': agenciaId.toString()});
     }
+    
+    async buscaPorDescricaoAtividade(descricao){
+      return await this.client.select(['local.*', 'atividade.*']).from('atividade')
+      .innerJoin('local', 'atividade.localId', 'local.id')
+      .whereRaw("UPPER(atividade.descricao) like UPPER('%" + descricao + "%')")
+    }
+
+    async buscaPorDescricaoAtividadeAgenciaId(descricao, agenciaId){
+      return await this.client.select(['local.*', 'atividade.*']).from('atividade')
+      .innerJoin('local', 'atividade.localId', 'local.id')
+      .whereRaw("UPPER(atividade.descricao) like UPPER('%" + descricao + "%')")
+      .andWhere({'atividade.agenciaId': agenciaId.toString()});
+    }
   
     async salva(atividade){
       const [firstRow] = await this.client('atividade')

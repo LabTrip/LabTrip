@@ -27,7 +27,13 @@ export default function defineAtividadeRouter(){
    .get((req, res) => atividadeController.buscaTodos(req, res))
    .post((req, res) => atividadeController.salva(req, res));
 
-  router.route('/:id')
+
+  router.route('/search?')
+    .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
+    .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
+    .get((req, res) => atividadeController.mostraBusca(req, res));
+
+    router.route('/:id')
     .all((req, res, next) => loginMiddleware.validaToken(req,res, next))
     .all((req, res, next) => acessoRotaMiddleware.acessoRota(req, res, next))
     .all((req, res, next) => atividadeMiddleware.atividadeExiste(req, res, next))
