@@ -102,7 +102,11 @@ const atividadeViewModel = (atividade) => ({
         else{
           atividades = await this.atividadeRepository.buscaPorDescricaoAtividadeAgenciaId(descricaoAtividade, req.token.agenciaId);
         }
-        console.log(atividades)
+        
+        if(atividades.length == 0){
+          atividades.push({id: 1, descricao: 'Nenhuma atividade encontrada'})
+        }
+
         return res.status(200).json(atividades.map((a) => atividadeViewModel(a))); 
       }
       catch(e){

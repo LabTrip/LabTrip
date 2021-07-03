@@ -47,7 +47,10 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
     
       try{
  
-        const roteiroAtividade= await this.roteiroAtividadeRepository.buscaTodosPorRoteiro(req);
+        const roteiroAtividade = await this.roteiroAtividadeRepository.buscaTodosPorRoteiro(req);
+        if(roteiroAtividade.length == 0){
+          roteiroAtividade.push({id: 1, descricao: 'Nenhuma atividade encontrada'})
+        }
         res.status(200).json(roteiroAtividade.map(u => roteiroAtividadeViewModel(u)));
       }  
       catch(e){
