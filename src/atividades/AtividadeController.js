@@ -61,7 +61,11 @@ const atividadeViewModel = (atividade) => ({
   
     async salva(req, res){
       try{
-        const {descricao, localId, local, agenciaId} = req.body;
+        const {descricao, localId, local} = req.body;
+        let {agenciaId} = req.body;
+        if(req.token.agenciaId || req.token.agenciaId != null){
+          agenciaId = req.token.agenciaId
+        }
         if(req.token.agenciaId == agenciaId || req.acesso.tipoAcesso == "Total"){
           const localidade = await this.salvaLocal(local);
   
