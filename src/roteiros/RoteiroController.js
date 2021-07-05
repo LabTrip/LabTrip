@@ -1,5 +1,6 @@
 import Roteiro from './Roteiro'
 import api from '../requesterConfig'
+const logger = require('../logger'); 
 
 const roteiroViewModel = (roteiro) => ({
     id: roteiro.id,
@@ -24,6 +25,8 @@ const roteiroViewModel = (roteiro) => ({
         res.status(200).json(roteiro.map(u => roteiroViewModel(u)));
       }  
       catch(e){
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
          return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});        
       }
     }
@@ -40,6 +43,8 @@ const roteiroViewModel = (roteiro) => ({
         res.status(201).json(roteiroViewModel(roteiro));
       }
       catch(e){
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }      
     }
@@ -66,7 +71,8 @@ const roteiroViewModel = (roteiro) => ({
         res.status(201).json(roteiroViewModel(roteiro));
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }      
     }
@@ -76,6 +82,8 @@ const roteiroViewModel = (roteiro) => ({
         return res.status(200).json(roteiroViewModel(req.roteiro)); 
 
       }catch(e){
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }     
     }
@@ -100,7 +108,8 @@ const roteiroViewModel = (roteiro) => ({
         }        
 
       }catch(e){
-        console.log(e)
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }     
     }
@@ -126,7 +135,8 @@ const roteiroViewModel = (roteiro) => ({
         return viagem;
       }
       catch (e) {
-        console.log(e)
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
         return undefined;
       }
     }
@@ -143,7 +153,8 @@ const roteiroViewModel = (roteiro) => ({
 
         return res.status(200).json(roteiroViewModel(roteiro));      
       }catch(e){
-        console.log(e)
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }      
     }    
@@ -153,7 +164,8 @@ const roteiroViewModel = (roteiro) => ({
         await this.roteiroRepository.deleta(req.roteiro);
         return res.status(204).end();
       }catch(e){
-        console.log(e)
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }    
     }
@@ -191,7 +203,8 @@ const roteiroViewModel = (roteiro) => ({
         this.notifica(req, body);
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+      	logger.info(e.toString(), req.token)
       }
       
     }

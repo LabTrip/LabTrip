@@ -2,6 +2,7 @@ require('dotenv/config');
 import Orcamento from './Orcamento'
 import DespesaExtra from './DespesaExtra'
 import api from '../requesterConfig'
+const logger = require('../logger');
 
 const orcamentoViewModel = (orcamento) => ({
   id:  orcamento.id,
@@ -68,7 +69,8 @@ export default class OrcamentoController {
       }
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -86,6 +88,8 @@ export default class OrcamentoController {
       return tipoOrcamento;
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return undefined;
     }
   }
@@ -123,7 +127,8 @@ export default class OrcamentoController {
       return res.status(200).json(orcamento); 
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -149,7 +154,8 @@ export default class OrcamentoController {
       return await this.orcamentoRepository.atualiza(orcamento);
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return undefined;
     }
   }
@@ -194,7 +200,8 @@ export default class OrcamentoController {
 
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     } 
     
@@ -213,7 +220,8 @@ export default class OrcamentoController {
       return res.status(200).json(despesaExtra);
     }
     catch(e){
-      console.log(e);
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -229,7 +237,8 @@ export default class OrcamentoController {
       return res.status(200).json(despesaExtra);
     }
     catch(e){
-      console.log(e);
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -245,7 +254,8 @@ export default class OrcamentoController {
       return res.status(200).json({status: "200", mensagem: "Deletado com sucesso!"});
     }
     catch(e){
-      console.log(e);
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -282,7 +292,8 @@ export default class OrcamentoController {
       this.notifica(req, body);
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
     }
   }
 
@@ -314,7 +325,8 @@ export default class OrcamentoController {
       this.notifica(req, body);
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
     }
     
   }
@@ -330,6 +342,8 @@ export default class OrcamentoController {
         //console.log('Response ' + response.data.perfis)
     }).catch((err) => {
         console.error("ops! ocorreu um erro" + err);
+        logger.error(err)
+        logger.info(err.toString(), req.token)
         return undefined;
     });
   }

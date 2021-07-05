@@ -7,6 +7,7 @@ const path = require("path");
 const { promisify } = require("util");
 const s3 = new aws.S3();
 import {s3Teste} from '../config/s3'
+const logger = require('../logger'); 
 
 const usuarioViewModel = (usuario) => ({
   id: usuario.id,
@@ -32,6 +33,8 @@ export default class UsuarioController {
       res.status(200).json(usuarios.map(u => usuarioViewModel(u)));
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
   }
@@ -65,6 +68,8 @@ export default class UsuarioController {
       res.status(201).json(usuarioViewModel(usuario));
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
@@ -80,7 +85,8 @@ export default class UsuarioController {
       res.status(200).json({status: "200", mensagem: 'Token salvo com sucesso'});
     }
     catch (e) {
-      console.log(e)
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
@@ -94,6 +100,8 @@ export default class UsuarioController {
       res.status(200).json(tokens);
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
@@ -119,6 +127,8 @@ export default class UsuarioController {
       return perfis;
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
   }
@@ -154,6 +164,8 @@ export default class UsuarioController {
 
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas. ' + e});
     }
 
@@ -178,6 +190,8 @@ export default class UsuarioController {
 
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
@@ -190,6 +204,8 @@ export default class UsuarioController {
       return res.status(204).end();
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
@@ -211,6 +227,8 @@ export default class UsuarioController {
       readStream.pipe(res);
     }
     catch(e){
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
 
@@ -234,7 +252,8 @@ export default class UsuarioController {
       return res.status(200).json({status: '200', mensagem: 'Foto atualizada com sucesso.'});
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
 
@@ -251,6 +270,8 @@ export default class UsuarioController {
       return res.status(204).json({status: '200', mensagem: 'Foto deleta com sucesso.'});    
     }
     catch(e){
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
   }
@@ -306,7 +327,8 @@ export default class UsuarioController {
 
     }
     catch (e) {
-      console.log(e)
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
     }
 
   }
@@ -340,6 +362,8 @@ export default class UsuarioController {
 
     }
     catch (e) {
+      logger.error(e)
+	    logger.info(e.toString(), req.token)
       console.log(e)
     }
 

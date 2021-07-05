@@ -1,6 +1,7 @@
 import Chat from './Chat'
 const moment = require('moment')
 import api from '../requesterConfig'
+const logger = require('../logger');
 
 const chatViewModel = (chat) => ({
     id: chat.id,
@@ -25,6 +26,8 @@ const chatViewModel = (chat) => ({
         res.status(200).json(chats.map(u => chatViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -39,7 +42,8 @@ const chatViewModel = (chat) => ({
         return user;
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return undefined;
       }
       
@@ -50,7 +54,8 @@ const chatViewModel = (chat) => ({
         return this.users.filter(user => user.room === room);
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return undefined;
       }
       
@@ -61,7 +66,8 @@ const chatViewModel = (chat) => ({
         return this.users.find(user => user.id === id);
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return undefined;
       }
       
@@ -73,7 +79,8 @@ const chatViewModel = (chat) => ({
         return mensagem[0];
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return undefined;
       }
     }
@@ -87,7 +94,8 @@ const chatViewModel = (chat) => ({
         };
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return undefined;
       }
     }
@@ -102,7 +110,8 @@ const chatViewModel = (chat) => ({
 
       }
       catch(e){
-        console.log(e);
+        logger.error(e)
+        logger.info(e.toString(), req.token);
       }
     }
   
@@ -138,7 +147,8 @@ const chatViewModel = (chat) => ({
         return res.status(201).json(chatViewModel(chat));
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});           
       }      
     }
@@ -161,7 +171,8 @@ const chatViewModel = (chat) => ({
         return viagem;
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return undefined;
       }
     }

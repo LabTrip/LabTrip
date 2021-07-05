@@ -1,5 +1,6 @@
 import Atividade from './Atividade'
 import Local from '../locais/Local';
+const logger = require('../logger'); 
 
 const atividadeViewModel = (atividade) => ({
     id: atividade.id,
@@ -41,6 +42,8 @@ const atividadeViewModel = (atividade) => ({
         return res.status(200).json(atividades.map(u => atividadeViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -54,6 +57,8 @@ const atividadeViewModel = (atividade) => ({
         return await this.atividadeRepository.salvaLocal(localidade) || localidade;
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -79,6 +84,8 @@ const atividadeViewModel = (atividade) => ({
         }
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
             
@@ -89,6 +96,8 @@ const atividadeViewModel = (atividade) => ({
         return res.status(200).json(atividadeViewModel(req.atividade)); 
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)      
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -114,7 +123,8 @@ const atividadeViewModel = (atividade) => ({
         return res.status(200).json(atividades.map((a) => atividadeViewModel(a))); 
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -126,6 +136,8 @@ const atividadeViewModel = (atividade) => ({
         return local;
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -145,6 +157,8 @@ const atividadeViewModel = (atividade) => ({
         }
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
                  
@@ -156,6 +170,8 @@ const atividadeViewModel = (atividade) => ({
         return res.status(204).end();
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       

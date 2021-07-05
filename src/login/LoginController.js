@@ -4,6 +4,7 @@ import sha256 from 'crypto-js/sha256';
 const cryptoRandomString = require('crypto-random-string');
 const nodemailer = require("nodemailer");
 require('dotenv/config');
+const logger = require('../logger');
 
 let transporter = nodemailer.createTransport({
   host: process.env.SMTP_SENDINBLUE,
@@ -73,7 +74,8 @@ export default class LoginController {
       }
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -96,6 +98,8 @@ export default class LoginController {
       });
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
 
@@ -118,7 +122,8 @@ export default class LoginController {
       });
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -132,6 +137,8 @@ export default class LoginController {
       return res.status(200).json({codigo:"200", mensagem: "Código gerado com sucesso"});
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -150,6 +157,8 @@ export default class LoginController {
       }
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -168,6 +177,8 @@ export default class LoginController {
       }
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
         
@@ -191,6 +202,8 @@ export default class LoginController {
       }
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
         
@@ -206,6 +219,8 @@ export default class LoginController {
       });
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
 

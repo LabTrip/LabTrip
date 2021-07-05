@@ -1,6 +1,7 @@
 import Notificacao from './Notificacao'
 const {Expo} = require('expo-server-sdk');
 let expo = new Expo();
+const logger = require('../logger');
 
 
 export default class NotificacaoController {
@@ -94,7 +95,8 @@ export default class NotificacaoController {
       res.status(200).json({"status": 200, "mensagem": "Notificação enviada com sucesso"});
     }
     catch (e) {
-        console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
     }
 
@@ -107,7 +109,8 @@ export default class NotificacaoController {
         return res.status(200).json(notificacoes);
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({ status: '400', mensagem: 'Entrada de informações incorretas.' });
       }
   }

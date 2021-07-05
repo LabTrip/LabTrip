@@ -4,6 +4,7 @@ import {mailer} from '../smtpConfig'
 import EmailConviteTemplate from '../template/EmailConviteTemplate'
 require('dotenv/config');
 import api from '../requesterConfig'
+const logger = require('../logger'); 
 
 const statusAtualizarAutomaticamente = [
   'Planejado',
@@ -86,6 +87,8 @@ export default class ViagemController {
       res.status(200).json(viagens.map(u => viagemViewModel(u)));
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -176,7 +179,8 @@ export default class ViagemController {
 
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -196,7 +200,8 @@ export default class ViagemController {
       return res.status(200).json(viagemViewModel(req.viagem)); 
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -247,6 +252,8 @@ export default class ViagemController {
       return res.status(200).json(viagemViewModel(viagemAtualizada));
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     } 
     
@@ -259,7 +266,8 @@ export default class ViagemController {
       return res.status(200).json({participantes: participantes.map(p => participantesViewModel(p))});
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -270,6 +278,8 @@ export default class ViagemController {
       return res.status(204).end();
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   }
@@ -294,6 +304,8 @@ export default class ViagemController {
       return res.status(204).end();
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -337,7 +349,8 @@ export default class ViagemController {
 
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -362,7 +375,8 @@ export default class ViagemController {
       return res.status(200).send(await new EmailConviteTemplate(convite).retornoConvite());
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -393,7 +407,8 @@ export default class ViagemController {
       return res.status(202).json({status: '202', mensagem: 'Alterado com sucesso.'});    
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -420,7 +435,8 @@ export default class ViagemController {
       return res.status(200).json({permissoes: permissoes.map(u => permissoesViagemViewModel(u))}); 
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   
@@ -435,7 +451,8 @@ export default class ViagemController {
       return res.status(200).json({permissoes: permissoes.map(u => permissoesViagemViewModel(u))}); 
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
   
@@ -468,7 +485,8 @@ export default class ViagemController {
       this.notifica(req, body);
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
     }
     
   }
@@ -484,6 +502,8 @@ export default class ViagemController {
         //console.log('Response ' + response.data.perfis)
     }).catch((err) => {
         console.error("ops! ocorreu um erro" + err);
+        logger.error(err)
+	      logger.info(err.toString(), req.token)
         return undefined;
     });
   }

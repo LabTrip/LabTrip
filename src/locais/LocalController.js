@@ -1,4 +1,5 @@
 import Local from './Local'
+const logger = require('../logger'); 
 
 const localViewModel = (local) => ({
     id: local.id,
@@ -24,6 +25,8 @@ const localViewModel = (local) => ({
         res.status(200).json(locais.map(u => localViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -36,6 +39,8 @@ const localViewModel = (local) => ({
         return res.status(201).json(localViewModel(await this.localRepository.salva(localidade)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -46,6 +51,8 @@ const localViewModel = (local) => ({
         return res.status(200).json(localViewModel(req.local)); 
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -60,6 +67,8 @@ const localViewModel = (local) => ({
         return res.status(200).json(localViewModel(localAtualizado));      
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -72,6 +81,8 @@ const localViewModel = (local) => ({
         return res.status(204).end();
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       

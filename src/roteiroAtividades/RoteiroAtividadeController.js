@@ -1,4 +1,5 @@
 import RoteiroAtividade from './RoteiroAtividade'
+const logger = require('../logger'); 
 
 const roteiroAtividadeViewModel = (roteiroAtividade) => ({  
     id: roteiroAtividade.id,
@@ -35,8 +36,9 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
         res.status(200).json(roteiroAtividade.map(u => roteiroAtividadeViewModel(u)));
       }  
       catch(e){
-        console.log(e)
-         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
                  
       }
     }
@@ -52,8 +54,9 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
         res.status(200).json(roteiroAtividade.map(u => roteiroAtividadeViewModel(u)));
       }  
       catch(e){
-          console.log(e) 
-          return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
+        return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
                   
       }
     } 
@@ -66,6 +69,8 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
         res.status(201).json(roteiroAtividadeViewModel(roteiroAtividade));
       }
       catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e.toString()});       
       }      
     }
@@ -75,6 +80,8 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
         return res.status(200).json(roteiroAtividadeViewModel(req.roteiroAtividade)); 
 
       }catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }
      
@@ -88,6 +95,8 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
 
         return res.status(200).json(roteiroAtividadeViewModel(roteiroAtividadeAtualizado));      
       }catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }     
     }    
@@ -98,6 +107,8 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
         await this.roteiroAtividadeRepository.deleta(req.roteiroAtividade);     
         return res.status(204).end();
       }catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});       
       }    
     }
