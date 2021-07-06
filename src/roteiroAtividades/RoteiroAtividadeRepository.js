@@ -341,7 +341,6 @@ export default class RoteiroAtividadeRepository{
   }
 
   async deleta(roteiroAtividade){
-    console.log(roteiroAtividade)
     await this.client('roteiro_atividade')
     .where({'roteiro_atividade.id': roteiroAtividade.id}).first()
     .delete()

@@ -103,9 +103,8 @@ const roteiroAtividadeViewModel = (roteiroAtividade) => ({
 
     async deleta(req, res){
        try{
-         console.log('controller', req.roteiroAtividade)
         await this.roteiroAtividadeRepository.deleta(req.roteiroAtividade);     
-        return res.status(204).end();
+        return res.status(204).json({status: '204', mensagem: 'Excluído com sucesso.'});
       }catch(e){
         logger.error(e)
 	      logger.info(e.toString(), req.token)
