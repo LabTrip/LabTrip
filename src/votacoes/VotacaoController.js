@@ -1,4 +1,5 @@
 import Votacao from './Votacao'
+const logger = require('../logger'); 
 
 const votacaoViewModel = (votacao) => ({
     roteiroAtividadeId: votacao.roteiroAtividadeId,
@@ -19,6 +20,8 @@ const votacaoViewModel = (votacao) => ({
         res.status(200).json(votacoes.map(u => votacaoViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -30,6 +33,8 @@ const votacaoViewModel = (votacao) => ({
         res.status(200).json(votacoes.map(u => votacaoViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e.detail.toString()});
       }
       
@@ -49,6 +54,8 @@ const votacaoViewModel = (votacao) => ({
           await this.votacaoRepository.deleta(votacao);
           return res.status(204).end();  
         }else{
+          logger.error(e)
+          logger.info(e.toString(), req.token)
           return res.status(400).json({status: '400', mensagem: e.detail});
         }   
       }      
@@ -59,6 +66,8 @@ const votacaoViewModel = (votacao) => ({
         return res.status(200).json(votacaoViewModel(req.votacao)); 
       }
       catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -73,6 +82,8 @@ const votacaoViewModel = (votacao) => ({
         return res.status(200).json(votacaoViewModel(votacaoAtualizada));      
       }
       catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -86,6 +97,8 @@ const votacaoViewModel = (votacao) => ({
         return res.status(204).end();
       }
       catch(e){
+        logger.error(e)
+	      logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       

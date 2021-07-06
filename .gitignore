@@ -5,3 +5,5 @@ report/
 reports/
 coverage/*
 tmp/*
+logs/
+.log

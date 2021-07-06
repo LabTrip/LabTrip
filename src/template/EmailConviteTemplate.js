@@ -1,5 +1,6 @@
 import {mailer} from '../smtpConfig'
 require('dotenv/config');
+const logger = require('../logger'); 
 
 export default class EmailConviteTemplate {
 
@@ -19,8 +20,8 @@ export default class EmailConviteTemplate {
           return "OK"
         }
         catch(e){
-          const error = await e.toString();
-          console.log(error)
+          logger.error(e)
+	        logger.info(e.toString(), req.token)
           return "";
         }
     
@@ -74,7 +75,8 @@ export default class EmailConviteTemplate {
           return corpo.toString();
         }
         catch(e){
-          console.log(e)
+          logger.error(e)
+	        logger.info(e.toString(), req.token)
           return e;
         }
       }
@@ -110,7 +112,8 @@ export default class EmailConviteTemplate {
           return corpo.toString();
         }
         catch(e){
-          console.log(e)
+          logger.error(e)
+	        logger.info(e.toString(), req.token)
           return e;
         }
       }

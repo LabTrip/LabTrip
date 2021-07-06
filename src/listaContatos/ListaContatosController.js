@@ -1,4 +1,5 @@
 import ListaContatos from './ListaContatos'
+const logger = require('../logger'); 
 
 const listaContatosViewModel = (listaContatos) => ({
     usuarioId: listaContatos.usuarioId,
@@ -24,7 +25,9 @@ const listaContatosViewModel = (listaContatos) => ({
         res.status(200).json(listaContatos.map(u => listaContatosViewModel(u)));
       }
       catch(e){
-          return res.status(400).json({status: '400', mensagem: e.toString()});
+        logger.error(e)
+        logger.info(e.toString(), req.token)
+        return res.status(400).json({status: '400', mensagem: e.toString()});
       }
       
     }
@@ -35,6 +38,8 @@ const listaContatosViewModel = (listaContatos) => ({
         res.status(200).json(listaContatos.map(u => listaContatosViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e.toString()});
       }
       
@@ -46,6 +51,8 @@ const listaContatosViewModel = (listaContatos) => ({
         res.status(200).json(listaContatos.map(u => listaContatosViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -57,6 +64,8 @@ const listaContatosViewModel = (listaContatos) => ({
         res.status(200).json(listaContatos.map(u => listaContatosViewModel(u)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -69,6 +78,8 @@ const listaContatosViewModel = (listaContatos) => ({
         return res.status(201).json(listaContatosViewModel(await this.listaContatosRepository.salva(novoContato)));
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.', detalhes: e.toString()});
       }
       
@@ -79,6 +90,8 @@ const listaContatosViewModel = (listaContatos) => ({
         return res.status(200).json(listaContatosViewModel(req.listaContatos)); 
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -92,6 +105,8 @@ const listaContatosViewModel = (listaContatos) => ({
         return res.status(200).json(listaContatosViewModel(contatoAtualizado));      
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token) 
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       
@@ -104,6 +119,8 @@ const listaContatosViewModel = (listaContatos) => ({
         return res.status(204).end();
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token) 
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
       }
       

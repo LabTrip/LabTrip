@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
 require('dotenv/config');
 import {mailer} from '../smtpConfig'
+const logger = require('../logger');
 
 const agenciaViewModel = (agencia) => ({
   id: agencia.id,
@@ -36,7 +37,8 @@ export default class AgenciaController {
       res.status(200).json(agencias.map(u => agenciaViewModel(u)));  
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -53,6 +55,8 @@ export default class AgenciaController {
       res.status(201).json(agenciaViewModel(agencia));  
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -67,7 +71,8 @@ export default class AgenciaController {
       return res.status(200).json({funcionarios: funcionarios})  
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -105,7 +110,8 @@ export default class AgenciaController {
       res.status(200).json({status: '200', mensagem: 'Convite enviado com sucesso'});  
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -124,6 +130,8 @@ export default class AgenciaController {
       return res.status(201).json({status: '201', mensagem: 'Funcionário deletado com sucesso.'});  
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -153,6 +161,8 @@ export default class AgenciaController {
       res.status(200).send(resposta);  
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -163,6 +173,8 @@ export default class AgenciaController {
       return res.status(200).json(agenciaViewModel(req.agencia));   
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -179,6 +191,8 @@ export default class AgenciaController {
       return res.status(200).json(agenciaViewModel(agenciaAtualizada));        
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }  
     
@@ -191,6 +205,8 @@ export default class AgenciaController {
       return res.status(204).end();  
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
@@ -206,6 +222,8 @@ export default class AgenciaController {
       });  
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
 

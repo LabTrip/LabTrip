@@ -6,6 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
 const s3 = new aws.S3();
+const logger = require('../logger'); 
 
 const dadosEssenciaisViewModel = (dadosEssenciais) => ({
     id: dadosEssenciais.id, 
@@ -31,7 +32,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         res.status(200).json(dadosEssenciais.map(u => dadosEssenciaisViewModel(u)));
       }
       catch(e){ 
-        console.log(e)       
+        logger.error(e)
+        logger.info(e.toString(), req.token)       
         return res.status(400).json({status: '400', mensagem: e.toString()});
       }
       
@@ -43,7 +45,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         res.status(200).json(dadosEssenciais.map(u => dadosEssenciaisViewModel(u)));
       }
       catch(e){
-        console.log(e)
+        logger.error(e)
+        logger.info(e.toString(), req.token) 
         return res.status(400).json({status: '400', mensagem: e});
       }
       
@@ -57,7 +60,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         return res.status(201).json(dadosEssenciaisViewModel(await this.dadosEssenciaisRepository.salva(dadosEssenciais)));
       }
       catch(e){  
-        console.log(e)      
+        logger.error(e)
+        logger.info(e.toString(), req.token)       
         return res.status(400).json({status: '400', mensagem: e.toString()});
           
       }      
@@ -68,6 +72,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         return res.status(200).json(dadosEssenciaisViewModel(req.dadosEssenciais)); 
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token) 
         return res.status(400).json({status: '400', mensagem:e.toString()});
       }
       
@@ -82,7 +88,9 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         return res.status(200).json(dadosEssenciaisViewModel(dadosEssenciaisAtualizado));      
       }
       catch(e){
-          return res.status(400).json({status: '400', mensagem: e.toString()});
+        logger.error(e)
+        logger.info(e.toString(), req.token) 
+        return res.status(400).json({status: '400', mensagem: e.toString()});
       }
       
     }
@@ -95,6 +103,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
         return res.status(204).end();
       }
       catch(e){
+        logger.error(e)
+        logger.info(e.toString(), req.token) 
         return res.status(400).json({status: '400', mensagem: e.toString()});
       }
       
@@ -117,7 +127,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
       readStream.pipe(res);
     }
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token) 
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
   }
@@ -141,7 +152,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
     }
 
     catch(e){
-      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token) 
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
   }
@@ -157,6 +169,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
       return res.status(204).json({status: '200', mensagem: 'Foto deleta com sucesso.'});    
     }
     catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token) 
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
   }

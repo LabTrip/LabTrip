@@ -17,7 +17,6 @@ import defineOrcamentoRouter from './orcamentos/OrcamentoRouter'
 import definePublicRouter from './public/PublicRouter'
 import defineNotificacaoRouter from './notificacoes/NotificacaoRouter'
 import Chat from './chats/Chat'
-import {v4 as uuidv4} from 'uuid';
 
 const http = require('http')
 const socketio =  require('socket.io');
@@ -28,6 +27,7 @@ var httpsRedirect = require('express-https-redirect');
 const morgan = require('morgan')
 const json = require('morgan-json');
 var rfs = require('rotating-file-stream')
+var winston = require("./logger");
 
 // create a rotating write stream
 var accessLogStream = rfs.createStream('access.log', {
@@ -40,25 +40,24 @@ morgan.token('bodyJSON', req => JSON.stringify(req.body || {}));
 morgan.token('token', req => JSON.stringify(req.token));
 
 const formatLog = json({
-  data: ':date[clf]',
-  token: ':token',
-  request: ':method :url HTTP/:http-version',
+  //data: ':date[clf]',
+  request: ':method :url - versao HTTP/:http-version',  
   status: ':status',
   res: ':res[content-length]',
   responseTime: ':response-time ms',
-  body: ':bodyJSON'
+  body: ':bodyJSON',
+  token: ':token',
 });
-
-//const formatLog2 = json(':date[clf] :user-id :method :url HTTP/:http-version :status :res[content-length] :response-time ms :bodyJSON')
 
 export default function LabTrip() {
   const app = express();
   app.use(express.json());
-  app.use(morgan(formatLog,{ stream: accessLogStream }));  
+  app.use(morgan(formatLog,{ stream: winston.stream }));
   app.use(express.urlencoded({ extended: true }));
   app.use('/', httpsRedirect());
   app.use(helmet());
   app.use(cors());
+
   app.use('/usuarios', defineUsuarioRouter());
   app.use('/viagens', defineViagemRouter());
   app.use('/atividades', defineAtividadeRouter());
@@ -79,11 +78,11 @@ export default function LabTrip() {
     "/files",
     express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
   );
-  
+
 
   app.get('/', function(req, res) {
     res.status(200).json({mensagem: 'Olá  mundo!'});
-  });
+  }); 
   
 
   /*app.listen(process.env.PORT || 5001, function(){
