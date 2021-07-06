@@ -142,7 +142,8 @@ export default class RoteiroAtividadeRepository{
       .as('subqueryNegativo')
       }), 'subqueryNegativo.roteiroAtividadeId','roteiro_atividade.id')
     .where({'roteiroId': roteiroId.toString()})
-      .andWhere({'versaoRoteiro': versaoRoteiro.toString()});
+    .andWhere({'versaoRoteiro': versaoRoteiro.toString()})
+    .orderBy('roteiro_atividade.dataInicio','asc');;
   }
 
   async buscaTodosPorRoteiro_AcessoGerencial(agenciaId,roteiroId, versao){
@@ -172,7 +173,8 @@ export default class RoteiroAtividadeRepository{
     .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
     .where({'viagem.agenciaId': agenciaId.toString()})
     .andWhere({'roteiroId': roteiroId.toString()})
-    .andWhere({'versaoRoteiro': versao.toString()});   
+    .andWhere({'versaoRoteiro': versao.toString()})
+    .orderBy('roteiro_atividade.dataInicio','asc');;   
   }
 
   async buscaTodosPorRoteiro_AcessoParcial(usuarioId,roteiroId, versao){
@@ -201,9 +203,10 @@ export default class RoteiroAtividadeRepository{
       }), 'subqueryNegativo.roteiroAtividadeId','roteiro_atividade.id')
     .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
     .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
-      .where({'usuario_viagem.usuarioId': usuarioId.toString()})
-      .andWhere({'roteiro_atividade.roteiroId': roteiroId.toString()})
-      .andWhere({'roteiro_atividade.versaoRoteiro': versao.toString()});
+    .where({'usuario_viagem.usuarioId': usuarioId.toString()})
+    .andWhere({'roteiro_atividade.roteiroId': roteiroId.toString()})
+    .andWhere({'roteiro_atividade.versaoRoteiro': versao.toString()})
+    .orderBy('roteiro_atividade.dataInicio','asc');
   }
 
   async buscaPorId(req){
