@@ -326,7 +326,8 @@ export default class RoteiroAtividadeRepository{
   async atualiza(roteiroAtividade){
      const [firstRow] = await this.client('roteiro_atividade')
     .where({'roteiro_atividade.id': roteiroAtividade.id})
-    .update({      
+    .update({  
+      atividadeId: roteiroAtividade.atividadeId,
       dataInicio: roteiroAtividade.dataInicio,
       dataFim: roteiroAtividade.dataFim,
       custo: roteiroAtividade.custo,
