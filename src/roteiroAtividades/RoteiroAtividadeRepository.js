@@ -178,7 +178,6 @@ export default class RoteiroAtividadeRepository{
   async buscaTodosPorRoteiro_AcessoParcial(usuarioId,roteiroId, versao){
     return await this.client.select('local.*', 'atividade.*','subqueryPositivo.positivo','subqueryNegativo.negativo','roteiro_atividade.*').from('roteiro_atividade')
     .innerJoin('atividade', 'roteiro_atividade.atividadeId', 'atividade.id')
-    .innerJoin('votacao', 'votacao.roteiroAtividadeId', 'roteiro_atividade.id')
     .innerJoin('local', 'atividade.localId', 'local.id')
     .innerJoin('roteiro', function() {
       this.on(function() {
@@ -203,8 +202,8 @@ export default class RoteiroAtividadeRepository{
     .innerJoin('viagem', 'roteiro.viagemId', 'viagem.id')
     .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
       .where({'usuario_viagem.usuarioId': usuarioId.toString()})
-      .andWhere({'roteiroId': roteiroId.toString()})
-      .andWhere({'versaoRoteiro': versao.toString()});
+      .andWhere({'roteiro_atividade.roteiroId': roteiroId.toString()})
+      .andWhere({'roteiro_atividade.versaoRoteiro': versao.toString()});
   }
 
   async buscaPorId(req){
