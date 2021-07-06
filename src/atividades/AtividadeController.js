@@ -63,10 +63,10 @@ const atividadeViewModel = (atividade) => ({
       try{
         const {descricao, localId, local} = req.body;
         let {agenciaId} = req.body;
-        if(req.token.agenciaId || req.token.agenciaId != null){
+        if(!req.token.agenciaId || req.token.agenciaId != null){
           agenciaId = req.token.agenciaId
         }
-        if(req.token.agenciaId == agenciaId || req.acesso.tipoAcesso == "Total"){
+        if(req.token.agenciaId == agenciaId){
           const localidade = await this.salvaLocal(local);
   
           const atividade = new Atividade(descricao, agenciaId, localidade.id);
