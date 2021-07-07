@@ -17,7 +17,7 @@ export default class NotificacaoController {
       let {participantes, titulo, mensagem, dado, icone} = req.body;
 
       const notificacao = await this.notificacaoRepository.salva({iconeLabel: icone, descricao: mensagem})
-      console.log(notificacao)
+      //console.log(notificacao)
       const usuario_notificacao = await this.notificacaoRepository.salvaUsuarioNotificacao(participantes.map((p) => {
           return {
               notificacaoId: notificacao.id,
@@ -26,7 +26,7 @@ export default class NotificacaoController {
               visualizado: false
           }
       }));
-      console.log(usuario_notificacao)
+      //console.log(usuario_notificacao)
       const pushTokens = await this.notificacaoRepository.buscaTokenNotificacao(participantes);
 
       for (let pushToken of pushTokens) {

@@ -185,7 +185,7 @@ const roteiroViewModel = (roteiro) => ({
             break;
           case 'PUT':
             titulo = 'Roteiro atualizado'
-            mensagem = 'O status do roteiro ' + roteiro.descricao + 'da viagem ' + viagem.descricao + ' mudou para "' + status.descricao + '".'
+            mensagem = 'O status do roteiro ' + roteiro.descricaoRoteiro + ' da viagem ' + viagem.descricao + ' mudou para "' + status.descricao + '".'
             break;
         }
   

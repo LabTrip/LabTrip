@@ -33,9 +33,9 @@ const chatViewModel = (chat) => ({
       
     }
 
-    conectaAoChat(id, username, userId, room, chat) {
+    conectaAoChat(id, username, userId, room, chat, token) {
       try{
-        const user = { id, username, userId, room , chat};
+        const user = { id, username, userId, room , chat, token};
 
         this.users.push(user);
 
@@ -59,6 +59,72 @@ const chatViewModel = (chat) => ({
         return undefined;
       }
       
+    }
+
+    async notificaUsuarioChat(user) {
+      try{
+        const viagemId = user.room.split('/')[0]
+        const contexto = user.room.split('/')[1]
+
+        await this.notificaRoteiro(user.token, user.userId, viagemId, contexto, 'MESSAGE');
+
+        return
+      }
+      catch(e){
+        logger.error(e)
+        logger.info(e.toString(), token)
+        return undefined;
+      }
+    }
+
+    async notificaRoteiro(token, usuarioId, viagemId, contexto, operacao){
+      try{
+        let titulo, mensagem, dado;
+
+        const viagem = await this.chatRepository.buscaViagemPorId(viagemId)
+        const participantes = await this.chatRepository.buscaParticipantes(viagem, usuarioId);
+        const topico = await this.chatRepository.buscaTopico(contexto);
+  
+        switch(operacao){
+          case 'MESSAGE':
+            titulo = 'Você recebeu nova mensagem.'
+            mensagem = 'Nova mensagem no tópico "' + topico.descricao + '" da viagem "' + viagem.descricao + '".'
+            break;
+        }
+  
+        const body = {
+          icone: 'chat-bubble-outline',
+          participantes: participantes,
+          titulo: titulo,
+          mensagem: mensagem,
+          dado: {
+            viagem: viagem,
+            topico: topico,
+          }
+        }
+  
+        this.notifica(token, body);
+      }
+      catch(e){
+        logger.error(e)
+      	logger.info(e.toString(), token)
+      }
+      
+    }
+  
+  
+    async notifica(token, body) {
+      await api.post("notificacoes/", body,
+        {
+          headers: {
+            'x-access-token': token
+        }
+      }).then((response) => {
+          //console.log('Response ' + response.data.perfis)
+      }).catch((err) => {
+          console.error("ops! ocorreu um erro" + err);
+          return undefined;
+      });
     }
 
     buscaUsuarioAtual(id) {

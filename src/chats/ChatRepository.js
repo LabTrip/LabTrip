@@ -154,4 +154,21 @@ export default class ChatRepository{
       .where({'chat.id': chat.id})
       .delete();
     }
+
+    async buscaViagemPorId(id){
+      return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+      .innerJoin('status', 'viagem.statusId', 'status.id')
+      .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
+        .where({'viagem.id': id.toString()}).first();
+    }
+
+    async buscaParticipantes(viagem, usuarioId){
+      return await this.client.select(['usuario_viagem.*','usuario.nome as nome','permissao_viagem.descricao as descricao'])
+        .from('usuario_viagem')
+        .innerJoin('usuario','usuario_viagem.usuarioId','usuario.id')
+        .innerJoin('permissao_viagem','usuario_viagem.permissaoViagemId','permissao_viagem.id')
+        .whereNot('usuario_viagem.usuarioId', usuarioId)
+        .andWhere('viagemId', viagem.id);
+    }
+
   }

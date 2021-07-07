@@ -28,7 +28,7 @@ export default class Chat {
         socket.emit('message', this.chatController.formataMensagem({enviadoPor: 'Labtrip', usuarioId: '0'}, 'O chat informado não existe.'));
         return
       }
-      const user = this.chatController.conectaAoChat(socket.id, userAuth.nome, userAuth.id, room, chat);
+      const user = this.chatController.conectaAoChat(socket.id, userAuth.nome, userAuth.id, room, chat, token);
   
       socket.join(user.room);
       //console.log(user)
@@ -54,6 +54,8 @@ export default class Chat {
       }
       //console.log(mensagem)
       this.io.to(user.room).emit('message', this.chatController.formataMensagem({enviadoPor: user.username, usuarioId: user.userId, id: mensagem.id}, msg));
+      //notificação realizada aqui
+      this.chatController.notificaUsuarioChat(user);
     });
   
     // Runs when client disconnects
