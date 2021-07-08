@@ -161,8 +161,8 @@ const dadosEssenciaisViewModel = (dadosEssenciais) => ({
   async deletaArquivoRoteiroAtividade(req, res) {
     try{
       const dadosEssenciais = req.dadosEssenciais;
-      console.log(req.dadosEssenciais)
-      await this.dadosEssenciaisRepository.atualizaArquivoRoteiroAtividade({name: '', key: '', url: ''}, dadosEssenciais);
+     
+      await this.dadosEssenciaisRepository.deletaDadoPorId(dadosEssenciais);
 
       await this.deletaArquivo(dadosEssenciais.chaveFoto);
 

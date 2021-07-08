@@ -208,4 +208,10 @@ export default class DadosEssenciaisRepository{
       .where({'dados_essenciais.id': dadosEssenciais.dadosEssenciaisId})
       .delete();
     }
+
+    async deletaDadoPorId(dadosEssenciais){
+      await this.client('dados_essenciais')
+      .where({'dados_essenciais.id': dadosEssenciais.id})
+      .delete();
+    }
   }
