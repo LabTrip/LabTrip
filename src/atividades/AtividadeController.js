@@ -84,6 +84,7 @@ const atividadeViewModel = (atividade) => ({
         }
       }
       catch(e){
+        console.log(e)
         logger.error(e)
         logger.info(e.toString(), req.token)
         return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});

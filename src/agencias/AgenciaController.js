@@ -1,6 +1,7 @@
 import Agencia from './Agencia'
 const jwt = require('jsonwebtoken');
 const nodemailer = require("nodemailer");
+import EmailConviteTemplate from '../template/EmailConviteTemplate'
 require('dotenv/config');
 import {mailer} from '../smtpConfig'
 const logger = require('../logger');
@@ -158,7 +159,7 @@ export default class AgenciaController {
       await this.agenciaRepository.salvaFuncionario(usuarioId,agenciaId);
 
       resposta = this.retornoConvite("O seu convite foi aceito com sucesso!");
-      res.status(200).send(resposta);  
+      res.status(200).send(await new EmailConviteTemplate(convite).retornoConvite());  
     }
     catch(e){
       logger.error(e)

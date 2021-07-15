@@ -9,6 +9,8 @@ export default function definePublicRouter(){
   router.route('/logo-banner')
    .get((req, res) => publicController.mostraBanner(req, res));
     
+  router.route('/termo-de-uso')
+   .get((req, res) => publicController.mostraTermoDeUso(req, res));
 
   return router;
 }
