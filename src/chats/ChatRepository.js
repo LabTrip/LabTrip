@@ -126,6 +126,7 @@ export default class ChatRepository{
         .from('mensagem')
         .innerJoin('usuario','mensagem.usuarioId','usuario.id')
         .where({'chatId': chatId.toString()})
+        .orderBy('mensagem.enviadoEm','asc')
     }
 
     async salvarMensagem(socketUser, mensagem){
