@@ -28,6 +28,7 @@ export default class NotificacaoController {
       }));
       //console.log(usuario_notificacao)
       const pushTokens = await this.notificacaoRepository.buscaTokenNotificacao(participantes);
+      console.log(pushTokens)
 
       for (let pushToken of pushTokens) {
         pushToken = pushToken.tokenNotificacao;
