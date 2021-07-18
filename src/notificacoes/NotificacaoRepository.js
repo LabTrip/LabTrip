@@ -35,11 +35,7 @@ export default class NotificacaoRepository{
 
     async buscaTokenNotificacao(participantes){
       return await this.client.select('tokenNotificacao').from('token_notificacao')
-        .where((builder) => {
-          const p = participantes.map(p => p.usuarioId)
-
-          builder.whereIn('usuarioId', p);         
-        });
+        .whereIn('usuarioId', participantes);         
     }
   
     async buscaPorId(id){

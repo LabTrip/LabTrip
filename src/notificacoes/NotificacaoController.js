@@ -27,7 +27,7 @@ export default class NotificacaoController {
           }
       }));
       //console.log(usuario_notificacao)
-      const pushTokens = await this.notificacaoRepository.buscaTokenNotificacao(participantes);
+      const pushTokens = await this.notificacaoRepository.buscaTokenNotificacao(participantes.map(p => p.usuarioId));
       console.log(pushTokens)
 
       for (let pushToken of pushTokens) {
