@@ -80,7 +80,7 @@ export default class UsuarioController {
 
       const { token } = req.body;
 
-      await this.usuarioRepository.salvaTokenNotificacao(token, req.token.id);
+      const salva = await this.usuarioRepository.salvaTokenNotificacao(token, req.token.id);
 
       res.status(200).json({status: "200", mensagem: 'Token salvo com sucesso'});
     }

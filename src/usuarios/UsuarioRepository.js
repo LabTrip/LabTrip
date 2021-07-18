@@ -26,7 +26,7 @@ export default class UsuarioRepository{
           usuarioId: usuarioId
         })
         .onConflict('tokenNotificacao')
-        .ignore()
+        .merge()
         .returning("*");
   
         return firstRow;
