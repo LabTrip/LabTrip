@@ -100,7 +100,7 @@ export default class ViagemController {
 
     viagensAtualizadas.map(async (viagem, index) => {
       if(statusAtualizarAutomaticamente.indexOf(viagem.status) >= 0){
-        if(viagem.dataIncio <= new Date() && viagem.dataFim >= new Date()){
+        if(viagem.dataInicio <= new Date() && viagem.dataFim >= new Date()){
           novoStatus = "Em andamento";
         }
         else if(viagem.dataFim <= new Date()){
