@@ -4,9 +4,10 @@ export default class ViagemRepository{
   }
 
   async buscaTodos(){
-    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono', 'moeda.descricaoMoeda']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
+    .innerJoin('moeda','viagem.moedaId','moeda.id')
     .orderBy('viagem.criadoEm','desc');
   }
 
@@ -25,10 +26,11 @@ export default class ViagemRepository{
   }
 
   async buscaTodosComPermissao(id){
-    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono', 'moeda.descricaoMoeda']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
-      .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+    .innerJoin('moeda','viagem.moedaId','moeda.id')
+    .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
       .where({
         usuarioId: id,
       })
@@ -36,9 +38,10 @@ export default class ViagemRepository{
   }
 
   async buscaTodosDaAgencia(agenciaId){
-    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono', 'moeda.descricaoMoeda']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
+    .innerJoin('moeda','viagem.moedaId','moeda.id')
       .where({
         agenciaId: agenciaId.toString(),
       })
@@ -54,25 +57,29 @@ export default class ViagemRepository{
   }
 
   async buscaPorId(id){
-    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono', 'moeda.descricaoMoeda']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
+    .innerJoin('moeda','viagem.moedaId','moeda.id')
       .where({'viagem.id': id.toString()}).first();
   }
+  
 
   async buscaPorId_AcessoGerencial(id, agenciaId){
-    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono', 'moeda.descricaoMoeda']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
+    .innerJoin('moeda','viagem.moedaId','moeda.id')
       .where({'viagem.id': id.toString()})
       .andWhere({'viagem.agenciaId': agenciaId.toString()}).first();
   }
 
   async buscaPorId_AcessoParcial(id, usuarioId){
-    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono']).from('viagem')
+    return await this.client.select(['viagem.*', 'status.descricao as status', 'usuario.nome as dono', 'moeda.descricaoMoeda']).from('viagem')
     .innerJoin('status', 'viagem.statusId', 'status.id')
     .innerJoin('usuario', 'viagem.usuarioDonoId', 'usuario.id')
     .innerJoin('usuario_viagem', 'viagem.id', 'usuario_viagem.viagemId')
+    .innerJoin('moeda','viagem.moedaId','moeda.id')
     .where({'viagem.id': id.toString()})
     .andWhere({'usuario_viagem.usuarioId': usuarioId.toString()}).first();
   }
@@ -171,5 +178,9 @@ export default class ViagemRepository{
         'status.descricao': status
       })
       .first();
+  }
+
+  async buscaMoedas(){
+    return await this.client('moeda');
   }
 }

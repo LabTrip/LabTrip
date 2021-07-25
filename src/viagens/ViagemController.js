@@ -20,6 +20,8 @@ const viagemViewModel = (viagem) => ({
   status: viagem.status,
   agenciaId: viagem.agenciaId,
   usuarioDonoId: viagem.usuarioDonoId,
+  moedaId: viagem.moedaId,
+  descricaoMoeda: viagem.descricaoMoeda,
   dono: viagem.dono,
   criadoPorId: viagem.criadoPorId,
   participantes: viagem.participantes,
@@ -32,6 +34,7 @@ const updateViagemViewModel = (viagem) => ({
   dataInicio: viagem.dataInicio,
   dataFim: viagem.dataFim,
   statusId: viagem.statusId,
+  moedaId: viagem.moedaId,
   agenciaId: viagem.agenciaId,
   usuarioDonoId: viagem.usuarioDonoId,
   criadoPorId: viagem.criadoPorId
@@ -128,7 +131,7 @@ export default class ViagemController {
 
   async salva(req, res){
     try{
-      let {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes} = req.body;
+      let {descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes, moedaId} = req.body;
 
       if(!agenciaId){
         agenciaId = req.token.agenciaId;
@@ -140,7 +143,7 @@ export default class ViagemController {
           criadoPorId = req.token.id;
         }
 
-        const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId);
+        const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, moedaId);
     
         await this.viagemRepository.salva(viagem);
 
@@ -206,12 +209,24 @@ export default class ViagemController {
     }
   }
 
+  async buscaMoedas(req, res){
+    try{
+      
+      const moedas = await this.viagemRepository.buscaMoedas();
+      return res.status(200).json(moedas); 
+    }
+    catch(e){
+      logger.error(e)
+      logger.info(e.toString(), req.token)
+      return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
+    }
+  }
 
   async atualiza(req,res){    
     try{
-      const{descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes, deletarParticipantes} = req.body;
+      const{descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, criadoPorId, participantes, deletarParticipantes, moedaId} = req.body;
 
-      const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, req.viagem.criadoPorId, req.viagem.id);
+      const viagem = new Viagem(descricao, agenciaId, statusId, dataInicio, dataFim, usuarioDonoId, req.viagem.criadoPorId, moedaId, req.viagem.id);
       
       await this.viagemRepository.atualiza(viagem);
 

@@ -9,6 +9,7 @@ const updateViagemViewModel = (viagem) => ({
   dataInicio: viagem.dataInicio,
   dataFim: viagem.dataFim,
   statusId: viagem.statusId,
+  moedaId: viagem.moedaId,
   agenciaId: viagem.agenciaId,
   usuarioDonoId: viagem.usuarioDonoId,
   criadoPorId: viagem.criadoPorId
