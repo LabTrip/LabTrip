@@ -308,10 +308,16 @@ export default class ViagemController {
         const participantesDeletados = [];
 
         for(let participante of participantes){
-          participantesDeletados.push({
-            usuarioId: participante.usuarioId,
-            viagemId: req.viagem.id
-          });
+          if(await this.verificaPermissaoExclusaoParticipante(req, req.token.id, participante.usuarioId)){
+            console.log('permitiu deletar')
+            participantesDeletados.push({
+              usuarioId: participante.usuarioId,
+              viagemId: req.viagem.id
+            });
+          }
+          else{
+            return res.status(403).json({status: '403', mensagem: 'Sem permissão de acesso.'});
+          }
         }
         await this.viagemRepository.deletaParticipantes(participantesDeletados);
       }
@@ -324,6 +330,28 @@ export default class ViagemController {
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     }
     
+  }
+
+  async verificaPermissaoExclusaoParticipante(req, requisitante, participante){
+    try{
+      const permissaoRequisitante = await this.viagemRepository.buscaPermissaoDoUsuario(requisitante, req.viagem.id);
+      const permissaoParticipante = await this.viagemRepository.buscaPermissaoDoUsuario(participante, req.viagem.id);
+      
+      if(permissaoRequisitante.descricao == 'Membro'){
+        return false;
+      }
+      else if(permissaoRequisitante.descricao == 'Proprietário'  && permissaoParticipante.descricao == 'Agente'){
+        return false;
+      }
+
+      return true;
+    }
+    catch(e){
+      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
+      return false;
+    }
   }
 
   async convidaParticipantes(req, res){

@@ -131,7 +131,8 @@ export default class ViagemRepository{
   }
 
   async buscaPermissaoDoUsuario(usuarioId, viagemId){
-    return await this.client('usuario_viagem')
+    return await this.client.select(['usuario_viagem.*', 'permissao_viagem.descricao']).from('usuario_viagem')
+    .innerJoin('permissao_viagem','usuario_viagem.permissaoViagemId', 'permissao_viagem.id')
     .where({
       usuarioId: usuarioId.toString(),
       viagemId: viagemId.toString()
