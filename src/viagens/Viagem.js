@@ -10,7 +10,7 @@ export default class Viagem{
       this.agenciaId = agenciaId;
       this.usuarioDonoId = usuarioDonoId;
       this.criadoPorId = criadoPorId;
-      if(moedaId){
+      if(!moedaId){
         moedaId = 1;
       }
       this.moedaId = moedaId;
