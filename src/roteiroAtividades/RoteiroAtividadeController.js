@@ -4,6 +4,7 @@ const logger = require('../logger');
 const roteiroAtividadeViewModel = (roteiroAtividade) => ({  
     id: roteiroAtividade.id,
     atividadeId: roteiroAtividade.atividadeId,
+    descricao: roteiroAtividade.descricao,
     local: roteiroAtividade.local,
     endereco: roteiroAtividade.endereco,
     cidade: roteiroAtividade.cidade,

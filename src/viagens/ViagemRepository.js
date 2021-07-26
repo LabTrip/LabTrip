@@ -184,4 +184,21 @@ export default class ViagemRepository{
   async buscaMoedas(){
     return await this.client('moeda');
   }
+
+  async atualizaStatusAtividaes(statusId, viagemId, statusIdAnterior){
+    return await this.client('roteiro_atividade')
+      .whereIn('id', function () { 
+        this.select('roteiro_atividade.id').from('roteiro_atividade')
+        .innerJoin('roteiro', {'roteiro_atividade.roteiroId': 'roteiro.id','roteiro_atividade.versaoRoteiro': 'roteiro.versao'})
+        .where({
+          'roteiro.viagemId': viagemId,
+          'roteiro.statusId': 6,
+          'roteiro_atividade.statusId': statusIdAnterior
+        })
+      })
+      .update({
+        'statusId': statusId
+      })
+      .returning("*");
+  }
 }

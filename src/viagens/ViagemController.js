@@ -11,6 +11,11 @@ const statusAtualizarAutomaticamente = [
   'Em andamento'
 ]
 
+const statusAtualizarAtividades = [
+  'Planejamento',
+  'Planejado'
+]
+
 const viagemViewModel = (viagem) => ({
   id:  viagem.id,
   descricao: viagem.descricao,
@@ -262,6 +267,8 @@ export default class ViagemController {
       const novosParticipantes =  await this.viagemRepository.buscaParticipantes(req.viagem);
       viagemAtualizada.participantes = novosParticipantes;
 
+      await this.atualizaStatusAtividades(req.viagem, viagemAtualizada)
+
       await this.notificaViagem(req, viagemAtualizada, req.method)
 
       return res.status(200).json(viagemViewModel(viagemAtualizada));
@@ -272,6 +279,32 @@ export default class ViagemController {
       return res.status(400).json({status: '400', mensagem: 'Entrada de informações incorretas.'});
     } 
     
+  }
+
+  async atualizaStatusAtividades(viagemAntiga, viagemAtualizada){
+    try{
+      let statusId = viagemAtualizada.statusId, atualizar = false;
+      console.log(viagemAntiga.status)
+      console.log(viagemAtualizada.status)
+      if(viagemAntiga.status == 'Em planejamento' && viagemAtualizada.status == 'Planejado'){
+        console.log('Para planejado')
+        atualizar = true;
+      }
+      else if(viagemAtualizada.status == 'Em planejamento'){
+        console.log('Para planejamento')
+        atualizar = true;
+      }
+
+      if(atualizar){
+        const atividades = await this.viagemRepository.atualizaStatusAtividaes(statusId, viagemAtualizada.id, viagemAntiga.statusId);
+        console.log(atividades)
+      }
+    }
+    catch(e){
+      console.log(e)
+      logger.error(e)
+      logger.info(e.toString(), req.token)
+    }
   }
 
   async buscaParticipantes(req, res){
