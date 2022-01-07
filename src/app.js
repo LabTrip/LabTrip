@@ -27,7 +27,6 @@ var httpsRedirect = require('express-https-redirect');
 const morgan = require('morgan')
 const json = require('morgan-json');
 var rfs = require('rotating-file-stream')
-var winston = require("./logger");
 
 // create a rotating write stream
 var accessLogStream = rfs.createStream('access.log', {
@@ -52,7 +51,6 @@ const formatLog = json({
 export default function LabTrip() {
   const app = express();
   app.use(express.json());
-  app.use(morgan(formatLog,{ stream: winston.stream }));
   app.use(express.urlencoded({ extended: true }));
   app.use('/', httpsRedirect());
   app.use(helmet());

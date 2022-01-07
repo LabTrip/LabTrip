@@ -7,7 +7,6 @@ const path = require("path");
 const { promisify } = require("util");
 const s3 = new aws.S3();
 import {s3Teste} from '../config/s3'
-const logger = require('../logger'); 
 
 const usuarioViewModel = (usuario) => ({
   id: usuario.id,
@@ -216,19 +215,13 @@ export default class UsuarioController {
       const usuario = req.usuario;
       var readStream = null;
 
-      if(usuario.chaveFoto && usuario.chaveFoto != ''){
-        readStream = await s3.getObject({Key: usuario.chaveFoto, Bucket: process.env.BUCKET_NAME}).createReadStream();
-      }
-      else{
-        readStream = await s3.getObject({Key: 'pattern-foto-de-perfil.png', Bucket: process.env.BUCKET_NAME}).createReadStream();
-      }
       
+      var readStream = fs.createReadStream("./src/images/iconuser.png");
 
-      readStream.pipe(res);
+      return readStream.pipe(res);
     }
     catch(e){
-      logger.error(e)
-	    logger.info(e.toString(), req.token)
+      
       return res.status(500).json({status: '500', mensagem: 'Server internal error.'});
     }
 
